@@ -22,6 +22,9 @@ img{max-width:100%}
   --f-body:"Manrope Variable","Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
   --f-mark:"Archivo","Arial Black",sans-serif;
+  --f-play:"Luckiest Guy","Arial Rounded MT Bold","Arial Black",sans-serif;
+  --f-fun:"Fredoka","Arial Rounded MT Bold",system-ui,sans-serif;
+  --f-tall:"Imbue Variable","Imbue","Instrument Serif",Georgia,serif;
   --head:76px;
   --ease:cubic-bezier(.76,0,.24,1);
   --ease-out:cubic-bezier(.16,1,.3,1);
