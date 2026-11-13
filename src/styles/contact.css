@@ -1,0 +1,28 @@
+/* ---------- Contact ---------- */
+.contact{background:var(--white);padding-block:140px 120px}
+.contact-in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(40px,7vw,120px)}
+.details{display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px 20px;margin:48px 0 0;padding-top:28px;border-top:1px solid var(--line)}
+.details dt{font:500 11px/1.9 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.details dd{margin:0;font-size:16px;user-select:all}
+.ph{color:var(--gold-deep);font-family:var(--f-mono);font-size:.92em}
+form.enq{display:grid;grid-template-columns:1fr 1fr;gap:26px 22px;align-content:start}
+.fld{display:flex;flex-direction:column;gap:8px;min-width:0}
+.fld.full{grid-column:1/-1}
+.fld label{font:600 11px/1 var(--f-body);letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.fld input,.fld select,.fld-l{font:600 11px/1 var(--f-body);letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.fld textarea{font:400 17px/1.4 var(--f-body);color:var(--ink);background:transparent;border:0;border-bottom:1px solid #cfc9be;padding:10px 0 12px;border-radius:0;transition:border-color .3s;width:100%}
+.fld-l{font:600 11px/1 var(--f-body);letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.fld textarea{resize:vertical;min-height:96px}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-bottom-color:var(--ink)}
+.fld input:focus-visible,.fld select:focus-visible,.fld textarea:focus-visible{box-shadow:0 2px 0 var(--gold)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips input{position:absolute;opacity:0;pointer-events:none}
+.chips label{font:500 13px/1 var(--f-body);letter-spacing:0;text-transform:none;color:var(--ink);border:1px solid #d5cfc4;border-radius:999px;padding:11px 16px;cursor:pointer;transition:.25s}
+.chips input:checked+label{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chips input:focus-visible+label{outline:2px solid var(--gold);outline-offset:2px}
+.submit{grid-column:1/-1;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.btn-dark{display:inline-flex;align-items:center;gap:14px;min-height:56px;padding:0 28px;border-radius:999px;border:0;background:var(--ink);color:#fff;font:600 13px/1 var(--f-body);letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:background .3s,color .3s}
+.btn-dark:hover{background:var(--gold);color:var(--ink)}
+.form-note{font-size:14px;color:var(--mute);margin:0}
+.form-note.ok{color:var(--ink)}
+.form-note.err{color:#a3270f}

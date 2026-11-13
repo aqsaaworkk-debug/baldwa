@@ -1,0 +1,16 @@
+<svg viewBox="278 86 822 940" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Baldwa">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FBCB36"/><stop offset="1" stop-color="#F4A30C"/></linearGradient></defs>
+<g fill="url(#bg)">
+<path d="M687 97 L735 183 L390 810 L290 810Z"/>
+<path d="M752 212 L763 231 L441 810 L429 810Z"/>
+<path d="M774 250 L785 269 L487 810 L475 810Z"/>
+<path d="M795 287 L1082 810 L982 810 L745 380Z"/>
+<path d="M724 416 L944 810 L931 810 L717 429Z"/>
+<path d="M705 452 L905 810 L892 810 L698 465Z"/>
+<path d="M687 485 L872 810 L503 810Z" fill="#F9B514"/>
+</g>
+<g fill="#EF5A12"><path d="M612 810 A75 75 0 0 1 762 810Z"/><path d="M816.1 782.6 L775.0 783.3 L778.3 798.6Z"/><path d="M811.4 726.1 L758.6 752.3 L767.4 765.2Z"/><path d="M773.1 677.5 L730.4 728.9 L743.5 737.4Z"/><path d="M687.0 624.0 L679.2 718.3 L694.8 718.3Z"/><path d="M600.9 677.5 L630.5 737.4 L643.6 728.9Z"/><path d="M562.6 726.1 L606.6 765.2 L615.4 752.3Z"/><path d="M557.9 782.6 L595.7 798.6 L599.0 783.3Z"/></g>
+<g fill="url(#bg)"><rect x="287" y="828" width="800" height="12"/>
+<text x="687" y="989" text-anchor="middle" font-family="Archivo, 'Arial Black', sans-serif" font-weight="900" font-size="170" textLength="796" lengthAdjust="spacingAndGlyphs">BALDWA</text>
+<rect x="287" y="1005" width="806" height="13"/></g>
+</svg>

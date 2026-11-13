@@ -1,0 +1,12 @@
+/* ---------- Header ---------- */
+.top{position:fixed;top:0;left:0;right:0;z-index:60;height:calc(var(--head) + env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px);padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.88);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);border-bottom:1px solid transparent;transition:border-color .4s}
+.top.scrolled{border-bottom-color:var(--line)}
+.brand{display:block;line-height:0;text-decoration:none}
+.brand svg{height:50px;width:auto;display:block}
+html.brand-wait .brand{visibility:hidden}
+.burger{width:52px;height:52px;display:grid;place-content:center;gap:7px;background:none;border:0;cursor:pointer;border-radius:50%;transition:background .3s}
+.burger:hover{background:var(--paper)}
+.burger span{display:block;width:30px;height:1.5px;background:var(--ink);transition:width .4s var(--ease),transform .4s var(--ease)}
+.burger span:nth-child(2){width:20px;margin-left:auto}
+.burger span:nth-child(3){width:25px;margin-left:auto}
+.burger:hover span{width:30px}

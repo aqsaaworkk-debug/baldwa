@@ -1,0 +1,17 @@
+/* ---------- Hero ---------- */
+.hero{padding-top:calc(var(--head) + env(safe-area-inset-top,0px) + 4px);padding-bottom:16px}
+.hero-frame{position:relative;height:clamp(520px,calc(100vh - var(--head) - 24px),1020px);overflow:hidden;border-radius:3px;background:linear-gradient(180deg,#6f8aa8 0%,#e9c69c 58%,#c9b18f 60%,#b79a74 100%);clip-path:inset(0 0 0 0);transition:clip-path 1.4s var(--ease)}
+html.intro-on .hero-frame{clip-path:inset(12% 9% 12% 9% round 3px)}
+.hero-frame canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero-shade{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(10,8,6,.30),rgba(10,8,6,0) 70%),linear-gradient(to top,rgba(10,8,6,.42),rgba(10,8,6,0) 32%)}
+.hero-copy{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;text-align:center;color:#fff;gap:22px;padding:0 24px}
+.hero-copy .eyebrow{color:rgba(255,255,255,.92);letter-spacing:.36em;font-size:13px}
+.hero-copy h1{font-size:clamp(48px,7.6vw,132px);line-height:.96;max-width:14ch;text-shadow:0 2px 40px rgba(0,0,0,.25);transition:transform 1.4s var(--ease-out) .2s,opacity 1.2s var(--ease-out) .2s}
+html.intro-on .hero-copy h1{transform:translateY(40px);opacity:0}
+.link-under{font:600 13px/1 var(--f-body);letter-spacing:.3em;text-transform:uppercase;color:#fff;text-decoration:none;padding:10px 2px 12px;border-bottom:1px solid rgba(255,255,255,.9);transition:border-color .3s,color .3s}
+.link-under:hover{color:var(--gold);border-color:var(--gold)}
+.hero-meta{position:absolute;left:24px;right:24px;bottom:22px;display:flex;justify-content:space-between;gap:16px;color:rgba(255,255,255,.88);font:500 11px/1.4 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;flex-wrap:wrap}
+.hero-meta b{font-weight:500;color:var(--gold)}
+.scroll-cue{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);width:1px;height:46px;background:rgba(255,255,255,.35);overflow:hidden}
+.scroll-cue::after{content:"";position:absolute;left:0;top:-50%;width:1px;height:50%;background:#fff;animation:cue 2.2s var(--ease) infinite}
+@keyframes cue{to{top:110%}}

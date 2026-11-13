@@ -1,0 +1,6 @@
+/* ---------- Intro ---------- */
+#intro{position:fixed;inset:0;z-index:300;background:var(--white);display:grid;place-items:center;transition:background-color .9s var(--ease);animation:introFail .6s 6s forwards}
+#intro.leaving{background-color:rgba(255,255,255,0);pointer-events:none}
+@keyframes introFail{to{opacity:0;visibility:hidden}}
+.intro-mark{width:min(230px,46vw);will-change:transform}
+.intro-mark svg{width:100%;height:auto;display:block;overflow:visible}

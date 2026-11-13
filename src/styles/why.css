@@ -1,0 +1,12 @@
+/* ---------- Why ---------- */
+.why{background:var(--paper);padding-block:140px}
+.why-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.8fr);gap:40px;align-items:end}
+.why-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:56px;perspective:1200px}
+.card{position:relative;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:32px 28px 30px;min-height:280px;display:flex;flex-direction:column;gap:14px;transform-style:preserve-3d;transition:box-shadow .5s,border-color .4s;--mx:50%;--my:50%}
+.card::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle at var(--mx) var(--my),rgba(245,178,26,.16),rgba(245,178,26,0) 45%);opacity:0;transition:opacity .4s;pointer-events:none}
+.card:hover{box-shadow:0 30px 60px rgba(30,24,10,.10);border-color:#e8d6ac}
+.card:hover::before{opacity:1}
+.card .ic{width:52px;height:52px;border-radius:12px;background:var(--ink);color:var(--gold);display:grid;place-items:center;transform:translateZ(30px)}
+.card h3{font:600 20px/1.3 var(--f-body);letter-spacing:-.01em;transform:translateZ(20px);margin-top:18px}
+.card p{margin:0;color:var(--mute);font-size:15px;transform:translateZ(10px)}
+.card .k{margin-top:auto;font:500 11px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:#8d887f}
