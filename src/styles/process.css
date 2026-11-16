@@ -13,21 +13,23 @@
 .process .pr-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:center}
 .process .pr-road{position:relative}
 
-/* 3D drawing-sheet stack (original illustration), now driven by the road's progress */
-.process .stack-wrap{position:relative;height:360px;display:grid;place-items:center;perspective:1800px}
-.process .iso{position:relative;width:300px;height:300px;transform-style:preserve-3d;transform:rotateX(57deg) rotateZ(-42deg) scale(var(--pr-iso,.72));transition:transform 1.2s var(--ease-out)}
-.process .sheet{position:absolute;inset:0;background:rgba(255,255,255,.94);border:1px solid #d8d3c9;box-shadow:0 1px 0 rgba(0,0,0,.02),-18px 18px 40px rgba(20,16,8,.10);color:#55524b;transform:translateZ(calc(var(--i) * 46px));transition:transform .9s var(--ease-out),opacity .6s,color .4s,border-color .4s,box-shadow .6s}
-.process .sheet svg{width:100%;height:100%;display:block}
-.process .sheet.active{transform:translateZ(calc(var(--i) * 46px + 70px));color:var(--gold-deep);border-color:var(--gold);box-shadow:-30px 30px 60px rgba(183,123,0,.18)}
-.process .sheet.above{opacity:.22}
+/* Step pictures (illustrations only, no card or number), driven by the road's progress.
+   .active = the stage just reached (visible); no class = earlier stages (faded out); .above = not reached yet. */
+.process .stack-wrap{position:relative;height:340px;display:grid;place-items:center;perspective:1400px}
+.process .deck{position:relative;height:calc(100% - 40px);aspect-ratio:380/460;max-width:calc(100% - 48px)}
+.process .step-card{position:absolute;inset:0;opacity:0;transform:translateY(-30px) scale(.94);transition:transform .9s var(--ease-out),opacity .6s}
+.process .step-card img{display:block;width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}
+.process .step-card.active{opacity:1;transform:none}
+.process .step-card.above{opacity:0;transform:translateY(40px) rotateY(-34deg) scale(.92)}
 
-/* Wide screens: sheet stack on the left, road on the right (as in the original layout) */
+/* Wide screens: card deck on the left, road on the right */
 @media (min-width:1101px){
   .process .pr-layout{grid-template-columns:minmax(0,.34fr) minmax(0,1fr);gap:clamp(24px,3vw,56px)}
-  .process .stack-wrap{height:min(560px,calc(100svh - var(--head) - 80px));--pr-iso:.74}
+  .process .stack-wrap{height:min(600px,calc(100svh - var(--head) - 60px))}
+  .process .deck{height:auto;width:min(calc(100% - 56px),340px);max-width:none}
 }
-@media (min-width:1360px){
-  .process .stack-wrap{--pr-iso:.84}
+@media (prefers-reduced-motion:reduce){
+  .process .step-card{transition:none}
 }
 
 /* Route: a tilted 3D ground plane (pencil stroke, grid, anchors) under an upright layer (pins, pencil) */

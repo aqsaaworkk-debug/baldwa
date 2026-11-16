@@ -20,13 +20,13 @@ type Tile =
   | { area: string; tone: string; z: number; kind: 'project'; i: number }
   | { area: string; tone: string; z: number; kind: 'brand' | 'plan' | 'contact' };
 const TILES: Tile[] = [
-  { area: 'a', tone: 'night', z: 10, kind: 'project', i: 1 },
-  { area: 'b', tone: 'gold', z: 28, kind: 'project', i: 0 },
-  { area: 'c', tone: 'deep', z: 30, kind: 'project', i: 3 },
-  { area: 'd', tone: 'paper', z: 18, kind: 'project', i: 4 },
-  { area: 'e', tone: 'sun', z: 24, kind: 'contact' },
+  { area: 'a', tone: 'white', z: 10, kind: 'project', i: 1 },
+  { area: 'b', tone: 'paper', z: 28, kind: 'project', i: 0 },
+  { area: 'c', tone: 'stone', z: 30, kind: 'project', i: 3 },
+  { area: 'd', tone: 'white', z: 18, kind: 'project', i: 4 },
+  { area: 'e', tone: 'stone', z: 24, kind: 'contact' },
   { area: 'f', tone: 'white', z: 40, kind: 'brand' },
-  { area: 'g', tone: 'white', z: 6, kind: 'project', i: 5 },
+  { area: 'g', tone: 'paper', z: 6, kind: 'project', i: 5 },
   { area: 'h', tone: 'paper', z: 14, kind: 'project', i: 2 },
   { area: 'i', tone: 'night', z: 22, kind: 'plan' },
 ];
@@ -178,6 +178,7 @@ export default function Projects() {
             gsap.quickTo(f, 'z', { duration: 0.6, ease: 'power3.out' }),
           ]);
         });
+        
         const fMove = (e: PointerEvent) => {
           const f = (e.target as HTMLElement).closest<HTMLElement>('.pj-face');
           if (!f || !fx.has(f)) return;

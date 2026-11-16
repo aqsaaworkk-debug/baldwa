@@ -4,23 +4,16 @@ import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 
 // Five stages along one hand-drawn route. `phase`, `text` and `tags` are the studio's existing process copy.
 const STAGES = [
-  { title: 'Analysis', phase: 'Site & brief', text: 'Site diligence, brief workshops, cost envelope and stakeholder alignment – before a single line is drawn.', tags: ['Site visit', 'Survey', 'Brief'] },
+  { title: 'Vision', phase: 'Site & brief', text: 'Initial consultation to deeply understand your vision, lifestyle goals, and project requirements.', tags: ['Site visit', 'Survey', 'Brief'] },
   { title: 'Strategize', phase: 'Concept & massing', text: 'A delivery model, master programme and approvals map – the invisible scaffolding every successful project stands on.', tags: ['Massing models', 'Sun studies'] },
   { title: 'Design', phase: 'Design development', text: 'Architecture, interiors, structure and MEP developed together in one multidisciplinary practice – every decision cross-checked against the brief and the budget.', tags: ['Plans & sections', 'Material palette', 'Interiors'] },
   { title: 'Execute', phase: 'Drawings & approvals', text: 'BIM coordination, contractor management, weekly cost dashboards and full-time site supervision.', tags: ['Working drawings', 'Approvals'] },
   { title: 'Deliver', phase: 'Build & handover', text: 'Snag closure, FF&E, O&M manuals, warranty and a live asset model handed to the client.', tags: ['Site supervision', 'Handover'] },
 ];
 
-const mono = { fontFamily: 'JetBrains Mono, monospace', fontSize: 10, fill: 'currentColor', stroke: 'none' } as const;
-
-// One drawing sheet per stage, stacked as an exploded isometric. The sheet for the latest reached stage lifts out.
-const SHEETS = [
-  <svg key="0" viewBox="0 0 300 300" fill="none" stroke="currentColor" strokeWidth="1.3"><g opacity=".25"><path d="M20 60H280M20 100H280M20 140H280M20 180H280M20 220H280M20 260H280M60 20V280M100 20V280M140 20V280M180 20V280M220 20V280M260 20V280" /></g><path d="M58 76L238 62L250 232L48 242Z" strokeWidth="2" /><path d="M38 214Q150 30 262 214" strokeDasharray="4 6" /><circle cx="150" cy="78" r="9" /><path d="M262 36v26M262 36l-6 10M262 36l6 10" /><text x="24" y="290" style={mono}>01 SITE · SUN PATH</text></svg>,
-  <svg key="1" viewBox="0 0 300 300" fill="none" stroke="currentColor" strokeWidth="1.3"><path d="M58 76L238 62L250 232L48 242Z" opacity=".3" /><rect x="74" y="92" width="96" height="70" strokeWidth="2" /><rect x="128" y="146" width="104" height="66" strokeWidth="2" /><path d="M84 162l20-20M100 162l38-38M118 162l44-44M128 136l34-34M138 212l40-40M156 212l58-58M176 212l46-46M196 212l26-26" /><text x="24" y="290" style={mono}>02 CONCEPT · MASSING</text></svg>,
-  <svg key="2" viewBox="0 0 300 300" fill="none" stroke="currentColor" strokeWidth="1.3"><rect x="56" y="62" width="190" height="170" strokeWidth="2.4" /><path d="M56 132H150M150 62V232M150 160H246M196 160V232M104 132V232" /><path d="M150 110a18 18 0 0 1 18-18M104 190a16 16 0 0 0-16 16" /><rect x="164" y="76" width="68" height="70" strokeDasharray="3 4" /><text x="24" y="290" style={mono}>03 DESIGN · PLANS</text></svg>,
-  <svg key="3" viewBox="0 0 300 300" fill="none" stroke="currentColor" strokeWidth="1.3"><rect x="56" y="62" width="150" height="120" /><path d="M56 200H206M56 194v12M206 194v12M224 62V182M218 62h12M218 182h12" /><text x="116" y="216" style={mono}>{"42'-0\""}</text><rect x="180" y="226" width="96" height="50" strokeWidth="2" /><path d="M180 244H276M228 226V276" /><text x="186" y="240" style={{ ...mono, fontSize: 9 }}>A-101</text><text x="24" y="290" style={mono}>04 DRAWINGS</text></svg>,
-  <svg key="4" viewBox="0 0 300 300" fill="none" stroke="currentColor" strokeWidth="1.3"><path d="M60 70H240M60 150H240M60 230H240M60 70V230M120 70V230M180 70V230M240 70V230" strokeWidth="2" /><g fill="currentColor" stroke="none">{[65, 145, 225].flatMap((y) => [55, 115, 175, 235].map((x) => <rect key={`${x}-${y}`} x={x} y={y} width="10" height="10" />))}</g><text x="24" y="290" style={mono}>05 BUILD · STRUCTURE</text></svg>,
-];
+// One illustrated step card per stage (cropped from the studio's "architectural journey" graphic, steps 1 to 5).
+// The card for the latest reached stage sits on top of the deck; earlier cards tuck in behind it.
+const CARDS = STAGES.map((s, i) => ({ src: `/images/process/step-${i + 1}.webp`, title: s.title }));
 
 // Horizontal marker positions as a fraction of the road width. Must match `--x` handling in process.css.
 const XS = [0.08, 0.29, 0.5, 0.71, 0.92];
@@ -218,11 +211,12 @@ export default function Process() {
           pins.current[k]?.classList.toggle('is-on', on);
           anchors.current[k]?.classList.toggle('is-on', on);
         });
-        // The 3D sheet stack follows the road: the latest reached stage's sheet lifts, sheets above it fade back.
+        // The card deck follows the road: the latest reached stage's card is on top, later cards wait out of sight.
         const active = Math.max(0, reached - 1);
         sheets.current.forEach((el, k) => {
           el?.classList.toggle('active', k === active);
           el?.classList.toggle('above', k > active);
+          el?.style.setProperty('--d', String(Math.max(0, active - k)));
         });
       };
 
@@ -280,9 +274,12 @@ export default function Process() {
         <div className="pr-pin">
           <div className="wrap pr-layout">
             <div className="stack-wrap" aria-hidden="true">
-              <div className="iso">
-                {SHEETS.map((s, i) => (
-                  <div key={i} ref={(el) => { sheets.current[i] = el; }} className={`sheet${i === 0 ? ' active' : ' above'}`} style={{ ['--i' as string]: i }}>{s}</div>
+              <div className="deck">
+                {CARDS.map((c, i) => (
+                  <div key={c.src} ref={(el) => { sheets.current[i] = el; }} className={`step-card${i === 0 ? ' active' : ' above'}`}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={c.src} alt="" width={380} height={460} loading="lazy" decoding="async" />
+                  </div>
                 ))}
               </div>
             </div>
@@ -332,7 +329,7 @@ export default function Process() {
                   <li key={s.title} ref={(el) => { items.current[i] = el; }}
                     className={`pr-stage ${i % 2 ? 'pr-up' : 'pr-down'}`} style={{ ['--x' as string]: `${XS[i] * 100}%` }}>
                     <p className="pr-kicker"><span>{String(i + 1).padStart(2, '0')}</span>{s.phase}</p>
-                    <h3 aria-label={s.title}>{[...s.title].map((ch, k) => <span key={k} aria-hidden="true">{ch}</span>)}</h3>
+                    <h3 aria-label={s.title}>{[...s.title].map((ch, k) => (ch === ' ' ? ' ' : <span key={k} aria-hidden="true">{ch}</span>))}</h3>
                     <p className="pr-text">{s.text}</p>
                     <p className="pr-tags">{s.tags.join(' · ')}</p>
                   </li>
