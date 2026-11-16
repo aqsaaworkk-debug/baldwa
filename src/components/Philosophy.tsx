@@ -1,66 +1,196 @@
 'use client';
 import { useRef } from 'react';
-import { ScrollTrigger, useGSAP } from '@/lib/gsap';
+import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { prefersReducedMotion } from '@/lib/dom';
 
-// Wrap a word in *asterisks* to make it gold italic.
-const MANIFESTO = 'Every building we draw begins with the *sun.* Where it rises, where it sets and how it falls across a room decide the plan before anything else.';
-const WORDS = MANIFESTO.split(/\s+/).map((w) => ({ text: w.replace(/\*/g, ''), gold: w.startsWith('*') }));
+// Wrap a word in *asterisks* to make it gold.
+const HEADLINE = 'Every building we draw begins with the *sun.*';
+const WORDS = HEADLINE.split(/\s+/).map((w) => ({ text: w.replace(/\*/g, ''), gold: w.startsWith('*') }));
 
-const RAYS = Array.from({ length: 24 }, (_, i) => {
-  const a = (i * 15 * Math.PI) / 180, w = .06, r1 = 112, r2 = i % 2 ? 170 : 196;
-  const p = [[r2 * Math.cos(a), r2 * Math.sin(a)], [r1 * Math.cos(a + w), r1 * Math.sin(a + w)], [r1 * Math.cos(a - w), r1 * Math.sin(a - w)]];
-  return 'M' + p.map((q) => `${q[0].toFixed(1)} ${q[1].toFixed(1)}`).join(' L') + 'Z';
-});
-
+// Three ideas. `orb` picks the style of the matching planet in the orbit (philosophy.css).
 const PILLARS = [
-  { n: 'I · Light', title: 'Light first', text: 'Rooms are placed along the sun path, so mornings, afternoons and evenings each have a room that suits them.' },
-  { n: 'II · Shade', title: 'Shade as craft', text: 'Deep overhangs, screens and courtyards keep interiors cool and turn harsh daylight into soft patterns.' },
-  { n: 'III · Permanence', title: 'Built to last', text: 'Stone, lime and timber chosen to age well, with details that are honest about how they are made.' },
+  { orb: 'light', title: 'Light first', text: 'Rooms are placed along the sun path, so mornings, afternoons and evenings each have a room that suits them.' },
+  { orb: 'shade', title: 'Shade as craft', text: 'Deep overhangs, screens and courtyards keep interiors cool and turn harsh daylight into soft patterns.' },
+  { orb: 'stone', title: 'Built to last', text: 'Stone, lime and timber chosen to age well, with details that are honest about how they are made.' },
 ];
+
+// The three ideas as diary pages, in screen order (left, centre, right). They open right first, then left, then the centre fills in,
+// so the reading order while scrolling is still Light, Shade, Built to last.
+const PAGES = [
+  { side: 'side-l', ...PILLARS[1] },
+  { side: 'mid', ...PILLARS[2] },
+  { side: 'side-r', ...PILLARS[0] },
+];
+
+// Orbits in a -100..100 box around the sun: radii, tilt (deg), angular speed (rad/s), start angle, planet size (% of stage).
+const ORBITS = [
+  { rx: 60, ry: 19, tilt: -14, speed: 0.5, start: 0.6, size: 10 },
+  { rx: 79, ry: 26, tilt: 9, speed: -0.33, start: 2.4, size: 8 },
+  { rx: 96, ry: 31, tilt: -4, speed: 0.23, start: 4.3, size: 6.5 },
+];
+const RAD = Math.PI / 180;
+const f1 = (n: number) => n.toFixed(1);
+// Half of a tilted ellipse as an SVG arc: the front half passes in front of the sun, the back half behind it.
+const arc = (o: (typeof ORBITS)[number], front: boolean) => {
+  const x = o.rx * Math.cos(o.tilt * RAD), y = o.rx * Math.sin(o.tilt * RAD);
+  return `M${f1(x)} ${f1(y)}A${o.rx} ${o.ry} ${o.tilt} 0 ${front ? 1 : 0} ${f1(-x)} ${f1(-y)}`;
+};
 
 export default function Philosophy() {
   const root = useRef<HTMLElement>(null);
-  const sun = useRef<HTMLDivElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
+  const planets = useRef<(HTMLSpanElement | null)[]>([]);
 
-  // The sun rises behind the manifesto as the section scrolls in, lighting it word by word.
   useGSAP(() => {
-    const words = Array.from(root.current!.querySelectorAll<HTMLElement>('.manifesto .w'));
-    if (prefersReducedMotion()) { words.forEach((w) => w.classList.add('lit')); sun.current!.style.setProperty('--rise', '0'); return; }
+    const sec = root.current!, st = stage.current!;
+    const words = Array.from(sec.querySelectorAll<HTMLElement>('.ph-title .w'));
+    const reduce = prefersReducedMotion();
+
+    // Planets travel their ellipses; scale and stacking follow depth so they pass behind and in front of the sun.
+    let size = st.clientWidth;
+    const place = (t: number) => {
+      const k = size / 200;
+      ORBITS.forEach((o, i) => {
+        const el = planets.current[i];
+        if (!el) return;
+        const a = o.start + t * o.speed, depth = Math.sin(a);
+        const lx = o.rx * Math.cos(a), ly = o.ry * depth;
+        const c = Math.cos(o.tilt * RAD), s = Math.sin(o.tilt * RAD);
+        el.style.transform = `translate(-50%,-50%) translate3d(${f1((lx * c - ly * s) * k)}px,${f1((lx * s + ly * c) * k)}px,0) scale(${(1 + 0.24 * depth).toFixed(3)})`;
+        el.style.zIndex = depth > 0 ? '4' : '1';
+      });
+    };
+    const ro = new ResizeObserver(() => { size = st.clientWidth; if (reduce) place(0); });
+    ro.observe(st);
+    place(0);
+
+    if (reduce) {
+      words.forEach((w) => w.classList.add('lit'));
+      return () => ro.disconnect();
+    }
+
+    let visible = true;
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; });
+    io.observe(sec);
+    const tick = (time: number) => { if (visible) place(time); };
+    gsap.ticker.add(tick);
+
+    // The headline lights up word by word as the section scrolls in.
     ScrollTrigger.create({
-      trigger: root.current, start: 'top bottom', end: 'top 5%', scrub: true,
+      trigger: sec.querySelector('.ph-title'), start: 'top 88%', end: 'top 42%', scrub: true,
       onUpdate: ({ progress }) => {
-        sun.current!.style.setProperty('--rise', (1 - progress).toFixed(3));
-        const lit = Math.round(Math.min(1, progress * 1.25) * words.length);
+        const lit = Math.round(progress * words.length);
         words.forEach((w, i) => w.classList.toggle('lit', i < lit));
       },
+    });
+
+    // The system grows into place, the sun breathes, and soft lights drift in the background.
+    gsap.from('.ph-system', { scale: 0.72, opacity: 0, ease: 'none', scrollTrigger: { trigger: sec, start: 'top 85%', end: 'top 25%', scrub: 0.6 } });
+    gsap.to('.ph-glow', { scale: 1.14, opacity: 0.75, duration: 3.2, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    gsap.to('.ph-sun', { y: -10, duration: 4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    gsap.utils.toArray<HTMLElement>('.ph-blob').forEach((el, i) => {
+      gsap.to(el, { x: i % 2 ? -70 : 80, y: i % 2 ? 50 : -60, duration: 11 + i * 3, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    });
+
+    // Mouse only: the whole system leans towards the pointer.
+    const cleanups: (() => void)[] = [];
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      const tilt = sec.querySelector<HTMLElement>('.ph-tilt')!;
+      const ry = gsap.quickTo(tilt, 'rotationY', { duration: 0.9, ease: 'power3.out' });
+      const rx = gsap.quickTo(tilt, 'rotationX', { duration: 0.9, ease: 'power3.out' });
+      const move = (e: PointerEvent) => {
+        const r = sec.getBoundingClientRect();
+        ry(((e.clientX - r.left) / r.width - 0.5) * 22);
+        rx(-((e.clientY - r.top) / r.height - 0.5) * 14);
+      };
+      const leave = () => { ry(0); rx(0); };
+      sec.addEventListener('pointermove', move);
+      sec.addEventListener('pointerleave', leave);
+      cleanups.push(() => { sec.removeEventListener('pointermove', move); sec.removeEventListener('pointerleave', leave); });
+    }
+
+    return () => { gsap.ticker.remove(tick); io.disconnect(); ro.disconnect(); cleanups.forEach((fn) => fn()); };
+  }, { scope: root });
+
+  // Diary: one blank page first; on scroll a page opens to the right, then one to the left, then the centre page gets its text.
+  // On narrow screens the same thing happens vertically (a page opens downwards, then one upwards).
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+    mm.add({ wide: '(min-width: 901px)', narrow: '(max-width: 900px)', reduce: '(prefers-reduced-motion: reduce)' }, (ctx) => {
+      const { wide, reduce } = ctx.conditions as { wide: boolean; reduce: boolean };
+      if (reduce) return; // everything simply stays open
+      const box = root.current!.querySelector<HTMLElement>('.ph-cards')!;
+      const q = gsap.utils.selector(box);
+      const prop = wide ? 'rotationY' : 'rotationX';
+      // Each side page is folded flat over the centre page, hinged on the edge it shares with it.
+      gsap.set(q('.side-r'), { transformOrigin: wide ? '0% 50%' : '50% 0%', [prop]: wide ? -180 : 180 });
+      gsap.set(q('.side-l'), { transformOrigin: wide ? '100% 50%' : '50% 100%', [prop]: wide ? 180 : -180, autoAlpha: 0 });
+      gsap.set(q('.ph-card-in > *'), { autoAlpha: 0 });
+
+      const tl = gsap.timeline({
+        defaults: { ease: 'power1.inOut' },
+        scrollTrigger: { trigger: box, start: wide ? 'top 82%' : 'top 80%', end: wide ? 'top 20%' : 'center 45%', scrub: 0.5 },
+      });
+      tl.to(q('.side-r'), { [prop]: 0, duration: 1 }, 0)
+        .set(q('.side-r .ph-card-in > *'), { autoAlpha: 1 }, 0.5) // text appears once the page is past upright
+        .set(q('.side-l'), { autoAlpha: 1 }, 1)
+        .to(q('.side-l'), { [prop]: 0, duration: 1 }, 1)
+        .set(q('.side-l .ph-card-in > *'), { autoAlpha: 1 }, 1.5)
+        .fromTo(q('.mid .ph-card-in > *'), { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.14, ease: 'power2.out' }, 2);
     });
   }, { scope: root });
 
   return (
     <section id="philosophy" className="philo gut" ref={root}>
-      <div className="sunwrap" aria-hidden="true">
-        <div className="sun" ref={sun}>
-          <svg viewBox="-200 -200 400 400">
-            <defs><radialGradient id="sunGlow"><stop offset="0" stopColor="#f5b21a" stopOpacity=".28" /><stop offset="1" stopColor="#f5b21a" stopOpacity="0" /></radialGradient></defs>
-            <circle r="200" fill="url(#sunGlow)" />
-            <g className="rays" fill="#ef5a12" opacity=".9">{RAYS.map((d) => <path key={d} d={d} />)}</g>
-            <circle r="92" fill="#ef5a12" />
-          </svg>
-        </div>
-        <div className="horizon" />
-      </div>
+      <svg className="ph-edge ph-edge-top" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path d="M0 0H1440V44C1180 112 900 20 620 60C380 94 180 110 0 52Z" />
+      </svg>
+      <span className="ph-blob b1" aria-hidden="true" />
+      <span className="ph-blob b2" aria-hidden="true" />
+
       <div className="wrap philo-in">
         <p className="eyebrow gold rv">Brand philosophy</p>
-        <p className="manifesto">
+
+        <div className="ph-system" aria-hidden="true">
+          <div className="ph-tilt">
+            <div className="ph-stage" ref={stage}>
+              <span className="ph-glow" />
+              <svg className="ph-rings ph-rings-back" viewBox="-100 -100 200 200">
+                {ORBITS.map((o, i) => <path key={i} d={arc(o, false)} />)}
+              </svg>
+              <span className="ph-sun" />
+              <svg className="ph-rings ph-rings-front" viewBox="-100 -100 200 200">
+                {ORBITS.map((o, i) => <path key={i} d={arc(o, true)} />)}
+              </svg>
+              {ORBITS.map((o, i) => (
+                <span key={i} ref={(el) => { planets.current[i] = el; }} className={`ph-planet ph-orb ${PILLARS[i].orb}`} style={{ width: `${o.size}%` }} />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <h2 className="ph-title">
           {WORDS.map((w, i) => <span key={i}><span className={`w${w.gold ? ' g' : ''}`}>{w.text}</span>{i < WORDS.length - 1 ? ' ' : ''}</span>)}
-        </p>
-        <div className="pillars">
-          {PILLARS.map((p) => (
-            <div key={p.title} className="pillar rv"><span className="mono">{p.n}</span><h3>{p.title}</h3><p>{p.text}</p></div>
+        </h2>
+        <p className="ph-lede rv">Where it rises, where it sets and how it falls across a room decide the plan before anything else.</p>
+
+        <div className="ph-cards">
+          {PAGES.map((p) => (
+            <div key={p.title} className={`ph-card ${p.side}`}>
+              <div className="ph-card-in">
+                <h3>{p.title}</h3>
+                <p>{p.text}</p>
+              </div>
+            </div>
           ))}
+          {/* Binder rings on the two hinges */}
+          {['a1', 'a2', 'b1', 'b2'].map((c) => <span key={c} className={`ph-link ${c}`} aria-hidden="true" />)}
         </div>
       </div>
+
+      <svg className="ph-edge ph-edge-bottom" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path d="M0 120H1440V58C1200 14 980 96 700 84C440 72 240 16 0 62Z" />
+      </svg>
     </section>
   );
 }

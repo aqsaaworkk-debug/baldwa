@@ -1,41 +1,29 @@
-# UI/UX Specification: Immersive 3D "Places We Have Shaped" Featured Projects Section
+Prompt: Scroll-Driven Full-Screen Video Section ("Why Baldwa")
 
-## 1. Overview & Concept
-* **Goal**: Build an immersive, 3D-animated "Featured Projects" section inspired by the Dropbox Brand reference style (`https://brand.dropbox.com/`), tailored for a scroll-driven storytelling experience.
-* **Core Interaction Flow**: 
-  1. **Initial State**: The section opens with a hero card centered on screen displaying the heading **"Places We Have Shaped"** alongside a stunning, high-fidelity 3D house/architectural visual asset.
-  2. **Scroll-Driven Shrinking**: As the user scrolls down, the central hero box smoothly shrinks down to a compact, docked sidebar card while remaining fully readable.
-  3. **Grid Reveal & Hover Effects**: Concurrently, surrounding project cards emerge in a 3D perspective layout. Hovering over any project triggers a dynamic, responsive **shiny light / specular glint border effect** to highlight interactivity.
-  4. **Click Interaction**: Clicking any project card triggers a smooth 3D depth transition to open the project details.
+Objective
 
----
+Build a responsive, modern "Why Baldwa" section for the project where a background video runs in full-screen and step-by-step points appear dynamically as the user scrolls.
 
-## 2. Technical Stack & Architecture
-* **Framework**: React / HTML5 with Tailwind CSS for styling.
-* **3D / Animation Engine**: Three.js / React Three Fiber (R3F) or Framer Motion for smooth scroll-linked depth transformations and 3D perspective tilts.
-* **Styling & Effects**: Custom CSS shaders or Tailwind utility classes for the dynamic hover "shiny light" / glowing border effect.
+Key Requirements
 
----
+Layout & Container:
 
-## 3. Key Component Breakdown
+Create a sticky, full-screen section that stays pinned in view while scrolling through its height.
 
-### A. Hero Card ("Places We Have Shaped")
-* **Initial State (`scroll_progress = 0`)**: 
-  * Occupies center stage with a large, elevated 3D depth layer.
-  * Displays the title **"Places We Have Shaped"** and a rich, interactive 3D house model/photo asset.
-* **Transition State (`scroll_progress > 0`)**:
-  * Smoothly scales down (e.g., from `scale(1)` to `scale(0.45)`) and glides to the left side of the viewport.
-  * Typography and asset scale down proportionally to maintain complete legibility.
+Embed a background video that plays continuously in full-screen and covers the container.
 
-### B. Project Grid & Cards
-* **Layout**: Positioned adjacent to the shrinking hero card in a dynamic 3D perspective grid.
-* **Hover Effect ("Shiny Light")**:
-  * Mouse-tracking radial gradient or dynamic pseudo-element border shimmer that follows cursor coordinates across the card surface, producing a metallic, luminous light sweep.
-* **Click Action**: 
-  * Triggers an immersive modal expansion or camera zoom-in transition into the selected project view.
+Add a dark overlay over the video to ensure high text contrast and readability.
 
----
+Scroll-Driven Step-by-Step Points:
 
-## 4. Implementation Guidelines
-1. **Performance**: Ensure smooth 60fps transitions by hardware-accelerating scale and transform properties (`will-change: transform`).
-2. **Responsiveness**: Scale down layout parameters gracefully on tablet and mobile viewports, converting the pinned sticky scroll into a vertical stacking flow if necessary.
+Do not use traditional floating cards or grid boxes.
+
+Display clean, minimal step-by-step points (e.g., numbered items) anchored on the screen.
+
+Implement scroll-trigger logic so that as the user scrolls, the text points transition, highlight, or fade in sequentially corresponding to the scroll progress within the section.
+
+Styling & User Experience:
+
+Use clean typography with smooth transitions.
+
+Keep the design minimalist so the primary focus remains on the background video and the sequential narrative points.

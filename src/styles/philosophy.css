@@ -1,19 +1,85 @@
-/* ---------- Philosophy ---------- */
-.philo{position:relative;background:var(--night);color:#fff;padding-block:160px 140px;overflow:hidden}
-.sunwrap{position:absolute;left:50%;top:0;bottom:0;width:min(1200px,140vw);transform:translateX(-50%);pointer-events:none}
-.sun{position:absolute;left:50%;top:52%;width:min(760px,110vw);aspect-ratio:1;transform:translate(-50%,calc(var(--rise,0.35) * 60%));opacity:.95}
-.sun svg{width:100%;height:100%;display:block}
-.sun .rays{transform-origin:0 0;animation:spin 90s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.horizon{position:absolute;left:0;right:0;top:calc(52% + min(380px,55vw));height:60%;background:var(--night)}
-.horizon::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(245,178,26,.7),transparent)}
-.philo-in{position:relative;z-index:1}
-.manifesto{font:400 clamp(36px,4.6vw,76px)/1.08 var(--f-display);margin:28px 0 0;max-width:20ch;letter-spacing:-.01em}
-.manifesto .w{color:#85817a;transition:color .5s}
-.manifesto .w.lit{color:#fff}
-.manifesto .w.g.lit{color:var(--gold);font-style:italic}
-.pillars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:clamp(120px,22vw,300px)}
-.pillar{border-top:1px solid rgba(255,255,255,.22);padding-top:22px;background:linear-gradient(rgba(11,11,10,.55),rgba(11,11,10,0))}
-.pillar .mono{font-size:11px;letter-spacing:.14em;color:var(--gold)}
-.pillar h3{font-size:40px;line-height:1;margin:12px 0 12px}
-.pillar p{margin:0;color:#c9c5bd;max-width:36ch}
+/* ---------- Philosophy: a small solar system on a night band, with curved edges ---------- */
+.philo{--ph-edge:clamp(40px,7vw,110px);position:relative;background:var(--night);color:var(--white);text-align:center;overflow:hidden;
+  padding-block:calc(var(--ph-edge) + 96px) calc(var(--ph-edge) + 110px)}
+/* Curved edges blend into the paper section above and the white section below */
+.ph-edge{position:absolute;left:0;width:100%;height:var(--ph-edge);display:block;pointer-events:none;z-index:1}
+.ph-edge-top{display:none}
+.ph-edge-bottom{bottom:-1px;fill:var(--white)}
+
+/* Soft drifting lights */
+.ph-blob{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;will-change:transform}
+.ph-blob.b1{width:min(520px,70vw);aspect-ratio:1;left:-8%;top:8%;background:color-mix(in srgb,var(--gold) 26%,transparent)}
+.ph-blob.b2{width:min(460px,64vw);aspect-ratio:1;right:-10%;bottom:10%;background:color-mix(in srgb,var(--sun) 22%,transparent)}
+
+.philo-in{position:relative;z-index:2}
+.philo .eyebrow{font-family:var(--f-fun);font-weight:500;font-size:13px}
+
+/* Solar system. .ph-system scales in on scroll, .ph-tilt leans to the pointer, .ph-stage holds the pieces. */
+.ph-system{margin:30px auto 0;width:min(280px,58vw);perspective:1100px}
+.ph-tilt{will-change:transform}
+.ph-stage{position:relative;width:100%;aspect-ratio:1}
+.ph-glow{position:absolute;inset:8%;border-radius:50%;z-index:0;
+  background:radial-gradient(circle,color-mix(in srgb,var(--gold) 46%,transparent) 0%,color-mix(in srgb,var(--sun) 16%,transparent) 42%,transparent 70%)}
+.ph-rings{position:absolute;inset:0;width:100%;height:100%;overflow:visible;fill:none;stroke-linecap:round}
+.ph-rings path{stroke:color-mix(in srgb,var(--gold) 70%,transparent);stroke-width:.55}
+.ph-rings path:nth-child(2){stroke:rgba(255,255,255,.34);stroke-dasharray:1.2 2.6}
+.ph-rings path:nth-child(3){stroke:color-mix(in srgb,var(--gold) 42%,transparent)}
+.ph-rings-back{z-index:1;opacity:.55}
+.ph-rings-front{z-index:3}
+.ph-sun{position:absolute;left:32%;top:32%;width:36%;aspect-ratio:1;border-radius:50%;z-index:2;
+  background:radial-gradient(circle at 34% 28%,color-mix(in srgb,var(--gold) 22%,var(--white)) 0%,var(--gold) 30%,var(--sun) 76%,color-mix(in srgb,var(--sun) 62%,var(--night)) 100%);
+  box-shadow:inset -10px -14px 30px color-mix(in srgb,var(--sun) 55%,var(--night)),0 0 60px 6px color-mix(in srgb,var(--gold) 48%,transparent),0 0 150px 40px color-mix(in srgb,var(--sun) 26%,transparent)}
+.ph-planet{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);will-change:transform}
+
+/* Planet styles, shared by the orbiting planets and the card icons */
+.ph-orb{display:block;aspect-ratio:1;border-radius:50%}
+.ph-orb.light{background:radial-gradient(circle at 34% 28%,var(--white) 0%,var(--gold) 52%,var(--gold-deep) 100%);box-shadow:0 0 22px color-mix(in srgb,var(--gold) 60%,transparent)}
+.ph-orb.shade{background:radial-gradient(circle at 72% 34%,var(--night-2) 0 50%,transparent 52%),radial-gradient(circle at 30% 30%,var(--white) 0%,var(--gold) 55%,var(--gold-deep) 100%);box-shadow:0 0 0 1px rgba(255,255,255,.12)}
+.ph-orb.stone{background:radial-gradient(circle at 34% 28%,var(--white) 0%,var(--paper) 40%,var(--night-mute) 100%);box-shadow:0 0 18px rgba(255,255,255,.28)}
+
+/* Headline and lede */
+.ph-title{margin:30px auto 0;max-width:17ch;font:400 clamp(34px,4.8vw,70px)/1.1 var(--f-play);letter-spacing:.01em}
+.ph-title .w{color:#5d5a54;transition:color .5s}
+.ph-title .w.lit{color:var(--white)}
+.ph-title .w.g.lit{color:var(--gold);text-shadow:0 0 34px color-mix(in srgb,var(--gold) 55%,transparent)}
+.ph-lede{margin:24px auto 0;max-width:46ch;font:400 19px/1.65 var(--f-fun);color:var(--night-mute)}
+
+/* Diary pages: three identical white pages joined by gold binder rings. The side pages start folded over the centre
+   page and are opened by scroll (GSAP rotates .ph-card around the hinge; see Philosophy.tsx). Without JS all are open.
+   Each .ph-card carries half the gap as padding, so its edge is exactly the hinge line. */
+.ph-cards{--ph-gap:22px;position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:clamp(64px,8vw,110px) calc(var(--ph-gap) / -2) 0;text-align:left;perspective:1700px}
+.ph-card{position:relative;padding-inline:calc(var(--ph-gap) / 2);will-change:transform}
+.ph-card.mid{z-index:2}
+.ph-card.side-r{z-index:3}
+.ph-card.side-l{z-index:4}
+.ph-card-in{height:100%;padding:clamp(30px,3.2vw,46px) clamp(26px,3vw,44px) clamp(34px,3.4vw,50px);border-radius:34px;background:var(--white);color:var(--ink);
+  box-shadow:0 40px 70px -34px rgba(0,0,0,.95),0 0 60px -30px color-mix(in srgb,var(--gold) 60%,transparent)}
+.ph-card h3{margin:0 0 20px;font:400 clamp(28px,3vw,46px)/1.05 var(--f-play);letter-spacing:.02em;color:var(--ink);text-shadow:.045em .045em 0 var(--gold)}
+.ph-card p{margin:0;max-width:30ch;font:500 clamp(17px,1.35vw,20px)/1.6 var(--f-fun);color:var(--ink-2)}
+/* A ring: two punched holes (background dots) and a gold loop running between them across the hinge */
+.ph-link{--ring:calc(var(--ph-gap) + 40px);position:absolute;z-index:6;width:var(--ring);height:22px;pointer-events:none;
+  background:radial-gradient(circle at 9px 50%,var(--night) 0 6.5px,transparent 7px),radial-gradient(circle at calc(100% - 9px) 50%,var(--night) 0 6.5px,transparent 7px)}
+.ph-link::after{content:"";position:absolute;inset:1px 7px;border:3.5px solid var(--gold);border-radius:999px;
+  box-shadow:0 3px 5px rgba(0,0,0,.45),inset 0 1px 0 color-mix(in srgb,var(--white) 60%,transparent)}
+.ph-link.a1,.ph-link.a2{left:calc(100% / 3 - var(--ring) / 2)}
+.ph-link.b1,.ph-link.b2{left:calc(200% / 3 - var(--ring) / 2)}
+.ph-link.a1,.ph-link.b1{top:calc(34% - 11px)}
+.ph-link.a2,.ph-link.b2{top:calc(66% - 11px)}
+
+@media (max-width:900px){
+  .philo{padding-block:calc(var(--ph-edge) + 64px) calc(var(--ph-edge) + 72px)}
+  /* Pages stack in three equal rows; the hinges and rings become horizontal */
+  .ph-cards{grid-template-columns:1fr;grid-auto-rows:1fr;max-width:440px;margin:56px auto 0}
+  .ph-card{padding-inline:0;padding-block:calc(var(--ph-gap) / 2)}
+  .ph-link{width:22px;height:var(--ring);
+    background:radial-gradient(circle at 50% 9px,var(--night) 0 6.5px,transparent 7px),radial-gradient(circle at 50% calc(100% - 9px),var(--night) 0 6.5px,transparent 7px)}
+  .ph-link::after{inset:7px 1px}
+  .ph-link.a1,.ph-link.a2{top:calc(100% / 3 - var(--ring) / 2)}
+  .ph-link.b1,.ph-link.b2{top:calc(200% / 3 - var(--ring) / 2)}
+  .ph-link.a1,.ph-link.b1{left:calc(26% - 11px)}
+  .ph-link.a2,.ph-link.b2{left:calc(74% - 11px)}
+  .ph-lede{font-size:17px}
+}
+@media (prefers-reduced-motion:reduce){
+  .ph-title .w{transition:none}
+}
