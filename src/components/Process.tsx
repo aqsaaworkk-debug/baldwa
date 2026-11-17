@@ -366,9 +366,6 @@ export default function Process() {
         </div>
       </div>
 
-      <svg className="pr-edge pr-edge-bottom" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-        <path d="M0 120H1440V52C1210 88 1000 100 760 86C520 72 300 18 0 40Z" />
-      </svg>
     </section>
   );
 }

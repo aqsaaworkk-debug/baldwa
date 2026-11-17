@@ -1,29 +1,12 @@
 'use client';
 import { useRef } from 'react';
-import { ScrollTrigger, useGSAP } from '@/lib/gsap';
+import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { prefersReducedMotion } from '@/lib/dom';
 
-// Wrap a word in *asterisks* to make it gold italic.
-const MANIFESTO = 'Every building we draw begins with the *sun.* Where it rises, where it sets and how it falls across a room decide the plan before anything else.';
-const WORDS = MANIFESTO.split(/\s+/).map((w) => ({ text: w.replace(/\*/g, ''), gold: w.startsWith('*') }));
+// Wrap a word in *asterisks* to make it gold.
+const HEADLINE = 'Every building we draw begins with the *sun.*';
+const WORDS = HEADLINE.split(/\s+/).map((w) => ({ text: w.replace(/\*/g, ''), gold: w.startsWith('*') }));
 
-const RAYS = Array.from({ length: 24 }, (_, i) => {
-  const a = (i * 15 * Math.PI) / 180, w = .06, r1 = 112, r2 = i % 2 ? 170 : 196;
-  const p = [[r2 * Math.cos(a), r2 * Math.sin(a)], [r1 * Math.cos(a + w), r1 * Math.sin(a + w)], [r1 * Math.cos(a - w), r1 * Math.sin(a - w)]];
-  return 'M' + p.map((q) => `${q[0].toFixed(1)} ${q[1].toFixed(1)}`).join(' L') + 'Z';
-});
-
-<<<<<<< Updated upstream
-const PILLARS = [
-  { n: 'I · Light', title: 'Light first', text: 'Rooms are placed along the sun path, so mornings, afternoons and evenings each have a room that suits them.' },
-  { n: 'II · Shade', title: 'Shade as craft', text: 'Deep overhangs, screens and courtyards keep interiors cool and turn harsh daylight into soft patterns.' },
-  { n: 'III · Permanence', title: 'Built to last', text: 'Stone, lime and timber chosen to age well, with details that are honest about how they are made.' },
-];
-
-export default function Philosophy() {
-  const root = useRef<HTMLElement>(null);
-  const sun = useRef<HTMLDivElement>(null);
-=======
 // Three ideas, one per diary page.
 const PILLARS = [
   { title: 'Light first', text: 'Rooms are placed along the sun path, so mornings, afternoons and evenings each have a room that suits them.' },
@@ -45,14 +28,8 @@ const FILM = { src: '/videos/philosophy-sun.mp4', poster: '/images/philosophy-su
 export default function Philosophy() {
   const root = useRef<HTMLElement>(null);
   const film = useRef<HTMLVideoElement>(null);
->>>>>>> Stashed changes
 
-  // The sun rises behind the manifesto as the section scrolls in, lighting it word by word.
   useGSAP(() => {
-<<<<<<< Updated upstream
-    const words = Array.from(root.current!.querySelectorAll<HTMLElement>('.manifesto .w'));
-    if (prefersReducedMotion()) { words.forEach((w) => w.classList.add('lit')); sun.current!.style.setProperty('--rise', '0'); return; }
-=======
     const sec = root.current!, video = film.current!;
     const words = Array.from(sec.querySelectorAll<HTMLElement>('.ph-title .w'));
 
@@ -63,23 +40,19 @@ export default function Philosophy() {
 
     // The film loads and plays only while the section is near the screen.
     const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) video.play().catch(() => {});
+      if (e.isIntersecting) video.play().catch(() => { });
       else video.pause();
     }, { rootMargin: '200px 0px' });
     io.observe(sec);
 
     // The headline lights up word by word as the section scrolls in.
->>>>>>> Stashed changes
     ScrollTrigger.create({
-      trigger: root.current, start: 'top bottom', end: 'top 5%', scrub: true,
+      trigger: sec.querySelector('.ph-title'), start: 'top 88%', end: 'top 42%', scrub: true,
       onUpdate: ({ progress }) => {
-        sun.current!.style.setProperty('--rise', (1 - progress).toFixed(3));
-        const lit = Math.round(Math.min(1, progress * 1.25) * words.length);
+        const lit = Math.round(progress * words.length);
         words.forEach((w, i) => w.classList.toggle('lit', i < lit));
       },
     });
-<<<<<<< Updated upstream
-=======
 
     // The film grows into place and soft lights drift in the background.
     gsap.from('.ph-system', { scale: 0.8, opacity: 0, ease: 'none', scrollTrigger: { trigger: sec, start: 'top 85%', end: 'top 25%', scrub: 0.6 } });
@@ -116,27 +89,18 @@ export default function Philosophy() {
         .set(q('.side-l .ph-card-in > *'), { autoAlpha: 1 }, 1.5)
         .fromTo(q('.mid .ph-card-in > *'), { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.14, ease: 'power2.out' }, 2);
     });
->>>>>>> Stashed changes
   }, { scope: root });
 
   return (
     <section id="philosophy" className="philo gut" ref={root}>
-      <div className="sunwrap" aria-hidden="true">
-        <div className="sun" ref={sun}>
-          <svg viewBox="-200 -200 400 400">
-            <defs><radialGradient id="sunGlow"><stop offset="0" stopColor="#f5b21a" stopOpacity=".28" /><stop offset="1" stopColor="#f5b21a" stopOpacity="0" /></radialGradient></defs>
-            <circle r="200" fill="url(#sunGlow)" />
-            <g className="rays" fill="#ef5a12" opacity=".9">{RAYS.map((d) => <path key={d} d={d} />)}</g>
-            <circle r="92" fill="#ef5a12" />
-          </svg>
-        </div>
-        <div className="horizon" />
-      </div>
+      <svg className="ph-edge ph-edge-top" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path d="M0 0H1440V44C1180 112 900 20 620 60C380 94 180 110 0 52Z" />
+      </svg>
+      <span className="ph-blob b1" aria-hidden="true" />
+      <span className="ph-blob b2" aria-hidden="true" />
+
       <div className="wrap philo-in">
         <p className="eyebrow gold rv">Brand philosophy</p>
-<<<<<<< Updated upstream
-        <p className="manifesto">
-=======
 
         <div className="ph-system" aria-hidden="true">
           <div className="ph-film">
@@ -145,15 +109,27 @@ export default function Philosophy() {
         </div>
 
         <h2 className="ph-title">
->>>>>>> Stashed changes
           {WORDS.map((w, i) => <span key={i}><span className={`w${w.gold ? ' g' : ''}`}>{w.text}</span>{i < WORDS.length - 1 ? ' ' : ''}</span>)}
-        </p>
-        <div className="pillars">
-          {PILLARS.map((p) => (
-            <div key={p.title} className="pillar rv"><span className="mono">{p.n}</span><h3>{p.title}</h3><p>{p.text}</p></div>
+        </h2>
+        <p className="ph-lede rv">Where it rises, where it sets and how it falls across a room decide the plan before anything else.</p>
+
+        <div className="ph-cards">
+          {PAGES.map((p) => (
+            <div key={p.title} className={`ph-card ${p.side}`}>
+              <div className="ph-card-in">
+                <h3>{p.title}</h3>
+                <p>{p.text}</p>
+              </div>
+            </div>
           ))}
+          {/* Binder rings on the two hinges */}
+          {['a1', 'a2', 'b1', 'b2'].map((c) => <span key={c} className={`ph-link ${c}`} aria-hidden="true" />)}
         </div>
       </div>
+
+      <svg className="ph-edge ph-edge-bottom" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path d="M0 120H1440V58C1200 14 980 96 700 84C440 72 240 16 0 62Z" />
+      </svg>
     </section>
   );
 }

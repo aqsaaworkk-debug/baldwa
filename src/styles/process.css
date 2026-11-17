@@ -1,16 +1,8 @@
 /* ---------- Process: scroll-drawn route ---------- */
-<<<<<<< Updated upstream
-/* Curved edges blend the black plan section above and the paper Why section below into the white Process background. */
-.process{--pr-edge:clamp(44px,8vw,120px);overflow-x:clip;--pr-road:var(--ink);--pr-band:clamp(120px,22vh,230px);position:relative;background:var(--white);padding-block:calc(var(--pr-edge) + 88px) calc(var(--pr-edge) + 24px)}
-.process .pr-edge{position:absolute;left:0;width:100%;height:var(--pr-edge);display:block;pointer-events:none}
-.process .pr-edge-top{top:-1px;fill:var(--night)}
-.process .pr-edge-bottom{bottom:-1px;fill:var(--paper)}
-=======
 /* A curved edge blends the plan section above into the white Process background; its fill is the plan's floor colour (--plan-floor, villa-plan.css). The curve into the Why film below is drawn by the Why section (.why-edge). */
 .process{--pr-edge:clamp(44px,8vw,120px);overflow-x:clip;--pr-road:var(--ink);--pr-band:clamp(120px,22vh,230px);position:relative;background:var(--white);padding-block:calc(var(--pr-edge) + 88px) 40px}
 .process .pr-edge{position:absolute;left:0;width:100%;height:var(--pr-edge);display:block;pointer-events:none}
 .process .pr-edge-top{top:-1px;fill:var(--plan-floor)}
->>>>>>> Stashed changes
 
 /* Section heading: tall, condensed high-contrast serif caps */
 .process .pr-head h2{margin-top:18px;max-width:16ch;font-family:var(--f-tall);font-variation-settings:"opsz" 100;font-weight:400;text-transform:uppercase;letter-spacing:.01em;font-size:clamp(46px,6.4vw,104px);line-height:.95}

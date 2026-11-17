@@ -3,7 +3,6 @@
   .panel.left{width:260px}
   .panel.right{width:290px}
   .zoom,.compass{right:326px}
-  .why-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:900px){
   :root{--head:66px;--plan-floor:var(--night)}
@@ -11,7 +10,7 @@
   .menu-body{grid-template-columns:1fr}
   .menu-media{display:none}
   .work{padding-block:88px 56px}
-  .plan-head,.why-head{grid-template-columns:1fr}
+  .plan-head{grid-template-columns:1fr}
   .pj-panel{grid-template-columns:1fr;overflow:auto}
   .pj-panel-media{min-height:0;aspect-ratio:16/10}
   .pj-panel-copy{padding:28px 24px 28px;overflow:visible}
@@ -27,13 +26,10 @@
   .zoom{right:12px!important;bottom:62px}
   .compass{right:12px!important;top:12px}
   .plan-hint{bottom:12px;font-size:10px;padding:9px 14px}
-  .process{padding-block:calc(var(--pr-edge) + 64px) calc(var(--pr-edge) + 40px)}
+  .process{padding-block:calc(var(--pr-edge) + 64px) 32px}
   .process .pr-text{font-size:14px}
-  .why{padding-block:96px}
-  .why-grid{grid-template-columns:1fr}
-  .card{min-height:0}
-  .philo{padding-block:110px 96px}
-  .pillars{grid-template-columns:1fr;gap:36px}
+
+
   .contact{padding-block:96px}
   .contact-in{grid-template-columns:1fr}
   form.enq{grid-template-columns:1fr}

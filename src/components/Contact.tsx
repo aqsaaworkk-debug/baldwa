@@ -23,11 +23,6 @@ export default function Contact() {
       scrollTrigger: { trigger: card, start: 'top 82%', once: true },
     });
 
-    // Shapes drift gently around the card.
-    gsap.utils.toArray<HTMLElement>('.enq-shape').forEach((el, i) => {
-      gsap.to(el, { y: i % 2 ? 18 : -22, rotation: i % 2 ? -14 : 16, duration: 3.2 + i * 0.7, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-    });
-
     // 3D tilt that follows the pointer (mouse only, so touch scrolling is unaffected).
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     const rx = gsap.quickTo(card, 'rotationX', { duration: 0.6, ease: 'power3.out' });
@@ -124,10 +119,6 @@ export default function Contact() {
         </div>
 
         <div className="enq-stage rv">
-          <span className="enq-shape s1" aria-hidden="true" />
-          <span className="enq-shape s2" aria-hidden="true" />
-          <span className="enq-shape s3" aria-hidden="true" />
-          <span className="enq-shape s4" aria-hidden="true" />
 
           <form className="enq enq-card" onSubmit={onSubmit} noValidate>
             <div className="fld enq-pop"><label htmlFor="f-name">Your name</label><input id="f-name" name="name" autoComplete="name" required /></div>
