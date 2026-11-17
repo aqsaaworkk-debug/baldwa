@@ -1,6 +1,6 @@
 import Intro from '@/components/Intro';
 import Header from '@/components/Header';
-import Hero from '@/components/Hero';
+import Journey from '@/components/Journey';
 import Projects from '@/components/Projects';
 import VillaPlan from '@/components/VillaPlan';
 import Process from '@/components/Process';
@@ -17,7 +17,7 @@ export default function Home() {
       <Intro />
       <Header />
       <main>
-        <Hero />
+        <Journey />
         <Projects />
         <VillaPlan />
         <Process />
