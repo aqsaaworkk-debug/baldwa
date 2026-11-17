@@ -48,7 +48,7 @@
 .pj-photo .pj-t-title{color:#fff;font-size:clamp(17px,min(8cqi,9cqb),34px)}
 .pj-photo .pj-t-sub{color:rgba(255,255,255,.82)}
 .pj-photo .pj-open{left:auto;bottom:auto;top:max(6cqi,14px);right:max(6cqi,14px);z-index:5;color:#fff;border-color:rgba(255,255,255,.7);opacity:.85}
-.pj-photo:hover .pj-open,.pj-photo:focus-visible .pj-open{background:#fff;color:var(--ink);border-color:#fff}
+.pj-photo:hover .pj-open,.pj-photo:focus-visible .pj-open{background:transparent;color:#fff;border-color:#fff}
 .pj-t-plan{position:absolute;right:9cqi;bottom:9cqi;width:min(46cqi,40cqb);height:auto;color:var(--gold);transform:translate(calc(var(--px) * -8px),calc(var(--py) * -8px));transition:transform .5s var(--ease-out)}
 .pj-t-sun{color:var(--night);width:min(58cqi,46cqb)}
 .pj-brand{display:grid;place-items:center;cursor:default}
@@ -64,13 +64,14 @@
 .pj-face:hover::after,.pj-face:focus-visible::after,.pj-face:hover .pj-edge,.pj-face:focus-visible .pj-edge{opacity:1}
 .pj-open{position:absolute;left:9cqi;bottom:8cqi;z-index:2;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;border:1px solid currentColor;color:var(--fg);opacity:.55;transition:background .3s,color .3s,border-color .3s,opacity .3s}
 .pj-open svg{width:12px;height:12px}
-.pj-face:hover .pj-open,.pj-face:focus-visible .pj-open{opacity:1;background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.pj-face:hover .pj-open,.pj-face:focus-visible .pj-open{opacity:1;background:transparent;color:var(--fg);border-color:var(--fg)}
 
 /* Pinned desktop: bento layout filling the screen (class added by JS only when the scroll animation runs) */
-.work.pj-pinned{padding-block:20px 0}
+/* pinned: full width and full height, the header floats over it (no strip kept free for it) */
+.work.pj-pinned{padding:0}
 .work.pj-pinned .pj-track{height:280vh}
-.work.pj-pinned .pj-pin{position:sticky;top:var(--head);height:calc(100vh - var(--head));height:calc(100svh - var(--head))}
-.work.pj-pinned .pj-stage{height:100%;padding-block:18px;perspective:1900px}
+.work.pj-pinned .pj-pin{position:sticky;top:0;height:100vh;height:100svh}
+.work.pj-pinned .pj-stage{height:100%;padding:0;perspective:1900px}
 .work.pj-pinned .pj-mosaic{height:100%;gap:14px;
   grid-template-columns:2.6fr 3.65fr 1fr 3.65fr 2.6fr;grid-template-rows:2.35fr 1fr 2.35fr;
   grid-template-areas:"a b b c d" "a e f c i" "g e h h i"}
@@ -103,9 +104,9 @@ html.pj-lock body{overflow:hidden}
 .pj-panel-nav svg{width:26px}
 .pj-close{position:absolute;top:14px;right:14px;width:42px;height:42px;border-radius:50%;background:rgba(47,65,86,.6)}
 .pj-close svg{width:14px;height:14px}
-.pj-panel-nav button:hover,.pj-close:hover{background:var(--fog);border-color:var(--fog);color:#fff}
+.pj-panel-nav button:hover,.pj-close:hover{background:transparent;border-color:var(--fog);color:var(--fog)}
 
 .btn-line{display:inline-flex;align-items:center;gap:12px;font:600 12px/1 var(--f-body);letter-spacing:.24em;text-transform:uppercase;text-decoration:none;color:var(--gold);border:1px solid rgba(245,178,26,.5);padding:16px 22px;border-radius:999px;white-space:nowrap;transition:background .3s,color .3s}
-.btn-line:hover{background:var(--gold);color:#2f4156}
+.btn-line:hover{background:transparent;border-color:var(--gold);color:#fff}
 .img-wait{background:linear-gradient(110deg,#283849 30%,#384d63 50%,#283849 70%);background-size:200% 100%;animation:shimmer 1.6s linear infinite}
 @keyframes shimmer{to{background-position:-200% 0}}

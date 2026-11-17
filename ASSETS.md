@@ -16,6 +16,16 @@ Record every asset that is not written in this repository here, with where it ca
 
 Nothing in the 3D scene is downloaded from a third party. Clouds, sky, ground, streets, houses, trees and the plot are generated in code (`src/lib/journey/`); the founder is the client's clip above.
 
+## Real work
+
+| Asset | Used for | Source | Licence |
+| --- | --- | --- | --- |
+| `public/images/realwork/virtual-binz-site-01.webp` | Virtual Binz construction photo | Supplied by the client on 2026-11-17 as `Virtual Binz (1).webp` | Supplied by the client; usage rights to be confirmed before launch. |
+| `public/images/realwork/virtual-binz-site-02.webp` | Virtual Binz construction photo | Supplied by the client on 2026-11-17 as `Virtual Binz.webp` | Supplied by the client; usage rights to be confirmed before launch. |
+| `public/images/realwork/gattani-residence-site.webp` | Gattani Residence construction photo | Supplied by the client on 2026-11-17 as `Gattani - Residence (1).webp` | Supplied by the client; usage rights to be confirmed before launch. |
+| `public/images/realwork/project-team-site.webp` | Project team site photo | Supplied by the client on 2026-11-17 as `DSCN1639.JPG`, resized to 2000 px and converted to WebP for the site | Supplied by the client; usage rights to be confirmed before launch. |
+| `public/images/realwork/site-supervision.webp` | Site supervision photo | Supplied by the client on 2026-11-17 as `IMG-20261117-WA0032.webp` | Supplied by the client; usage rights to be confirmed before launch. |
+
 ## Fonts (npm packages, self-hosted)
 
 | Font | Package | Licence |

@@ -111,6 +111,23 @@ export const SERVICES: Service[] = [
 
 export const servicePath = (s: Service) => `/services/${s.slug}`;
 
+// ---------- Projects and Contact ----------
+export const PROJECTS_PAGE = {
+  path: '/projects',
+  nav: 'Projects',
+  title: 'Architecture and Interior Design Projects | Baldwa & Associates',
+  description: 'Explore selected architecture and interior design work by Baldwa and Associates.',
+  h1: 'Projects shaped through design and detail',
+};
+
+export const CONTACT_PAGE = {
+  path: '/contact',
+  nav: 'Contact',
+  title: 'Contact Baldwa and Associates | Start a Project',
+  description: 'Start a conversation with Baldwa and Associates about architecture, interior design, BIM engineering or project management.',
+  h1: 'Start with a site and a conversation',
+};
+
 // ---------- FAQ (on-page, also published as FAQPage structured data) ----------
 export const FAQ = [
   { q: 'What services does Baldwa and Associates offer?', a: 'Baldwa and Associates delivers end-to-end architectural planning, BIM engineering, interior design, Vastu consultation and project management services for residential and financial spaces.' },
@@ -121,9 +138,16 @@ export const FAQ = [
 ];
 
 // ---------- Navigation: the pages, plus the one in-page link kept from before (Start a project) ----------
-export const PAGE_LINKS = [
+export const HOME_FOOTER_LINKS = [
   { href: ABOUT.path, label: ABOUT.nav },
   ...SERVICES.map((s) => ({ href: servicePath(s), label: s.nav })),
+];
+
+export const PAGE_LINKS = [
+  { href: ABOUT.path, label: ABOUT.nav },
+  { href: PROJECTS_PAGE.path, label: PROJECTS_PAGE.nav },
+  ...SERVICES.map((s) => ({ href: servicePath(s), label: s.nav })),
+  { href: CONTACT_PAGE.path, label: CONTACT_PAGE.nav },
 ];
 
 // Structured data for search engines (organisation, from the brief's brand facts only).

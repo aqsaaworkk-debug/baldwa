@@ -6,10 +6,10 @@ import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 //   almond   up to and through Why Baldwa
 //   PHILO    Our Professional services (set while Why Baldwa's film still covers the screen, so it slides in already coloured)
 //   SMOKE    from the section after the notebook (FAQ) through Contact; changes as that section comes in, as before
-//   DEEP     the footer (changes as the footer comes in)
+// The footer paints its own dark navy arch; the surrounding canvas stays smoke so the curve is visible.
 // The colour lives in --page-bg (base.css), so every section and the page behind them change together.
 // Over these tones the text sitting on the canvas turns light: html.tone-light (styles in the section files).
-const ALMOND = '#f2ede7', PHILO = '#aab3b8', SMOKE = '#748795', DEEP = '#1c2836';
+const ALMOND = '#f2ede7', PHILO = '#aab3b8', SMOKE = '#748795';
 
 export default function PageTone() {
   useGSAP(() => {
@@ -28,10 +28,6 @@ export default function PageTone() {
     gsap.fromTo(html, { '--page-bg': PHILO }, {
       '--page-bg': SMOKE, ease: 'none', immediateRender: false,
       scrollTrigger: { trigger: after, start: 'top bottom', end: 'top 55%', scrub: true },
-    });
-    gsap.fromTo(html, { '--page-bg': SMOKE }, {
-      '--page-bg': DEEP, ease: 'none', immediateRender: false,
-      scrollTrigger: { trigger: foot, start: 'top bottom', end: 'top 55%', scrub: true },
     });
     // light text from the moment the canvas leaves almond (still under the film, so the switch is never seen)
     const light = ScrollTrigger.create({

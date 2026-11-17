@@ -67,7 +67,6 @@ export default function Projects() {
 
       if (pinned && !reduce) {
         sec.classList.add('pj-pinned');
-        const head = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--head')) || 76;
         const box = () => ({ w: mos.clientWidth, h: mos.clientHeight });
         // Where the hero shrinks to before it vanishes: a small card in the centre of the grid.
         const target = () => { const { w, h } = box(), tw = w * 0.3, th = h * 0.3; return { l: (w - tw) / 2, t: (h - th) / 2, w: tw, h: th }; };
@@ -91,11 +90,11 @@ export default function Projects() {
         tiles.forEach((el) => gsap.set(el, hidden(el)));
 
         const tl = gsap.timeline({
-          scrollTrigger: { trigger: track.current, start: () => `top top+=${head()}`, end: 'bottom bottom', scrub: 0.7, invalidateOnRefresh: true, onRefresh: fitMedia },
+          scrollTrigger: { trigger: track.current, start: 'top top', end: 'bottom bottom', scrub: 0.7, invalidateOnRefresh: true, onRefresh: fitMedia },
         });
         // Hero shrinks toward the centre, then fades out completely (autoAlpha also hides it from clicks).
         tl.fromTo(heroEl,
-          { left: 0, top: 0, width: () => box().w, height: () => box().h, borderRadius: 26 },
+          { left: 0, top: 0, width: () => box().w, height: () => box().h, borderRadius: 0 },
           { left: () => target().l, top: () => target().t, width: () => target().w, height: () => target().h, borderRadius: 16, duration: 0.9, ease: 'power2.inOut', onUpdate: fitMedia }, 0)
           .to(heroEl.querySelectorAll('.pj-fade'), { opacity: 0, duration: 0.3 }, 0)
           .fromTo(heroEl, { autoAlpha: 1 }, { autoAlpha: 0, z: HERO_Z - 260, duration: 0.35, ease: 'power1.in', immediateRender: false }, 0.6);

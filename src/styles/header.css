@@ -3,9 +3,9 @@
 .brand{display:block;line-height:0;text-decoration:none}
 .brand svg{height:50px;width:auto;display:block}
 html.brand-wait .brand{visibility:hidden}
-.burger{width:52px;height:52px;display:grid;place-content:center;gap:7px;background:none;border:0;cursor:pointer;border-radius:50%;transition:background .3s}
-.burger:hover{background:var(--fog)}
-.burger:hover span{background:#fff}
+.burger{width:52px;height:52px;display:grid;place-content:center;gap:7px;background:none;border:1px solid transparent;cursor:pointer;border-radius:50%;transition:border-color .3s}
+.burger:hover{border-color:var(--fog)}
+.burger:hover span{background:var(--fog)}
 .burger span{display:block;width:30px;height:1.5px;background:var(--ink);transition:width .4s var(--ease),transform .4s var(--ease)}
 .burger span:nth-child(2){width:20px;margin-left:auto}
 .burger span:nth-child(3){width:25px;margin-left:auto}

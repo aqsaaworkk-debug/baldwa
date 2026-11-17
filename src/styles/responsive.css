@@ -5,6 +5,12 @@
   .zoom{right:326px}
 }
 @media (max-width:900px){
+  .rw{padding-block:56px 64px}
+  .rw-head{grid-template-columns:1fr;gap:18px}
+  .rw .intro-sec{grid-column:1 / -1;padding:12px clamp(8px,4vw,32px)}
+  .rw .intro-in{max-width:62ch}
+  .rw-photo-3{grid-column:1 / 6;grid-row:3 / 5;align-self:start}
+  .rw-photo-4,.rw-photo-5{grid-column:6 / -1}
   :root{--head:66px}
   .brand svg{height:42px}
   .work{padding-block:64px 44px}
@@ -47,6 +53,13 @@
   .process .pr-text{font-size:15px}
 }
 @media (max-width:520px){
+  .rw-grid{grid-template-columns:minmax(0,1fr);row-gap:32px}
+  .rw .rw-item,.rw .intro-sec{grid-column:1;grid-row:auto}
+  .rw .intro-sec{padding:16px 4px 24px}
+  .rw .intro-lead{font-size:22px}
+  .rw .intro-text{font-size:17px}
+  .rw .text-link{font-size:12px}
+  .rw-photo-3 .rw-frame{max-height:600px}
   .journey-caption{bottom:calc(var(--curve) + 88px + env(safe-area-inset-bottom,0px));padding:20px 22px 22px;border-radius:24px}
   .journey-nav{right:auto;left:24px;bottom:calc(var(--curve) + 28px + env(safe-area-inset-bottom,0px))}
   .hero-frame{height:clamp(520px,78vh,760px)}
@@ -60,5 +73,6 @@
 }
 @media (prefers-reduced-motion:reduce){
   html.js .journey{height:100vh;height:100svh}
+  .journey--live + .work{margin-top:0}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }

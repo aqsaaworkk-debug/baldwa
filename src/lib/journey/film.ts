@@ -13,7 +13,9 @@ import { clamp, lerp, range } from './stages';
 // The client's full hero film: one clip, scrubbed by scroll across the whole opening (title over its first frames).
 // Put the file in public/videos and set it here, e.g. { src: '/videos/hero.mp4', screens: 4 } (screens = scroll length).
 // While it is null, the two-clip opening below is used. Encode it with frequent keyframes so scrubbing stays smooth.
-export const HERO_FILM = null as { src: string; screens: number } | null;
+// Client hero film ("BALDWA VIDEO (1).mp4", 42 s: clouds, the plot, blueprint, construction, the finished building, the model),
+// re-encoded for scrubbing: 1280 px, 30 fps, a keyframe every 10 frames, no audio. poster = its first frame.
+export const HERO_FILM = { src: '/videos/hero.mp4', poster: '/images/hero-poster.jpg', screens: 9 } as { src: string; poster: string; screens: number } | null;
 
 export const CLIPS = {
   a: { src: '/video/opening-clouds.mp4', from: 13, to: 20 },  // client clip gemini_generated_video_9366a321, first 13 s unused

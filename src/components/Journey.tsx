@@ -177,7 +177,8 @@ export default function Journey() {
     if (process.env.NODE_ENV !== 'production') (window as unknown as { __journey?: typeof journey }).__journey = journey; // for scroll tests
     gsap.to(journey, {
       p: 1, ease: 'none', onUpdate: apply,
-      scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom bottom', scrub: .6, onRefresh: apply },
+      // Finish the film before the final screen, which holds it behind the incoming projects.
+      scrollTrigger: { trigger: root.current, start: 'top top', end: () => `bottom bottom+=${root.current?.querySelector<HTMLElement>('.journey-stage')?.offsetHeight ?? 0}`, scrub: .6, invalidateOnRefresh: true, onRefresh: apply },
     });
     apply();
 
@@ -202,7 +203,8 @@ export default function Journey() {
         {mode === '3d' && quality && <JourneyScene quality={quality} active={visible} />}
         {mode === '2d' && <canvas ref={canvas2d} role="img" aria-label="Clouds parting above an empty plot in a green neighbourhood" />}
         {mode === 'film' && HERO_FILM && SINGLE && (
-          <video className="film-clip" ref={clipA} src={HERO_FILM.src} muted playsInline preload="auto" aria-hidden="true" />
+          <video className="film-clip" ref={clipA} src={HERO_FILM.src} poster={HERO_FILM.poster} muted playsInline preload="auto" role="img"
+            aria-label="Clouds part over a lake to reveal an empty plot; the blueprint of a building rises, construction follows, and the finished building and its model appear" />
         )}
         {mode === 'film' && !SINGLE && <>
           <video className="film-clip" ref={clipA} src={CLIPS.a.src} muted playsInline preload="auto" aria-hidden="true" />
@@ -210,7 +212,9 @@ export default function Journey() {
             aria-label="An empty plot beside a road; the founder walks onto it and the outline of the building rises" />
         </>}
         {/* eslint-disable @next/next/no-img-element */}
-        {mode === 'still' && (USE_FILM
+        {mode === 'still' && (HERO_FILM && SINGLE
+          ? <img className="journey-still" src={HERO_FILM.poster} alt="Clouds over a lake and hills at sunrise, with a plot of land on the shore" />
+          : USE_FILM
           ? <img className="journey-still" src={`${IMG}/plot.webp`} alt="An empty plot beside a road, with houses and trees around it" />
           : <img className="journey-still" src={`${IMG}/site.webp`} alt="A wide, empty plot beside a road in a green neighbourhood, seen from above" />)}
         {live && mode !== 'film' && (

@@ -15,7 +15,7 @@ export default function AboutPage() {
   return (
     <PageShell crumbs={[{ label: ABOUT.nav }]} current={ABOUT.path}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_LD) }} />
-      <article className="pg-art gut">
+      <article className="pg-art pg-about gut">
         <div className="wrap">
           <header className="pg-head">
             <p className="eyebrow">{ABOUT.nav}</p>

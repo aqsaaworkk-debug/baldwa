@@ -3,14 +3,14 @@
 .menu-head{height:calc(var(--head) + env(safe-area-inset-top,0px) + 28px);padding-top:env(safe-area-inset-top,0px);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
 .menu-head .brand{grid-column:2}
 .menu-head .brand svg{height:62px}
-.menu-close{grid-column:3;justify-self:end;width:52px;height:52px;display:grid;place-items:center;background:none;border:0;cursor:pointer;color:var(--ink);border-radius:50%;transition:background .3s,color .3s}
-.menu-close:hover{background:var(--fog);color:#fff}
+.menu-close{grid-column:3;justify-self:end;width:52px;height:52px;display:grid;place-items:center;background:none;border:1px solid transparent;cursor:pointer;color:var(--ink);border-radius:50%;transition:border-color .3s,color .3s}
+.menu-close:hover{border-color:var(--fog);color:var(--fog)}
 .menu-nav{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(6px,1.4vh,14px);min-height:0;overflow:auto;padding:16px}
-.menu-nav a{font:500 clamp(30px,5.2vh,56px)/1.1 var(--f-sans);letter-spacing:-.025em;color:var(--ink);text-decoration:none;padding:4px 10px;transition:color .3s}
+.menu-nav a{font:500 clamp(25px,4.4vh,46px)/1.1 var(--f-sans);letter-spacing:-.025em;color:var(--ink);text-decoration:none;padding:4px 10px;transition:color .3s}
 .menu-nav a:hover,.menu-nav a:focus-visible{color:var(--fog)}
 .menu-nav a[aria-current="page"]{color:var(--fog)}
 /* Start a project: the one call to action, at the foot of the menu */
 .menu-cta-row{display:flex;justify-content:center;padding:16px 24px calc(28px + env(safe-area-inset-bottom,0px))}
-.menu-cta{display:inline-flex;align-items:center;min-height:50px;padding:0 26px;border-radius:999px;background:var(--ink);color:#fff;text-decoration:none;
-  font:600 13px/1 var(--f-sans);letter-spacing:.16em;text-transform:uppercase;transition:background-color .3s}
-.menu-cta:hover{background:var(--fog)}
+.menu-cta{display:inline-flex;align-items:center;gap:12px;min-height:50px;padding:0 2px;border:0;border-bottom:1px solid currentColor;background:transparent;color:var(--ink);text-decoration:none;
+  font:600 13px/1 var(--f-sans);letter-spacing:.16em;text-transform:uppercase;transition:color .3s}
+.menu-cta:hover{color:var(--fog)}

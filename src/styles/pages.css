@@ -8,67 +8,117 @@
 .text-link{display:inline-flex;gap:10px;margin-top:26px;font:600 13px/1 var(--f-sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink);text-decoration:none;padding:8px 0;transition:color .3s}
 .text-link:hover{color:var(--fog)}
 
-/* FAQ (Faq.tsx): sits on the grey-blue part of the page (PageTone), navy text for contrast */
-.faq{padding-block:24px 84px}
+/* FAQ: shown on the Contact page, with the same quiet editorial rhythm as the homepage. */
+.faq{padding-block:48px 96px}
 .faq-in{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:clamp(28px,5vw,80px);align-items:start}
 .faq .eyebrow{color:var(--ink-2)}
 .faq-head h2{margin-top:14px;font-size:clamp(32px,3.6vw,54px);line-height:1.05;color:var(--ink)}
 .faq-list{display:flex;flex-direction:column;gap:10px}
-.faq-item{border-radius:16px;background:rgba(242,237,231,.42);transition:background-color .3s}
-.faq-item[open]{background:rgba(242,237,231,.7)}
+.faq-item{border-bottom:1px solid color-mix(in srgb,var(--ink) 22%,transparent)}
 .faq-item summary{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px 24px;cursor:pointer;list-style:none}
 .faq-item summary::-webkit-details-marker{display:none}
 .faq-item h3{margin:0;font-size:clamp(17px,1.4vw,20px);line-height:1.3;font-weight:500;letter-spacing:-.01em;color:var(--ink)}
 .faq-item p{margin:0;padding:0 24px 22px;max-width:62ch;font-size:16px;line-height:1.65;color:var(--ink)}
-.faq-icon{position:relative;flex:none;width:30px;height:30px;border-radius:50%;background:var(--ink);transition:background-color .3s,transform .4s var(--ease-out)}
-.faq-icon::before,.faq-icon::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:1.5px;margin:-.75px 0 0 -5.5px;background:#fff}
+.faq-icon{position:relative;flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--ink);transition:border-color .3s,transform .4s var(--ease-out)}
+.faq-icon::before,.faq-icon::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:1.5px;margin:-.75px 0 0 -5.5px;background:var(--ink)}
 .faq-icon::after{transform:rotate(90deg);transition:transform .4s var(--ease-out)}
 .faq-item[open] .faq-icon::after{transform:rotate(0)}
-.faq-item summary:hover .faq-icon{background:var(--fog)}
+.faq-item summary:hover .faq-icon{border-color:var(--fog)}
+.faq-item summary:hover .faq-icon::before,.faq-item summary:hover .faq-icon::after{background:var(--fog)}
 
 /* ---------- Inner pages (PageShell.tsx) ---------- */
-.pg{padding-top:calc(var(--head) + 24px)}
-.pg-crumbs ol{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none;font-size:13px;color:var(--mute)}
+.pg{position:relative;min-height:100vh;padding-top:calc(var(--head) + 20px);background:var(--paper);overflow:clip}
+.pg-crumbs{padding-block:12px 20px}
+.pg-crumbs ol{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none;font:600 11px/1.4 var(--f-sans);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
 .pg-crumbs li+li::before{content:"/";margin-right:6px;opacity:.6}
 .pg-crumbs a{color:inherit;text-decoration:none}
 .pg-crumbs a:hover{color:var(--ink)}
 .pg-crumbs [aria-current]{color:var(--ink)}
 
-.pg-art{padding-block:40px 56px}
-.pg-head h1{margin-top:16px;max-width:18ch;font-size:clamp(40px,5.6vw,84px);line-height:1.02;letter-spacing:-.03em}
-.pg-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,80px);align-items:start;margin-top:clamp(32px,4vw,56px)}
+.pg-art{padding-block:12px 88px}
+.pg-head{position:relative;min-height:clamp(300px,38vw,520px);display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(28px,5vw,72px);border-radius:28px;overflow:hidden;background:linear-gradient(135deg,var(--surface),color-mix(in srgb,var(--surface) 52%,var(--paper)))}
+.pg-head::after{content:"";position:absolute;right:clamp(28px,5vw,72px);top:clamp(28px,5vw,60px);width:clamp(54px,7vw,96px);height:1px;background:var(--gold-deep)}
+.pg-head .eyebrow{color:var(--ink-2)}
+.pg-head h1{margin-top:18px;max-width:16ch;font-size:clamp(44px,6.4vw,94px);line-height:.98;letter-spacing:-.04em}
+.pg-grid{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(28px,6vw,96px);align-items:center;margin-top:clamp(40px,6vw,88px)}
 .pg-body p{margin:0 0 20px;font-size:clamp(17px,1.35vw,20px);line-height:1.7;color:var(--ink-2)}
 .pg-body p:first-child{font-size:clamp(19px,1.6vw,24px);line-height:1.55;color:var(--ink)}
-.pg-fig{margin:0;border-radius:22px;overflow:hidden;background:var(--surface);aspect-ratio:4/3;box-shadow:0 30px 60px -34px rgba(47,65,86,.45)}
+.pg-body{padding-left:clamp(20px,3vw,40px);border-left:1px solid color-mix(in srgb,var(--ink) 28%,transparent)}
+.pg-fig{margin:0;border-radius:24px;overflow:hidden;background:var(--surface);aspect-ratio:5/4;box-shadow:0 30px 60px -40px color-mix(in srgb,var(--ink) 55%,transparent)}
 .pg-fig img{display:block;width:100%;height:100%;object-fit:cover}
+.pg-service .pg-grid{grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr)}
+.pg-service .pg-fig{aspect-ratio:16/10}
 
-.pg-sub{margin-top:clamp(48px,6vw,88px)}
-.pg-sub h2{font-size:clamp(28px,3vw,44px);line-height:1.1}
-.pg-points{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px;margin:24px 0 0;padding:0;list-style:none}
-.pg-points li{padding:24px 26px 26px;border-radius:18px;background:var(--surface)}
+.pg-sub{margin-top:clamp(64px,9vw,128px)}
+.pg-sub h2{max-width:16ch;font-size:clamp(34px,4vw,58px);line-height:1.03}
+.pg-points{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:0;margin:34px 0 0;padding:0;list-style:none;border-top:1px solid color-mix(in srgb,var(--ink) 24%,transparent)}
+.pg-points li{padding:26px 26px 30px 0;border-bottom:1px solid color-mix(in srgb,var(--ink) 24%,transparent)}
 .pg-points h3{margin:0 0 10px;font-size:20px;line-height:1.25;font-weight:500;letter-spacing:-.01em}
 .pg-points h3 a{color:inherit;text-decoration:none}
 .pg-points h3 a:hover{color:var(--fog)}
 .pg-points p{margin:0;font-size:15px;line-height:1.6;color:var(--ink)}
 
 /* Explore: links to the other pages (internal linking) */
-.pg-more{padding-block:24px 56px}
+.pg-more{padding-block:44px 72px}
 .pg-more h2{font-size:clamp(24px,2.4vw,34px)}
-.pg-more ul{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:10px;margin:22px 0 0;padding:0;list-style:none}
-.pg-more a{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 22px;border-radius:14px;background:var(--surface);color:var(--ink);text-decoration:none;font-weight:500;transition:background-color .3s,color .3s}
-.pg-more a:hover{background:var(--fog);color:#fff}
+.pg-more ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(24px,5vw,80px);margin:24px 0 0;padding:0;list-style:none;border-top:1px solid color-mix(in srgb,var(--ink) 22%,transparent)}
+.pg-more a{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 2px;border-bottom:1px solid color-mix(in srgb,var(--ink) 22%,transparent);color:var(--ink);text-decoration:none;font-weight:500;transition:color .3s}
+.pg-more a:hover{color:var(--fog)}
+.pg-more a span:last-child{font-size:20px}
 
 /* Start a project */
 .pg-cta{padding-block:24px 88px}
-.pg-cta-in{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;padding:clamp(36px,5vw,64px) 24px;border-radius:24px;background:var(--smoke);color:#fff}
-.pg-cta h2{color:#fff;font-size:clamp(30px,3.4vw,50px)}
-.pg-cta p{margin:0;color:rgba(242,237,231,.9);font-size:18px}
+.pg-cta-in{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;padding:clamp(44px,6vw,80px) 24px;border-radius:24px;border:1px solid color-mix(in srgb,var(--ink) 22%,transparent);background:transparent;color:var(--ink)}
+.pg-cta h2{color:var(--ink);font-size:clamp(34px,4vw,58px)}
+.pg-cta p{margin:0;color:var(--ink-2);font-size:18px}
 .pg-cta .menu-cta{margin-top:8px}
+
+/* Projects index: editorial cards and a background-free category navigation. */
+.project-index{padding-top:clamp(64px,8vw,112px)}
+.project-index-top{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:32px;align-items:end}
+.project-index-top h2{margin-top:14px;font-size:clamp(34px,4.2vw,60px);line-height:1.02}
+.project-filters{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px 22px}
+.project-filters button{position:relative;padding:10px 0;border:0;background:transparent;color:var(--ink-2);font:600 12px/1 var(--f-sans);letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
+.project-filters button::after{content:"";position:absolute;left:0;right:100%;bottom:4px;height:1px;background:var(--ink);transition:right .3s var(--ease-out)}
+.project-filters button:hover,.project-filters button.is-active{color:var(--ink)}
+.project-filters button.is-active::after{right:0}
+.project-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(32px,5vw,80px) clamp(18px,3vw,42px);margin-top:clamp(40px,6vw,80px)}
+.project-card{min-width:0}
+.project-card:nth-child(even){margin-top:clamp(28px,5vw,72px)}
+.project-card figure{margin:0;aspect-ratio:4/3;border-radius:22px;overflow:hidden;background:var(--surface)}
+.project-card img{display:block;width:100%;height:100%;object-fit:cover}
+.project-card-copy{padding:20px 2px 0}
+.project-card-meta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 18px;font:600 10px/1.3 var(--f-sans);letter-spacing:.15em;text-transform:uppercase;color:var(--mute)}
+.project-card h3{margin-top:14px;font-size:clamp(26px,2.8vw,42px);line-height:1.05}
+.project-card p{margin:14px 0 0;max-width:58ch;font-size:16px;line-height:1.65;color:var(--ink-2)}
+.project-empty{margin:56px 0 0;padding:28px 0;border-block:1px solid color-mix(in srgb,var(--ink) 22%,transparent);color:var(--ink-2)}
+
+/* Contact page: the existing form and FAQ become one continuous inner-page composition. */
+.pg-contact{padding-bottom:18px}
+.pg-contact-zone .contact{padding-top:40px}
+.pg-contact-zone .contact-waves{opacity:.55}
+.pg-contact-zone .faq{padding-top:72px}
 
 @media (max-width:900px){
   .faq-in{grid-template-columns:1fr}
   .pg-grid{grid-template-columns:1fr}
+  .pg-service .pg-grid{grid-template-columns:1fr}
+  .pg-head{min-height:320px;border-radius:22px}
+  .pg-body{padding-left:20px}
+  .pg-more ul{grid-template-columns:1fr}
+  .project-index-top{grid-template-columns:1fr}
+  .project-filters{justify-content:flex-start}
   .intro-sec{padding-block:56px 32px}
+}
+
+@media (max-width:620px){
+  .pg{padding-top:calc(var(--head) + 12px)}
+  .pg-art{padding-bottom:64px}
+  .pg-head{min-height:300px;padding:26px 22px}
+  .pg-head::after{right:22px;top:24px}
+  .pg-head h1{font-size:clamp(40px,12vw,62px)}
+  .project-grid{grid-template-columns:1fr}
+  .project-card:nth-child(even){margin-top:0}
 }
 
 /* FAQ heading on the blue smoke canvas (html.tone-light, PageTone.tsx); the questions keep their light cards */

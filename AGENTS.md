@@ -40,7 +40,7 @@ Stack: Next.js 16 App Router + TypeScript, React 19, React Three Fiber 9 + drei,
 - Real project photos go in `public/images/` and are referenced from `src/data/projects.ts` via `image`.
 
 ## Scroll journey
-- Hero film: the client will supply one video for the hero. Set `HERO_FILM` in `src/lib/journey/film.ts` (e.g. `{ src: '/videos/hero.mp4', screens: 4 }`) and it replaces the two clips below, scrubbed by scroll. Until then the two-clip film runs.
+- Hero film (client, 2026-11-17): `HERO_FILM` in `src/lib/journey/film.ts` plays `public/videos/hero.mp4` (from `BALDWA VIDEO (1).mp4`), scrubbed by scroll over 9 screens. It was re-encoded for scrubbing (1280 px, 30 fps, keyframe every 10 frames, no audio, faststart); re-encode any replacement the same way. Setting `HERO_FILM` to null brings back the two-clip film below.
 - Right now the opening is the film version: `USE_FILM` in `Journey.tsx` scrubs two client clips (`src/lib/journey/film.ts`: segments, clip times, the drone move, the dissolve between the clips), staged after `reference videos/sky.mp4`: hero title over clouds, fast dive through them, one continuous drone glide. Setting it to false brings back the real-time 3D journey below, which is kept intact.
 - One number drives it: `journey.p` (0 to 1), written only by the ScrollTrigger in `Journey.tsx`. The 3D world, the camera and the HTML overlays read it. Keep every state a pure function of `p` (no accumulated state), so scrolling back restores it.
 - To add a stage: add it to `BUILT` in `stages.ts` with a length in screens, add camera keys with `at('stage', t)`, add its objects to the shared root in `world.ts` and set their state inside `update(p)`. Remove it from `PLANNED`.

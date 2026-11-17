@@ -35,7 +35,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   return (
     <PageShell crumbs={[{ label: 'Services' }, { label: s.nav }]} current={servicePath(s)}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-      <article className="pg-art gut">
+      <article className="pg-art pg-service gut">
         <div className="wrap">
           <header className="pg-head">
             <p className="eyebrow">Services · {s.nav}</p>

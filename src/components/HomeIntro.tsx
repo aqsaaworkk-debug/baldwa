@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ABOUT, BRAND, HOME } from '@/data/site';
 
-// The homepage introduction from the SEO brief, right after the hero (whose title is the page's H1).
+// The homepage introduction from the SEO brief, woven between the Real Work photos.
 export default function HomeIntro() {
   return (
     <section id="about" className="intro-sec gut" aria-label={`About ${BRAND.long}`}>

@@ -12,6 +12,7 @@ import type { SceneKey, TodKey } from '@/lib/three/scenes';
 
 export type Project = {
   name: string;
+  category: 'Residential' | 'Industrial' | 'Commercial' | 'Hospitality';
   type: string;
   location: string;
   text: string;
@@ -25,6 +26,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     name: 'Poolside Villa',
+    category: 'Residential',
     type: 'Villa · Landscape & pool',
     location: '[Location]',
     text: 'A two-storey villa opening onto a lawn and a shaped pool, with a sunken lounge set into the water, a shaded cabana and sun loungers along the deck.',
@@ -35,6 +37,7 @@ export const projects: Project[] = [
   },
   {
     name: 'Three-storey Residence',
+    category: 'Residential',
     type: 'Family home · Exterior',
     location: '[Location]',
     text: 'Stepped volumes with deep overhangs, a stone-clad entrance, a perforated jaali screen and glass balconies on every floor, framed by a planted front garden.',
@@ -45,6 +48,7 @@ export const projects: Project[] = [
   },
   {
     name: 'Arched Living Room',
+    category: 'Residential',
     type: 'Interior · Living & dining',
     location: '[Location]',
     text: 'Curved seating around a sculpted timber table, arched openings and soft wall lighting, flowing into a dining area that opens to the terrace.',
@@ -55,6 +59,7 @@ export const projects: Project[] = [
   },
   {
     name: 'Formal Dining Room',
+    category: 'Residential',
     type: 'Interior · Dining',
     location: '[Location]',
     text: 'A long marble table under a brass chandelier, with carved relief panels on a sage wall, inlaid stone floors and a full-height timber cabinet.',
@@ -65,6 +70,7 @@ export const projects: Project[] = [
   },
   {
     name: 'Classic Bedroom',
+    category: 'Residential',
     type: 'Interior · Bedroom',
     location: '[Location]',
     text: 'A tufted bed with gilded detailing, carved timber doors and wardrobe, patterned floor tiles and a coffered ceiling with a brass chandelier.',
@@ -75,6 +81,7 @@ export const projects: Project[] = [
   },
   {
     name: 'Industrial Plant',
+    category: 'Industrial',
     type: 'Industrial · Exterior & services',
     location: '[Location]',
     text: 'A steel-clad production hall on a concrete plinth, with covered loading bays and an open services yard: scrubbers, a cooling tower and colour-coded pipework laid out for easy maintenance.',

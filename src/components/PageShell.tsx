@@ -2,17 +2,22 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import Header from './Header';
 import Footer from './Footer';
-import NavLink from './NavLink';
-import { ABOUT, BRAND, SERVICES, servicePath } from '@/data/site';
+import { ABOUT, BRAND, CONTACT_PAGE, PROJECTS_PAGE, SERVICES, servicePath } from '@/data/site';
 
 // Frame for the inner pages (About, services): header, a breadcrumb, the page's own content, links to the other pages
 // (internal linking from the SEO brief), the Start a project call to action and the footer.
-export default function PageShell({ crumbs, current, children }: {
+export default function PageShell({ crumbs, current, children, showCta = true }: {
   crumbs: { label: string; href?: string }[];
   current: string; // href of this page, left out of the "explore" links
   children: ReactNode;
+  showCta?: boolean;
 }) {
-  const others = [{ href: ABOUT.path, label: ABOUT.nav }, ...SERVICES.map((s) => ({ href: servicePath(s), label: s.h1 }))].filter((l) => l.href !== current);
+  const others = [
+    { href: ABOUT.path, label: ABOUT.nav },
+    { href: PROJECTS_PAGE.path, label: PROJECTS_PAGE.nav },
+    ...SERVICES.map((s) => ({ href: servicePath(s), label: s.h1 })),
+    { href: CONTACT_PAGE.path, label: CONTACT_PAGE.nav },
+  ].filter((l) => l.href !== current);
   return (
     <>
       <Header />
@@ -37,15 +42,15 @@ export default function PageShell({ crumbs, current, children }: {
           </div>
         </section>
 
-        <section className="pg-cta gut" aria-labelledby="pg-cta-title">
+        {showCta && <section className="pg-cta gut" aria-labelledby="pg-cta-title">
           <div className="wrap pg-cta-in">
             <h2 id="pg-cta-title">Start a project</h2>
             <p>Tell us about the site and how you want to live.</p>
-            <NavLink to="contact" className="menu-cta">Start a project</NavLink>
+            <Link href={CONTACT_PAGE.path} className="menu-cta">Start a project <span aria-hidden="true">↗</span></Link>
           </div>
-        </section>
+        </section>}
       </main>
-      <Footer />
+      <Footer showFilm={false} />
     </>
   );
 }
