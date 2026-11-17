@@ -1,5 +1,8 @@
-/* A shallow navy arch marks the footer on every page. The canvas behind stays light enough to show the curve. */
-.foot{--foot-curve:clamp(32px,6vw,96px);overflow-x:clip;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;color:#eef3f7;padding-block:calc(56px + var(--foot-curve)) calc(32px + env(safe-area-inset-bottom,0px));background:var(--deep);border-radius:50% 50% 0 0 / var(--foot-curve) var(--foot-curve) 0 0}
+/* ---------- Footer: on the dark navy end of the page canvas (PageTone.tsx turns the page navy as it comes in) ---------- */
+.foot{overflow-x:clip;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;color:#eef3f7;padding-block:56px calc(32px + env(safe-area-inset-bottom,0px))}
+/* the footer brings its own navy; on the homepage the page itself turns navy as it comes in (PageTone sets .tone-run) */
+.foot{background:var(--deep)}
+html.tone-run .foot{background:transparent}
 /* full width: the mark sits on the left edge, the links on the right edge */
 .foot .foot-in{width:100%;max-width:none;padding-inline:clamp(16px,5vw,96px)}
 .foot-main{position:relative;display:flex;justify-content:space-between;align-items:center;gap:32px;min-height:clamp(380px,34vw,500px)}
@@ -24,11 +27,20 @@
 .foot-base{margin-top:28px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 28px;font-size:13px;color:var(--night-mute)}
 .foot-base small{font-size:inherit}
 
-/* Inner pages use the same sign-off without the homepage film or full-screen hold. */
-.foot--quiet{min-height:auto;padding-block:calc(72px + var(--foot-curve)) calc(32px + env(safe-area-inset-bottom,0px))}
-.foot--quiet .foot-main{min-height:300px}
-.foot--quiet .foot-nav .foot-cta{padding:12px 0;border-radius:0;border-bottom:1px solid currentColor;background:transparent;color:var(--paper)}
+/* Inner pages: softly rounded shoulders, balanced link columns and a compact sign-off. */
+.foot--quiet{min-height:auto;padding-block:clamp(48px,6vw,88px) calc(28px + env(safe-area-inset-bottom,0px));border-radius:clamp(28px,4vw,64px) clamp(28px,4vw,64px) 0 0;color:var(--paper)}
+.foot--quiet .foot-in{max-width:1520px;margin-inline:auto;padding-inline:clamp(12px,4vw,64px)}
+.foot--quiet .foot-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);align-items:start;min-height:0;gap:clamp(40px,8vw,128px);text-align:left}
+.foot--quiet .foot-left{align-items:flex-start;gap:28px}
+.foot--quiet .brand svg{height:60px}
+.foot--quiet .foot-line{max-width:25ch;font-size:clamp(22px,2.4vw,34px);line-height:1.35;color:var(--paper);text-wrap:pretty}
+.foot--quiet .foot-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:12px 32px;padding-top:4px}
+.foot--quiet .foot-nav a{font-size:15px;line-height:1.5;color:var(--surface);padding:5px 0}
+.foot--quiet .foot-nav a:hover{color:var(--paper)}
+.foot--quiet .foot-nav .foot-cta{grid-column:1 / -1;justify-self:start;display:inline-flex;align-items:center;gap:24px;margin-top:20px;padding:12px 0;border-radius:0;border-bottom:1px solid var(--fog);background:transparent;color:var(--paper);font-size:12px;letter-spacing:.12em}
+.foot--quiet .foot-nav .foot-cta::after{content:'↗';font-size:20px;line-height:1}
 .foot--quiet .foot-nav .foot-cta:hover{background:transparent;color:var(--fog)}
+.foot--quiet .foot-base{margin-top:clamp(40px,5vw,72px);padding-top:24px;border-top:1px solid var(--night-line);align-items:start;justify-content:space-between;gap:12px 32px;color:var(--surface);font-size:12px;line-height:1.6}
 
 @media (max-width:900px){
   .foot-main{flex-direction:column;justify-content:center;text-align:center;gap:28px;min-height:520px}
