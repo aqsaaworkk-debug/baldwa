@@ -1,0 +1,41 @@
+/* ---------- Journey (opening scroll: logo, clouds, site) ---------- */
+/* Without JS or with reduced motion: one screen showing the still of the site.
+   With JS: one screen plus --journey-screens of scroll (set from stages.ts); the stage sticks.
+   All motion is driven from the master progress in Journey.tsx. */
+.journey{position:relative;height:100vh;height:100svh}
+html.js .journey{height:calc((var(--journey-screens,4) + 1)*100vh);height:calc((var(--journey-screens,4) + 1)*100svh)}
+.journey-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--paper) url(/images/journey/site-small.webp) center/cover no-repeat}
+.journey-stage canvas,.journey-still{position:absolute;inset:0;width:100%;height:100%;display:block}
+.journey-still{object-fit:cover}
+.journey-cue{position:absolute;left:0;right:0;bottom:calc(30px + env(safe-area-inset-bottom,0px));margin:0;text-align:center;font:500 11px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mute);pointer-events:none}
+/* Captions and chapter buttons sit on soft white cards, so they read on clouds and land alike. */
+.journey-caption{position:absolute;left:max(24px,env(safe-area-inset-left,0px));bottom:calc(var(--curve) + 40px + env(safe-area-inset-bottom,0px));max-width:min(460px,calc(100% - 48px));padding:24px 30px 26px;border-radius:28px;background:rgba(255,255,255,.93);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--ink);pointer-events:none}
+.journey-kicker{font:500 11px/1.4 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;margin:0;color:var(--gold-deep)}
+.journey-caption h2{font-size:clamp(28px,3vw,44px);line-height:1.08;margin:12px 0 8px}
+.journey-caption p:last-child{margin:0;font-size:16px;color:var(--ink-2)}
+.journey-nav{position:absolute;right:max(24px,env(safe-area-inset-right,0px));bottom:calc(var(--curve) + 40px + env(safe-area-inset-bottom,0px));display:flex;gap:4px;padding:5px;border-radius:999px;background:rgba(255,255,255,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.journey-nav button{appearance:none;border:0;background:none;cursor:pointer;min-height:36px;padding:0 16px;border-radius:999px;font:600 13px/1 var(--f-body);color:var(--ink-2)}
+.journey-nav button:hover{background:var(--paper)}
+.journey-nav button[aria-current]{background:var(--ink);color:#fff}
+/* live (JS, motion allowed): the journey opens on the clouds, so they also back the stage while the scene loads */
+.journey--live .journey-stage{background-image:url(/images/journey/cloud-deck.webp)}
+/* still: only the site caption */
+.journey:not(.journey--live) :is(.journey-cue,.journey-nav,.journey-caption[data-chapter="sky"]){display:none}
+/* Photo opening over the live scene (Journey.tsx, PUFFS): land photo, dense cloud deck, cut-out cloud banks.
+   All transforms and opacity come from GSAP. */
+.journey-sky{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.sky-land,.sky-deck{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;will-change:transform,opacity}
+.sky-puff{position:absolute;width:calc(var(--w) * max(1vw,1.6vh));will-change:transform,opacity}
+.sky-puff img{display:block;width:100%;height:auto;
+  -webkit-mask-image:radial-gradient(closest-side,#000 72%,transparent);mask-image:radial-gradient(closest-side,#000 72%,transparent)}
+/* Film opening (USE_FILM in Journey.tsx): two scrubbed clips; the second dissolves in over the first. */
+.film-clip{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:transparent;will-change:transform}
+/* Hero title of the film opening, staged after the reference reel: large white serif on the left
+   over the clouds, a small spaced line under it, on a soft dark scrim so it reads on bright cloud. */
+.film-scrim{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(47,65,86,.52) 0%,rgba(47,65,86,.3) 42%,rgba(47,65,86,0) 78%),linear-gradient(180deg,rgba(47,65,86,.18),rgba(47,65,86,0) 30%)}
+.film-title{position:absolute;left:max(24px,6vw,env(safe-area-inset-left,0px));top:50%;margin-top:-1em;max-width:calc(100% - 48px);color:#fff;pointer-events:none;font-size:clamp(32px,8.4vw,116px)}
+.film-title h1{margin:0;font:400 1em/.98 var(--f-display);letter-spacing:-.01em;text-transform:uppercase;text-shadow:0 2px 30px rgba(0,0,0,.25)}
+.film-title p{margin:.9em 0 0;font:500 clamp(11px,.95vw,14px)/1.4 var(--f-mono);letter-spacing:.32em;text-transform:uppercase;color:rgba(255,255,255,.86)}
+/* in the film the first chapter is the hero title, so it has no card */
+.journey--film .journey-caption[data-chapter="sky"]{display:none}

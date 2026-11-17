@@ -32,7 +32,7 @@ export default function Why() {
 
     // The film only plays while the section is on screen.
     const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) vid.play().catch(() => {}); else vid.pause();
+      if (e.isIntersecting) vid.play().catch(() => { }); else vid.pause();
     }, { threshold: 0.05 });
     io.observe(sec);
 

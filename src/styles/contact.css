@@ -23,9 +23,9 @@
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.95),
     inset 0 -24px 40px -30px color-mix(in srgb,var(--gold) 45%,transparent),
-    0 2px 4px rgba(13,13,12,.04),
-    0 18px 36px -14px rgba(13,13,12,.14),
-    0 60px 90px -40px rgba(13,13,12,.3)}
+    0 2px 4px rgba(47,65,86,.04),
+    0 18px 36px -14px rgba(47,65,86,.14),
+    0 60px 90px -40px rgba(47,65,86,.3)}
 /* Thin gold highlight along the top edge */
 .enq-card::after{content:"";position:absolute;left:14%;right:14%;top:0;height:2px;border-radius:2px;pointer-events:none;
   background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.9}
@@ -38,7 +38,7 @@
 .fld label,.fld-l{font:500 12px/1 var(--f-fun);letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
 .fld input,.fld textarea{width:100%;font:400 17px/1.4 var(--f-fun);color:var(--ink);text-align:center;
   background:color-mix(in srgb,var(--ink) 3%,var(--white));border:1px solid var(--line);border-radius:999px;padding:15px 22px;
-  box-shadow:inset 0 1px 2px rgba(13,13,12,.05);
+  box-shadow:inset 0 1px 2px rgba(47,65,86,.05);
   transition:box-shadow .3s var(--ease-out),border-color .3s,background-color .3s}
 .fld textarea{border-radius:26px;resize:none;min-height:116px}
 .fld input:hover,.fld textarea:hover{border-color:color-mix(in srgb,var(--gold-deep) 55%,var(--line))}
@@ -49,28 +49,28 @@
 .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
 .chips input{position:absolute;opacity:0;pointer-events:none}
 .chips label{display:inline-block;font:500 15px/1 var(--f-fun);letter-spacing:.01em;text-transform:none;color:var(--ink);background:var(--white);
-  border:1px solid var(--line);border-radius:999px;padding:13px 20px;cursor:pointer;box-shadow:0 1px 2px rgba(13,13,12,.05);
+  border:1px solid var(--line);border-radius:999px;padding:13px 20px;cursor:pointer;box-shadow:0 1px 2px rgba(47,65,86,.05);
   transition:translate .25s var(--ease-out),box-shadow .25s var(--ease-out),background-color .25s,color .25s,border-color .25s}
-.chips label:hover{translate:0 -2px;border-color:var(--gold-deep);box-shadow:0 10px 18px -10px rgba(13,13,12,.3)}
+.chips label:hover{translate:0 -2px;border-color:var(--gold-deep);box-shadow:0 10px 18px -10px rgba(47,65,86,.3)}
 .chips input:checked+label{background:var(--ink);color:var(--white);border-color:var(--ink);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 12px 20px -10px rgba(13,13,12,.55)}
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 12px 20px -10px rgba(47,65,86,.55)}
 .chips input:focus-visible+label{outline:2px solid var(--gold-deep);outline-offset:3px}
 
 /* Submit */
 .submit{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:18px;padding-top:8px}
 .btn-pop{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:18px;min-height:64px;padding:0 12px 0 34px;border-radius:999px;border:0;
-  background:linear-gradient(180deg,#2a2926 0%,var(--ink) 100%);color:var(--white);
+  background:linear-gradient(180deg,#45596e 0%,var(--ink) 100%);color:var(--white);
   font:500 15px/1 var(--f-fun);letter-spacing:.2em;text-transform:uppercase;cursor:pointer;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 18px 30px -12px rgba(13,13,12,.6);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 18px 30px -12px rgba(47,65,86,.6);
   transition:translate .25s var(--ease-out),box-shadow .25s var(--ease-out)}
 .btn-pop svg{box-sizing:content-box;padding:15px 9px;border-radius:50%;background:var(--gold);color:var(--ink);transition:translate .3s var(--ease-out)}
 /* Light sweep across the button on hover */
 .btn-pop::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:45%;pointer-events:none;
   background:linear-gradient(100deg,transparent,rgba(255,255,255,.28),transparent);transform:skewX(-18deg);transition:left .7s var(--ease-out)}
-.btn-pop:hover{translate:0 -3px;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 26px 38px -14px rgba(13,13,12,.65)}
+.btn-pop:hover{translate:0 -3px;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 26px 38px -14px rgba(47,65,86,.65)}
 .btn-pop:hover::after{left:120%}
 .btn-pop:hover svg{translate:4px 0}
-.btn-pop:active{translate:0 1px;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 8px 16px -8px rgba(13,13,12,.6)}
+.btn-pop:active{translate:0 1px;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 8px 16px -8px rgba(47,65,86,.6)}
 .form-note{font:400 15px/1.5 var(--f-fun);color:var(--mute);margin:0;max-width:44ch}
 .form-note:empty{display:none}
 .form-note.ok{color:var(--ink)}

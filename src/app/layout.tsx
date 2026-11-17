@@ -17,7 +17,7 @@ import '@/styles/base.css';
 import '@/styles/intro.css';
 import '@/styles/header.css';
 import '@/styles/menu.css';
-import '@/styles/hero.css';
+import '@/styles/journey.css';
 import '@/styles/projects.css';
 import '@/styles/villa-plan.css';
 import '@/styles/process.css';

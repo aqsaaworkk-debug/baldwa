@@ -7,11 +7,11 @@ import { prefersReducedMotion } from '@/lib/dom';
 const HEADLINE = 'Every building we draw begins with the *sun.*';
 const WORDS = HEADLINE.split(/\s+/).map((w) => ({ text: w.replace(/\*/g, ''), gold: w.startsWith('*') }));
 
-// Three ideas. `orb` picks the style of the matching planet in the orbit (philosophy.css).
+// Three ideas, one per diary page.
 const PILLARS = [
-  { orb: 'light', title: 'Light first', text: 'Rooms are placed along the sun path, so mornings, afternoons and evenings each have a room that suits them.' },
-  { orb: 'shade', title: 'Shade as craft', text: 'Deep overhangs, screens and courtyards keep interiors cool and turn harsh daylight into soft patterns.' },
-  { orb: 'stone', title: 'Built to last', text: 'Stone, lime and timber chosen to age well, with details that are honest about how they are made.' },
+  { title: 'Light first', text: 'Rooms are placed along the sun path, so mornings, afternoons and evenings each have a room that suits them.' },
+  { title: 'Shade as craft', text: 'Deep overhangs, screens and courtyards keep interiors cool and turn harsh daylight into soft patterns.' },
+  { title: 'Built to last', text: 'Stone, lime and timber chosen to age well, with details that are honest about how they are made.' },
 ];
 
 // The three ideas as diary pages, in screen order (left, centre, right). They open right first, then left, then the centre fills in,
@@ -22,58 +22,28 @@ const PAGES = [
   { side: 'side-r', ...PILLARS[0] },
 ];
 
-// Orbits in a -100..100 box around the sun: radii, tilt (deg), angular speed (rad/s), start angle, planet size (% of stage).
-const ORBITS = [
-  { rx: 60, ry: 19, tilt: -14, speed: 0.5, start: 0.6, size: 10 },
-  { rx: 79, ry: 26, tilt: 9, speed: -0.33, start: 2.4, size: 8 },
-  { rx: 96, ry: 31, tilt: -4, speed: 0.23, start: 4.3, size: 6.5 },
-];
-const RAD = Math.PI / 180;
-const f1 = (n: number) => n.toFixed(1);
-// Half of a tilted ellipse as an SVG arc: the front half passes in front of the sun, the back half behind it.
-const arc = (o: (typeof ORBITS)[number], front: boolean) => {
-  const x = o.rx * Math.cos(o.tilt * RAD), y = o.rx * Math.sin(o.tilt * RAD);
-  return `M${f1(x)} ${f1(y)}A${o.rx} ${o.ry} ${o.tilt} 0 ${front ? 1 : 0} ${f1(-x)} ${f1(-y)}`;
-};
+// The client's sun film (buildings orbiting the sun). The poster is its first frame, shown until it plays and under reduced motion.
+const FILM = { src: '/videos/philosophy-sun.mp4', poster: '/images/philosophy-sun.webp' };
 
 export default function Philosophy() {
   const root = useRef<HTMLElement>(null);
-  const stage = useRef<HTMLDivElement>(null);
-  const planets = useRef<(HTMLSpanElement | null)[]>([]);
+  const film = useRef<HTMLVideoElement>(null);
 
   useGSAP(() => {
-    const sec = root.current!, st = stage.current!;
+    const sec = root.current!, video = film.current!;
     const words = Array.from(sec.querySelectorAll<HTMLElement>('.ph-title .w'));
-    const reduce = prefersReducedMotion();
 
-    // Planets travel their ellipses; scale and stacking follow depth so they pass behind and in front of the sun.
-    let size = st.clientWidth;
-    const place = (t: number) => {
-      const k = size / 200;
-      ORBITS.forEach((o, i) => {
-        const el = planets.current[i];
-        if (!el) return;
-        const a = o.start + t * o.speed, depth = Math.sin(a);
-        const lx = o.rx * Math.cos(a), ly = o.ry * depth;
-        const c = Math.cos(o.tilt * RAD), s = Math.sin(o.tilt * RAD);
-        el.style.transform = `translate(-50%,-50%) translate3d(${f1((lx * c - ly * s) * k)}px,${f1((lx * s + ly * c) * k)}px,0) scale(${(1 + 0.24 * depth).toFixed(3)})`;
-        el.style.zIndex = depth > 0 ? '4' : '1';
-      });
-    };
-    const ro = new ResizeObserver(() => { size = st.clientWidth; if (reduce) place(0); });
-    ro.observe(st);
-    place(0);
-
-    if (reduce) {
+    if (prefersReducedMotion()) {
       words.forEach((w) => w.classList.add('lit'));
-      return () => ro.disconnect();
+      return; // the film stays on its poster frame
     }
 
-    let visible = true;
-    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; });
+    // The film loads and plays only while the section is near the screen.
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) video.play().catch(() => { });
+      else video.pause();
+    }, { rootMargin: '200px 0px' });
     io.observe(sec);
-    const tick = (time: number) => { if (visible) place(time); };
-    gsap.ticker.add(tick);
 
     // The headline lights up word by word as the section scrolls in.
     ScrollTrigger.create({
@@ -84,32 +54,13 @@ export default function Philosophy() {
       },
     });
 
-    // The system grows into place, the sun breathes, and soft lights drift in the background.
-    gsap.from('.ph-system', { scale: 0.72, opacity: 0, ease: 'none', scrollTrigger: { trigger: sec, start: 'top 85%', end: 'top 25%', scrub: 0.6 } });
-    gsap.to('.ph-glow', { scale: 1.14, opacity: 0.75, duration: 3.2, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-    gsap.to('.ph-sun', { y: -10, duration: 4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    // The film grows into place and soft lights drift in the background.
+    gsap.from('.ph-system', { scale: 0.8, opacity: 0, ease: 'none', scrollTrigger: { trigger: sec, start: 'top 85%', end: 'top 25%', scrub: 0.6 } });
     gsap.utils.toArray<HTMLElement>('.ph-blob').forEach((el, i) => {
       gsap.to(el, { x: i % 2 ? -70 : 80, y: i % 2 ? 50 : -60, duration: 11 + i * 3, ease: 'sine.inOut', yoyo: true, repeat: -1 });
     });
 
-    // Mouse only: the whole system leans towards the pointer.
-    const cleanups: (() => void)[] = [];
-    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-      const tilt = sec.querySelector<HTMLElement>('.ph-tilt')!;
-      const ry = gsap.quickTo(tilt, 'rotationY', { duration: 0.9, ease: 'power3.out' });
-      const rx = gsap.quickTo(tilt, 'rotationX', { duration: 0.9, ease: 'power3.out' });
-      const move = (e: PointerEvent) => {
-        const r = sec.getBoundingClientRect();
-        ry(((e.clientX - r.left) / r.width - 0.5) * 22);
-        rx(-((e.clientY - r.top) / r.height - 0.5) * 14);
-      };
-      const leave = () => { ry(0); rx(0); };
-      sec.addEventListener('pointermove', move);
-      sec.addEventListener('pointerleave', leave);
-      cleanups.push(() => { sec.removeEventListener('pointermove', move); sec.removeEventListener('pointerleave', leave); });
-    }
-
-    return () => { gsap.ticker.remove(tick); io.disconnect(); ro.disconnect(); cleanups.forEach((fn) => fn()); };
+    return () => { io.disconnect(); video.pause(); };
   }, { scope: root });
 
   // Diary: one blank page first; on scroll a page opens to the right, then one to the left, then the centre page gets its text.
@@ -152,20 +103,8 @@ export default function Philosophy() {
         <p className="eyebrow gold rv">Brand philosophy</p>
 
         <div className="ph-system" aria-hidden="true">
-          <div className="ph-tilt">
-            <div className="ph-stage" ref={stage}>
-              <span className="ph-glow" />
-              <svg className="ph-rings ph-rings-back" viewBox="-100 -100 200 200">
-                {ORBITS.map((o, i) => <path key={i} d={arc(o, false)} />)}
-              </svg>
-              <span className="ph-sun" />
-              <svg className="ph-rings ph-rings-front" viewBox="-100 -100 200 200">
-                {ORBITS.map((o, i) => <path key={i} d={arc(o, true)} />)}
-              </svg>
-              {ORBITS.map((o, i) => (
-                <span key={i} ref={(el) => { planets.current[i] = el; }} className={`ph-planet ph-orb ${PILLARS[i].orb}`} style={{ width: `${o.size}%` }} />
-              ))}
-            </div>
+          <div className="ph-film">
+            <video ref={film} src={FILM.src} poster={FILM.poster} width={1280} height={720} muted loop playsInline preload="none" tabIndex={-1} />
           </div>
         </div>
 

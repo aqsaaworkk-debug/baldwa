@@ -5,7 +5,7 @@
   .zoom,.compass{right:326px}
 }
 @media (max-width:900px){
-  :root{--head:66px}
+  :root{--head:66px;--plan-floor:var(--night)}
   .brand svg{height:42px}
   .menu-body{grid-template-columns:1fr}
   .menu-media{display:none}
@@ -16,7 +16,11 @@
   .pj-panel-copy{padding:28px 24px 28px;overflow:visible}
   .plan{padding-block:64px 96px}
   .plan-app{height:auto;display:flex;flex-direction:column;gap:12px;border:0;background:none;overflow:visible}
-  .plan-view{position:relative;inset:auto;height:min(520px,110vw);border-radius:16px;overflow:hidden;border:1px solid var(--night-line);background:radial-gradient(ellipse 70% 60% at 50% 48%,#1e1d1a 0%,#0c0c0b 72%)}
+  .plan-view{position:relative;inset:auto;height:min(520px,110vw);border-radius:16px;overflow:hidden;border:1px solid #45596e;background:radial-gradient(ellipse 75% 65% at 50% 46%,#41607b 0%,#2a3b4f 45%,#1c2836 100%)}
+  .sp-open{position:static;align-self:flex-start}
+  .plan-app{padding-inline:16px}
+  .plan-view{margin-inline:-16px;border-radius:0;border-left:0;border-right:0}
+  .plan-view canvas{-webkit-mask-image:none;mask-image:none}
   .panel{position:relative;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;width:100%!important}
   .panel.right{max-height:520px}
   .zoom{right:12px!important;bottom:62px}
@@ -46,15 +50,18 @@
   .process .pr-text{font-size:15px}
 }
 @media (max-width:520px){
+  .journey-caption{bottom:calc(var(--curve) + 88px + env(safe-area-inset-bottom,0px));padding:20px 22px 22px;border-radius:24px}
+  .journey-nav{right:auto;left:24px;bottom:calc(var(--curve) + 28px + env(safe-area-inset-bottom,0px))}
   .hero-frame{height:clamp(520px,78vh,760px)}
   /* Featured projects: taller hero tile so the heading fits */
   .pj-hero{aspect-ratio:4/5}
-  .pj-hero-shade{background:linear-gradient(0deg,rgba(11,11,10,.85) 0%,rgba(11,11,10,.35) 50%,rgba(11,11,10,0) 75%)}
+  .pj-hero-shade{background:linear-gradient(0deg,rgba(47,65,86,.85) 0%,rgba(47,65,86,.35) 50%,rgba(47,65,86,0) 75%)}
   .pj-hero-copy{left:7cqi;right:7cqi;bottom:7cqb}
   .pj-hero-copy h2{font-size:clamp(30px,11cqi,52px)}
   .pj-hero-copy .lede{font-size:16px}
   .pj-mosaic{gap:10px}
 }
 @media (prefers-reduced-motion:reduce){
+  html.js .journey{height:100vh;height:100svh}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }

@@ -47,7 +47,7 @@ export default function Contact() {
     const ctx = canvas?.getContext('2d');
     if (!canvas || !ctx) return;
     const LINES = 24;
-    const gold = getComputedStyle(canvas).getPropertyValue('--gold').trim() || '#f5b21a';
+    const gold = getComputedStyle(canvas).getPropertyValue('--gold').trim() || '#f4b251';
     let w = 0, h = 0, visible = true;
 
     const draw = (t: number) => {

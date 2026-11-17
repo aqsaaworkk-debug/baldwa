@@ -13,13 +13,13 @@
 .why-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 /* Light overlay: only the right edge is darkened, behind the small text column, so the film stays the focus */
 .why-shade{position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(270deg,rgba(11,11,10,.78) 0%,rgba(11,11,10,.5) 20%,rgba(11,11,10,.08) 42%,rgba(11,11,10,0) 60%),rgba(11,11,10,.1)}
+  background:linear-gradient(270deg,rgba(47,65,86,.78) 0%,rgba(47,65,86,.5) 20%,rgba(47,65,86,.08) 42%,rgba(47,65,86,0) 60%),rgba(47,65,86,.1)}
 
 /* Text column, pinned to the top-right corner */
 .why-in{position:relative;z-index:1;display:flex;justify-content:flex-end;
   padding:clamp(24px,4.5vh,48px) max(clamp(20px,3vw,48px),env(safe-area-inset-right,0px)) clamp(24px,4vh,44px) max(24px,env(safe-area-inset-left,0px))}
 .why-live .why-in{position:absolute;inset:0}
-.why-col{width:min(360px,100%);text-shadow:0 1px 14px rgba(11,11,10,.6);display:flex;flex-direction:column;min-height:0}
+.why-col{width:min(360px,100%);text-shadow:0 1px 14px rgba(47,65,86,.6);display:flex;flex-direction:column;min-height:0}
 
 .why-eyebrow{margin:0;font:400 11px/1.4 var(--why-sans);letter-spacing:.4em;text-transform:uppercase;color:rgba(255,255,255,.78)}
 .why-top h2{margin-top:10px;font-family:var(--why-serif);font-variation-settings:"opsz" 100;font-weight:300;font-size:clamp(24px,2.1vw,32px);line-height:1.1;letter-spacing:.005em;text-wrap:balance}
@@ -43,7 +43,7 @@
 .why-live .why-points li.is-on::before{background:var(--white);border-color:var(--white)}
 
 @media (max-width:900px){
-  .why-shade{background:linear-gradient(180deg,rgba(11,11,10,.74) 0%,rgba(11,11,10,.5) 34%,rgba(11,11,10,.06) 62%,rgba(11,11,10,0) 100%)}
+  .why-shade{background:linear-gradient(180deg,rgba(47,65,86,.74) 0%,rgba(47,65,86,.5) 34%,rgba(47,65,86,.06) 62%,rgba(47,65,86,0) 100%)}
   .why-in{padding-right:20px}
   .why-col{width:min(360px,100%)}
 }
