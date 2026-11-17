@@ -1,22 +1,18 @@
 /* ---------- Process: scroll-drawn route ---------- */
-/* A curved edge blends the plan section above into the white Process background; its fill is the plan's floor colour (--plan-floor, villa-plan.css). The curve into the Why film below is drawn by the Why section (.why-edge). */
-.process{--pr-edge:clamp(44px,8vw,120px);overflow-x:clip;--pr-road:var(--ink);--pr-band:clamp(120px,22vh,230px);position:relative;background:var(--white);padding-block:calc(var(--pr-edge) + 88px) 40px}
-.process .pr-edge{position:absolute;left:0;width:100%;height:var(--pr-edge);display:block;pointer-events:none}
-.process .pr-edge-top{top:-1px;fill:var(--plan-floor)}
+.process{overflow-x:clip;--pr-road:var(--ink);--pr-band:clamp(120px,22vh,230px);position:relative;padding-block:72px 32px}
 
-/* Section heading: tall, condensed high-contrast serif caps */
-.process .pr-head h2{margin-top:18px;max-width:16ch;font-family:var(--f-tall);font-variation-settings:"opsz" 100;font-weight:400;text-transform:uppercase;letter-spacing:.01em;font-size:clamp(46px,6.4vw,104px);line-height:.95}
-.process .pr-head h2 em{font-style:normal}
-.process .pr-track{position:relative;margin-top:40px}
+.process .pr-head h2{margin-top:18px;max-width:16ch}
+.process .pr-track{position:relative;margin-top:20px}
 .process .pr-pin{display:flex;align-items:center}
 .process .pr-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:center}
 .process .pr-road{position:relative}
 
-/* Step pictures (illustrations only, no card or number), driven by the road's progress.
+/* Step pictures (illustrations only, no card or number), driven by the road's progress. Each card has the page colour
+   behind its picture, so the multiply blend turns the pictures' white backgrounds into the canvas beige.
    .active = the stage just reached (visible); no class = earlier stages (faded out); .above = not reached yet. */
 .process .stack-wrap{position:relative;height:340px;display:grid;place-items:center;perspective:1400px}
 .process .deck{position:relative;height:calc(100% - 40px);aspect-ratio:380/460;max-width:calc(100% - 48px)}
-.process .step-card{position:absolute;inset:0;opacity:0;transform:translateY(-30px) scale(.94);transition:transform .9s var(--ease-out),opacity .6s}
+.process .step-card{position:absolute;inset:0;background:var(--paper);opacity:0;transform:translateY(-30px) scale(.94);transition:transform .9s var(--ease-out),opacity .6s}
 .process .step-card img{display:block;width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}
 .process .step-card.active{opacity:1;transform:none}
 .process .step-card.above{opacity:0;transform:translateY(40px) rotateY(-34deg) scale(.92)}
@@ -24,7 +20,7 @@
 /* Wide screens: card deck on the left, road on the right */
 @media (min-width:1101px){
   .process .pr-layout{grid-template-columns:minmax(0,.34fr) minmax(0,1fr);gap:clamp(24px,3vw,56px)}
-  .process .stack-wrap{height:min(600px,calc(100svh - var(--head) - 60px))}
+  .process .stack-wrap{height:min(520px,calc(100svh - var(--head) - 120px))}
   .process .deck{height:auto;width:min(calc(100% - 56px),340px);max-width:none}
 }
 @media (prefers-reduced-motion:reduce){
@@ -70,17 +66,11 @@
 .process .pr-down{grid-row:3;align-self:start;padding-top:30px;--pr-sy:14px}
 .process .pr-stage:first-child{margin-left:calc(var(--x) - 2.5%);text-align:left}
 .process .pr-stage:last-child{margin-left:calc(var(--x) - 23.5%);text-align:right}
-.process .pr-kicker{margin:0 0 8px;font:500 11px/1.4 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.process .pr-kicker{margin:0 0 8px;font:500 11px/1.4 var(--f-sans);letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
 .process .pr-kicker span{color:var(--gold-deep);margin-right:10px}
-/* Stage titles: playful bouncy caps with a stacked 3D extrusion (soft ink face, gold depth) */
-.process .pr-stage h3{font:400 clamp(17px,1.4vw,22px)/1.15 var(--f-play);letter-spacing:.05em;text-transform:uppercase;color:var(--ink);padding-bottom:3px;
-  text-shadow:1px 1px 0 rgba(245,178,26,.45),2px 2px 0 rgba(245,178,26,.3)}
-.process .pr-stage h3 span{display:inline-block}
-.process .pr-stage h3 span:nth-child(odd){transform:translateY(-.05em) rotate(-3deg)}
-.process .pr-stage h3 span:nth-child(3n){transform:translateY(.04em) rotate(2.5deg)}
-/* Descriptions and tags: rounded, friendly but readable */
-.process .pr-text{margin:10px 0 0;font:400 15px/1.6 var(--f-fun);color:var(--mute)}
-.process .pr-tags{margin:10px 0 0;font:500 12px/1.5 var(--f-fun);letter-spacing:.02em;color:var(--gold-deep)}
+.process .pr-stage h3{font:500 clamp(18px,1.5vw,24px)/1.15 var(--f-sans);letter-spacing:-.015em;color:var(--ink);padding-bottom:3px}
+.process .pr-text{margin:10px 0 0;font:400 15px/1.6 var(--f-sans);color:var(--mute)}
+.process .pr-tags{margin:10px 0 0;font:500 12px/1.5 var(--f-sans);letter-spacing:.02em;color:var(--gold-deep)}
 
 /* Scroll reveal (only once JS is running; without JS everything stays visible) */
 .process.pr-live .pr-stage{opacity:0;transform:translate(var(--pr-sx,0),var(--pr-sy,14px));transition:opacity .7s var(--ease-out),transform .9s var(--ease-out)}
@@ -88,6 +78,7 @@
 
 /* Pinned road: the route stays on screen and draws as the visitor scrolls through a tall track */
 @media (min-width:1101px) and (min-height:641px) and (prefers-reduced-motion:no-preference){
-  .process .pr-track{height:340vh}
-  .process .pr-pin{position:sticky;top:var(--head);height:calc(100vh - var(--head));height:calc(100svh - var(--head))}
+  /* centred but lifted: the extra room below pushes the pictures, the route and the pencil up a little */
+  .process .pr-pin{position:sticky;top:var(--head);height:calc(100vh - var(--head));height:calc(100svh - var(--head));padding-bottom:clamp(40px,9vh,110px)}
+  .process .pr-track{height:300vh;margin-top:-24px}
 }

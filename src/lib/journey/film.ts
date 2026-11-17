@@ -10,6 +10,11 @@
 //   site   clip B, whole (the plot by the road, the founder walks in, the blueprint rises)
 import { clamp, lerp, range } from './stages';
 
+// The client's full hero film: one clip, scrubbed by scroll across the whole opening (title over its first frames).
+// Put the file in public/videos and set it here, e.g. { src: '/videos/hero.mp4', screens: 4 } (screens = scroll length).
+// While it is null, the two-clip opening below is used. Encode it with frequent keyframes so scrubbing stays smooth.
+export const HERO_FILM = null as { src: string; screens: number } | null;
+
 export const CLIPS = {
   a: { src: '/video/opening-clouds.mp4', from: 13, to: 20 },  // client clip gemini_generated_video_9366a321, first 13 s unused
   b: { src: '/video/opening-site.mp4', from: 0, to: 10 },     // client clip gemini_generated_video_e0871e65, whole
@@ -61,6 +66,6 @@ export function clipTimes(p: number) {
 
 // The first chapter is the hero title itself (no card in film mode, see journey.css).
 export const FILM_CHAPTERS = [
-  { id: 'sky', label: 'Sky', kicker: '01 / The beginning', title: 'A world of possibility.', detail: 'Above the clouds, the journey begins.', show: [0, filmAt('part', .25)], goto: 0 },
-  { id: 'site', label: 'Site', kicker: '02 / The site', title: 'A place to begin.', detail: 'The land. The setting. The first possibility.', show: [filmAt('site', .12), filmAt('site', .3)], goto: filmAt('site', .1) },
+  { id: 'sky', label: 'Sky', kicker: 'Baldwa & Associates', title: 'Architecture and interior design solutions in Udaipur', detail: 'Architecture, BIM engineering and interior design.', show: [0, filmAt('part', .25)], goto: 0 },
+  { id: 'site', label: 'Site', kicker: 'Baldwa & Associates · Udaipur', title: 'Architecture, BIM engineering and interior design', detail: 'A cross-functional architecture and design organisation based in Udaipur, Rajasthan.', show: [filmAt('site', .12), filmAt('site', .3)], goto: filmAt('site', .1) },
 ] as const;

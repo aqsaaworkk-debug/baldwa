@@ -1,7 +1,7 @@
 'use client';
 import { useRef, useState } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
-import { prefersReducedMotion } from '@/lib/dom';
+import { prefersReducedMotion, scrollToSection } from '@/lib/dom';
 import Logo from './Logo';
 
 // Logo builds itself in the centre, holds, then flies into the header (#brand).
@@ -21,6 +21,14 @@ export default function Intro() {
       setDone(true);
     };
     if (prefersReducedMotion()) { finish(); return; }
+    // Arriving at a section from another page (e.g. /#contact from "Start a project"): no intro, go straight there
+    // once the scroll-driven sections have laid out.
+    if (location.hash.length > 1) {
+      finish();
+      const id = decodeURIComponent(location.hash.slice(1));
+      setTimeout(() => scrollToSection(id), 450);
+      return;
+    }
 
     const fly = () => {
       const target = document.querySelector('#brand svg');

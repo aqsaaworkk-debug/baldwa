@@ -1,8 +1,36 @@
-/* ---------- Footer ---------- */
-.foot{background:var(--night);color:#d7e3ec;padding-block:64px calc(40px + env(safe-area-inset-bottom,0px))}
-.foot-in{display:grid;grid-template-columns:auto 1fr auto;gap:40px;align-items:end}
-.foot .brand svg{height:72px}
-.foot nav{display:flex;flex-wrap:wrap;gap:10px 28px;justify-content:center}
-.foot nav a{font:500 12px/1 var(--f-body);letter-spacing:.2em;text-transform:uppercase;text-decoration:none;color:var(--night-mute);padding:6px 0}
-.foot nav a:hover{color:#fff}
-.foot small{font:500 11px/1.6 var(--f-mono);letter-spacing:.08em;color:#8ea3b4;text-align:right}
+/* ---------- Footer: on the dark navy end of the page canvas (PageTone.tsx turns the page navy as it comes in) ---------- */
+.foot{overflow-x:clip;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;color:#eef3f7;padding-block:56px calc(32px + env(safe-area-inset-bottom,0px))}
+/* the footer brings its own navy; on the homepage the page itself turns navy as it comes in (PageTone sets .tone-run) */
+.foot{background:var(--deep)}
+html.tone-run .foot{background:transparent}
+/* full width: the mark sits on the left edge, the links on the right edge */
+.foot .foot-in{width:100%;max-width:none;padding-inline:clamp(16px,5vw,96px)}
+.foot-main{position:relative;display:flex;justify-content:space-between;align-items:center;gap:32px;min-height:clamp(380px,34vw,500px)}
+.foot-left{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;gap:22px}
+.foot .brand svg{height:76px}
+.foot-line{margin:0;max-width:22ch;font-size:clamp(22px,2vw,30px);line-height:1.2;font-weight:400;letter-spacing:-.02em;color:#fff;text-wrap:balance}
+
+/* Sun film, in depth: large, centred behind the text, faded. Its black backdrop is screen-blended into the navy and
+   its edges are faded so no frame shows. */
+/* centred with margins (percentages of the width), not a transform or z-index: either would isolate the screen blend */
+.foot-film{--fw:min(720px,56%);position:absolute;left:50%;top:50%;width:var(--fw);aspect-ratio:16/10;margin:calc(var(--fw) * -.3125) 0 0 calc(var(--fw) / -2);pointer-events:none}
+.foot-film video{display:block;width:100%;height:100%;object-fit:cover;mix-blend-mode:screen;opacity:.5;
+  -webkit-mask-image:radial-gradient(closest-side,#000 45%,transparent 100%);mask-image:radial-gradient(closest-side,#000 45%,transparent 100%)}
+
+/* Sections: plain text links, right-aligned */
+.foot-nav{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.foot-nav a{font:500 clamp(16px,1.3vw,19px)/1.2 var(--f-sans);letter-spacing:-.01em;text-decoration:none;color:#eef3f7;padding:6px 0;transition:color .3s}
+.foot-nav a:hover{color:var(--fog)}
+.foot-nav .foot-cta{margin-top:10px;padding:12px 20px;border-radius:999px;background:var(--paper);color:var(--ink);font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.foot-nav .foot-cta:hover{background:var(--fog);color:#fff}
+
+.foot-base{margin-top:28px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 28px;font-size:13px;color:var(--night-mute)}
+.foot-base small{font-size:inherit}
+
+@media (max-width:900px){
+  .foot-main{flex-direction:column;justify-content:center;text-align:center;gap:28px;min-height:520px}
+  .foot-left{align-items:center}
+  .foot-film{--fw:115%}
+  .foot-nav{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:4px 22px}
+  .foot-base{justify-content:center}
+}

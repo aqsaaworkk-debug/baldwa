@@ -83,7 +83,8 @@ export function groundShadow() {
   const c = document.createElement('canvas'); c.width = c.height = 256;
   const g = c.getContext('2d')!;
   const grad = g.createRadialGradient(128, 128, 30, 128, 128, 128);
-  grad.addColorStop(0, 'rgba(2,4,14,.75)'); grad.addColorStop(.6, 'rgba(2,4,14,.35)'); grad.addColorStop(1, 'rgba(2,4,14,0)');
+  // a soft navy shadow (palette ink), light enough to sit on the beige page canvas
+  grad.addColorStop(0, 'rgba(47,65,86,.34)'); grad.addColorStop(.5, 'rgba(47,65,86,.14)'); grad.addColorStop(1, 'rgba(47,65,86,0)');
   g.fillStyle = grad; g.fillRect(0, 0, 256, 256);
   return new THREE.CanvasTexture(c);
 }

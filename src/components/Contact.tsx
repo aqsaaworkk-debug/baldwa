@@ -13,32 +13,13 @@ export default function Contact() {
 
   useGSAP(() => {
     if (prefersReducedMotion()) return;
-    const stage = root.current?.querySelector<HTMLElement>('.enq-stage');
-    const card = root.current?.querySelector<HTMLElement>('.enq-card');
-    if (!stage || !card) return;
-
-    // Fields pop in one after another when the card scrolls into view.
+    const form = root.current?.querySelector<HTMLElement>('.enq');
+    if (!form) return;
+    // Fields rise in one after another when the form scrolls into view.
     gsap.from('.enq-pop', {
-      y: 28, opacity: 0, scale: 0.94, duration: 0.7, stagger: 0.07, ease: 'back.out(1.7)',
-      scrollTrigger: { trigger: card, start: 'top 82%', once: true },
+      y: 16, opacity: 0, duration: 0.6, stagger: 0.06, ease: 'power3.out',
+      scrollTrigger: { trigger: form, start: 'top 85%', once: true },
     });
-
-    // 3D tilt that follows the pointer (mouse only, so touch scrolling is unaffected).
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    const rx = gsap.quickTo(card, 'rotationX', { duration: 0.6, ease: 'power3.out' });
-    const ry = gsap.quickTo(card, 'rotationY', { duration: 0.6, ease: 'power3.out' });
-    const move = (e: PointerEvent) => {
-      const r = stage.getBoundingClientRect();
-      ry(((e.clientX - r.left) / r.width - 0.5) * 9);
-      rx(-((e.clientY - r.top) / r.height - 0.5) * 7);
-    };
-    const leave = () => { rx(0); ry(0); };
-    stage.addEventListener('pointermove', move);
-    stage.addEventListener('pointerleave', leave);
-    return () => {
-      stage.removeEventListener('pointermove', move);
-      stage.removeEventListener('pointerleave', leave);
-    };
   }, { scope: root });
 
   // Background: a ribbon of flowing parallel lines drawn on a canvas behind the card.
@@ -118,27 +99,25 @@ export default function Contact() {
           <p className="lede">Tell us about the site and how you want to live.</p>
         </div>
 
-        <div className="enq-stage rv">
-
-          <form className="enq enq-card" onSubmit={onSubmit} noValidate>
-            <div className="fld enq-pop"><label htmlFor="f-name">Your name</label><input id="f-name" name="name" autoComplete="name" required /></div>
-            <div className="fld enq-pop"><label htmlFor="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autoComplete="tel" required /></div>
-            <div className="fld full enq-pop">
-              <span className="fld-l">Project type</span>
-              <div className="chips" role="radiogroup" aria-label="Project type">
-                {TYPES.map((t, i) => (
-                  <span key={t}><input type="radio" name="type" id={`t${i}`} value={t} defaultChecked={i === 0} /><label htmlFor={`t${i}`}>{t}</label></span>
-                ))}
-              </div>
+        {/* A numbered spec sheet: underline fields on a light glass panel, no card shadow */}
+        <form className="enq" onSubmit={onSubmit} noValidate>
+          <div className="fld enq-pop"><label htmlFor="f-name"><i>01</i>Your name</label><input id="f-name" name="name" autoComplete="name" required /></div>
+          <div className="fld enq-pop"><label htmlFor="f-phone"><i>02</i>Phone</label><input id="f-phone" name="phone" type="tel" autoComplete="tel" required /></div>
+          <div className="fld full enq-pop">
+            <span className="fld-l"><i>03</i>Project type</span>
+            <div className="chips" role="radiogroup" aria-label="Project type">
+              {TYPES.map((t, i) => (
+                <span key={t}><input type="radio" name="type" id={`t${i}`} value={t} defaultChecked={i === 0} /><label htmlFor={`t${i}`}>{t}</label></span>
+              ))}
             </div>
-            <div className="fld full enq-pop"><label htmlFor="f-loc">Plot location</label><input id="f-loc" name="location" /></div>
-            <div className="fld full enq-pop"><label htmlFor="f-msg">About the project</label><textarea id="f-msg" name="message" rows={3} /></div>
-            <div className="submit enq-pop">
-              <button className="btn-pop" type="submit">Send enquiry <svg width="22" height="10" viewBox="0 0 22 10" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M0 5h20M16 1l4 4-4 4" /></svg></button>
-              <p className={`form-note${note ? ' ' + note.kind : ''}`} aria-live="polite">{note?.text}</p>
-            </div>
-          </form>
-        </div>
+          </div>
+          <div className="fld full enq-pop"><label htmlFor="f-loc"><i>04</i>Plot location</label><input id="f-loc" name="location" /></div>
+          <div className="fld full enq-pop"><label htmlFor="f-msg"><i>05</i>About the project</label><textarea id="f-msg" name="message" rows={2} /></div>
+          <div className="submit enq-pop">
+            <button className="btn-pop" type="submit">Send enquiry <svg width="22" height="10" viewBox="0 0 22 10" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M0 5h20M16 1l4 4-4 4" /></svg></button>
+            <p className={`form-note${note ? ' ' + note.kind : ''}`} aria-live="polite">{note?.text}</p>
+          </div>
+        </form>
       </div>
     </section>
   );

@@ -1,17 +1,18 @@
 'use client';
-import dynamic from 'next/dynamic';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
-import { hasWebGL, prefersReducedMotion } from '@/lib/dom';
+import { prefersReducedMotion } from '@/lib/dom';
 import { projects } from '@/data/projects';
+import { HOME } from '@/data/site';
 import { useProjectImages } from './ProjectImages';
 import NavLink from './NavLink';
 import Logo from './Logo';
 
-const HeroScene = dynamic(() => import('./three/HeroScene'), { ssr: false });
-
-// Live 3D building in the hero tile (the page hero above shows Sunfold, so this one differs).
-const HERO = { scene: 'pavilion', tod: 'dusk', index: 0 } as const; // index = photo shown if WebGL is unavailable
+// Photo in the hero tile (client image).
+const HERO = {
+  src: '/images/projects/arched-villa-dusk.webp',
+  alt: 'A cream villa at dusk with arched windows, a carved timber door and a columned rotunda lounge, lit softly from below',
+};
 
 // Bento mosaic. The hero card starts full screen, then shrinks toward the centre and fades away
 // while these tiles fill the whole grid.
@@ -44,31 +45,12 @@ export default function Projects() {
   const heroMedia = useRef<HTMLDivElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const panel = useRef<HTMLDivElement>(null);
-  const pointer = useRef({ x: 0, y: 0 });
   const origin = useRef<HTMLElement | null>(null);
   const opening = useRef(false);
   const swapping = useRef(false);
   const [sel, setSel] = useState<number | null>(null);
-  const [env, setEnv] = useState<{ webgl: boolean; reduced: boolean } | null>(null);
-  const [visible, setVisible] = useState(false);
   const total = projects.length;
   const p = projects[sel ?? 0];
-
-  // WebGL check, pause the 3D tile when off screen, and feed the pointer to its camera.
-  useEffect(() => {
-    setEnv({ webgl: hasWebGL(), reduced: prefersReducedMotion() });
-    const el = hero.current!;
-    const io = new IntersectionObserver(([e]) => setVisible(e.isIntersecting));
-    io.observe(el);
-    const move = (e: PointerEvent) => {
-      const r = el.getBoundingClientRect();
-      pointer.current = { x: (e.clientX - r.left) / r.width - .5, y: (e.clientY - r.top) / r.height - .5 };
-    };
-    const leave = () => { pointer.current = { x: 0, y: 0 }; };
-    el.addEventListener('pointermove', move);
-    el.addEventListener('pointerleave', leave);
-    return () => { io.disconnect(); el.removeEventListener('pointermove', move); el.removeEventListener('pointerleave', leave); };
-  }, []);
 
   const { contextSafe } = useGSAP(() => {
     const mm = gsap.matchMedia();
@@ -90,7 +72,7 @@ export default function Projects() {
         // Where the hero shrinks to before it vanishes: a small card in the centre of the grid.
         const target = () => { const { w, h } = box(), tw = w * 0.3, th = h * 0.3; return { l: (w - tw) / 2, t: (h - th) / 2, w: tw, h: th }; };
 
-        // The live 3D canvas keeps the full-screen size and is only scaled, so it never re-allocates while shrinking.
+        // The photo keeps the full-screen size and is only scaled while the card shrinks, so its crop never jumps.
         const fitMedia = () => {
           const { w, h } = box();
           media.style.width = `${w}px`; media.style.height = `${h}px`;
@@ -139,68 +121,38 @@ export default function Projects() {
       }
 
       if (hover && !reduce) {
-        // Depth parallax: the whole mosaic tilts with the pointer, so tiles on different depth layers shift apart.
-        if (pinned) {
-          const st = stage.current!;
-          const mx = gsap.quickTo(mos, 'rotationY', { duration: 1.1, ease: 'power3.out' });
-          const my = gsap.quickTo(mos, 'rotationX', { duration: 1.1, ease: 'power3.out' });
-          const sMove = (e: PointerEvent) => {
-            const r = st.getBoundingClientRect();
-            mx(((e.clientX - r.left) / r.width - .5) * 7); my(-((e.clientY - r.top) / r.height - .5) * 5);
-          };
-          const sLeave = () => { mx(0); my(0); };
-          st.addEventListener('pointermove', sMove);
-          st.addEventListener('pointerleave', sLeave);
-          offs.push(() => { st.removeEventListener('pointermove', sMove); st.removeEventListener('pointerleave', sLeave); gsap.set(mos, { clearProps: 'transform' }); });
-        }
-
-        // Hero tile leans toward the pointer.
-        const inner = heroInner.current!;
-        gsap.set(inner, { transformPerspective: 1400 });
-        const hx = gsap.quickTo(inner, 'rotationY', { duration: 0.9, ease: 'power3.out' });
-        const hy = gsap.quickTo(inner, 'rotationX', { duration: 0.9, ease: 'power3.out' });
-        const hMove = (e: PointerEvent) => {
-          const r = heroEl.getBoundingClientRect();
-          hx(((e.clientX - r.left) / r.width - .5) * 6); hy(-((e.clientY - r.top) / r.height - .5) * 5);
-        };
-        const hLeave = () => { hx(0); hy(0); };
-        heroEl.addEventListener('pointermove', hMove);
-        heroEl.addEventListener('pointerleave', hLeave);
-        offs.push(() => { heroEl.removeEventListener('pointermove', hMove); heroEl.removeEventListener('pointerleave', hLeave); });
-
-        // Tiles: lift toward the viewer, tilt to the cursor, and move the specular light (CSS vars) under it.
-        const fx = new Map<HTMLElement, gsap.QuickToFunc[]>();
-        gsap.utils.toArray<HTMLElement>('.pj-face').forEach((f) => {
-          gsap.set(f, { transformPerspective: 900 });
-          fx.set(f, [
-            gsap.quickTo(f, 'rotationY', { duration: 0.6, ease: 'power3.out' }),
-            gsap.quickTo(f, 'rotationX', { duration: 0.6, ease: 'power3.out' }),
-            gsap.quickTo(f, 'z', { duration: 0.6, ease: 'power3.out' }),
-          ]);
-        });
-        
+        // The cards stay still. Only the specular light (CSS vars) follows the cursor across a card.
         const fMove = (e: PointerEvent) => {
           const f = (e.target as HTMLElement).closest<HTMLElement>('.pj-face');
-          if (!f || !fx.has(f)) return;
+          if (!f) return;
           const r = f.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
           f.style.setProperty('--mx', `${x}px`);
           f.style.setProperty('--my', `${y}px`);
-          f.style.setProperty('--px', `${(x / r.width - .5) * 2}`);
-          f.style.setProperty('--py', `${(y / r.height - .5) * 2}`);
           f.style.setProperty('--ang', `${Math.atan2(y - r.height / 2, x - r.width / 2) * (180 / Math.PI) + 90}deg`);
-          const [ry, rx, z] = fx.get(f)!;
-          ry((x / r.width - .5) * 10); rx(-(y / r.height - .5) * 9); z(36);
-        };
-        const fOut = (e: PointerEvent) => {
-          const f = (e.target as HTMLElement).closest<HTMLElement>('.pj-face');
-          if (!f || !fx.has(f) || f.contains(e.relatedTarget as Node)) return;
-          const [ry, rx, z] = fx.get(f)!;
-          ry(0); rx(0); z(0);
-          f.style.setProperty('--px', '0'); f.style.setProperty('--py', '0');
         };
         mos.addEventListener('pointermove', fMove);
-        mos.addEventListener('pointerout', fOut);
-        offs.push(() => { mos.removeEventListener('pointermove', fMove); mos.removeEventListener('pointerout', fOut); });
+        offs.push(() => mos.removeEventListener('pointermove', fMove));
+
+        // Project photos turn like a model on a turntable, after the reference clip: the camera (the card) stays put at a
+        // slightly raised, drone-like angle and only the photo turns half a revolution to reveal the second photo on its back.
+        // While it turns it tips back (rotateX) and steps in a little (scale), as if seen from above; at rest it is flat and fills the card.
+        gsap.utils.toArray<HTMLElement>('.pj-flip').forEach((flip) => {
+          const face = flip.closest<HTMLElement>('.pj-face')!;
+          const st = { t: 0 };
+          const draw = () => {
+            const lift = Math.sin(Math.PI * st.t); // 0 at rest, 1 half-way
+            gsap.set(flip, { rotationY: 180 * st.t, rotationX: 16 * lift, scale: 1 - 0.14 * lift });
+          };
+          const turn = (to: number) => gsap.to(st, { t: to, duration: 1.1, ease: 'power2.inOut', overwrite: true, onUpdate: draw });
+          const on = () => turn(1), off = () => turn(0);
+          face.addEventListener('pointerenter', on); face.addEventListener('pointerleave', off);
+          face.addEventListener('focus', on); face.addEventListener('blur', off);
+          offs.push(() => {
+            face.removeEventListener('pointerenter', on); face.removeEventListener('pointerleave', off);
+            face.removeEventListener('focus', on); face.removeEventListener('blur', off);
+            gsap.killTweensOf(st); gsap.set(flip, { clearProps: 'transform' });
+          });
+        });
       }
 
       return () => { sec.classList.remove('pj-pinned'); offs.forEach((f) => f()); };
@@ -279,16 +231,14 @@ export default function Projects() {
               {/* Hero card: full screen at first, then shrinks to the centre and fades away. */}
               <article className="pj-hero" ref={hero} aria-labelledby="pj-title">
                 <div className="pj-hero-inner" ref={heroInner}>
-                  <div className={`pj-hero-media${env?.webgl || images[HERO.index] ? '' : ' img-wait'}`} ref={heroMedia}>
-                    {env?.webgl
-                      ? <HeroScene scene={HERO.scene} tod={HERO.tod} pointer={pointer} active={visible && sel === null} reduced={env.reduced} label="Live 3D model of a pavilion at dusk" />
-                      : images[HERO.index] && <img src={images[HERO.index]!} alt={projects[HERO.index].name} />}
+                  <div className="pj-hero-media" ref={heroMedia}>
+                    <img src={HERO.src} alt={HERO.alt} />
                   </div>
                   <div className="pj-hero-shade" />
                   <div className="pj-hero-copy">
                     <p className="eyebrow on-dark pj-fade">Featured projects</p>
-                    <h2 id="pj-title">Places we have <em>shaped</em></h2>
-                    <p className="lede on-dark pj-fade">Homes, pavilions and workplaces planned around sun, shade and the way people actually live in them.</p>
+                    <h2 id="pj-title">{HOME.thoughtful.h2}</h2>
+                    <p className="lede on-dark pj-fade">{HOME.thoughtful.text}</p>
                   </div>
                   <span className="pj-hint pj-fade" aria-hidden="true">Scroll to explore</span>
                 </div>
@@ -297,10 +247,19 @@ export default function Projects() {
               {TILES.map((t) => (
                 <div key={t.area} className={`pj-tile pj-${t.area} pj-tone-${t.tone}`} data-z={t.z}>
                   {t.kind === 'project' && (
-                    <button type="button" className="pj-face" data-i={t.i} aria-haspopup="dialog" onClick={(e) => openProject(t.i, e.currentTarget)}>
+                    <button type="button" className="pj-face pj-photo" data-i={t.i} aria-haspopup="dialog" onClick={(e) => openProject(t.i, e.currentTarget)}>
+                      {/* The photo fills the card; with a second photo it turns half a revolution on hover (see the hover setup above) */}
+                      <span className={`pj-t-art${images[t.i] ? '' : ' img-wait'}`}>
+                        <span className="pj-flip">
+                          <span className="pj-side pj-front">
+                            {images[t.i] && <img className="pj-a" src={images[t.i]!} alt="" />}
+                          </span>
+                          {projects[t.i].hover && <span className="pj-side pj-back"><img src={projects[t.i].hover} alt="" loading="lazy" /></span>}
+                        </span>
+                      </span>
+                      <span className="pj-shade" aria-hidden="true" />
                       <span className="pj-t-head"><span className="pj-t-title">{projects[t.i].name}</span>
                       <span className="pj-t-sub">{String(t.i + 1).padStart(2, '0')} · {projects[t.i].type}</span></span>
-                      <span className={`pj-t-art${images[t.i] ? '' : ' img-wait'}`}>{images[t.i] && <img src={images[t.i]!} alt="" />}</span>
                       <span className="pj-edge" aria-hidden="true" />
                       <span className="pj-open" aria-hidden="true">{arrow}</span>
                     </button>
@@ -325,11 +284,6 @@ export default function Projects() {
                         <span className="pj-t-title">Start a project</span>
                         <span className="pj-t-sub">Tell us about your plot</span>
                       </span>
-                      <svg className="pj-t-plan pj-t-sun" viewBox="0 0 120 120" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                        <path d="M14 96H106" />
-                        <path d="M30 96a30 30 0 0 1 60 0" />
-                        <path d="M60 52V36M38 61L27 50M82 61l11-11M28 80H14M106 80H92" strokeLinecap="round" />
-                      </svg>
                       <span className="pj-edge" aria-hidden="true" />
                       <span className="pj-open" aria-hidden="true">{arrow}</span>
                     </NavLink>

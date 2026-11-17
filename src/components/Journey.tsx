@@ -1,11 +1,12 @@
 'use client';
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
+import { gsap, useGSAP } from '@/lib/gsap';
 import { hasWebGL, prefersReducedMotion } from '@/lib/dom';
 import { createCloudReveal } from '@/lib/journey/cloudReveal2d';
 import { CHAPTERS, SCREENS, journey, lerp, pickQuality, range, smooth, stageT, type Quality } from '@/lib/journey/stages';
-import { CLIPS, DRONE, FILM_CHAPTERS, FILM_SCREENS, JOIN, PART, clipTimes, droneAt, filmAt, filmT } from '@/lib/journey/film';
+import { BRAND, HOME } from '@/data/site';
+import { CLIPS, DRONE, FILM_CHAPTERS, FILM_SCREENS, HERO_FILM, JOIN, PART, clipTimes, droneAt, filmAt, filmT } from '@/lib/journey/film';
 
 // Opening scroll journey. A tall section with a sticky stage; one scrubbed ScrollTrigger
 // writes the master progress (journey.p) and everything else follows from that number.
@@ -16,6 +17,7 @@ import { CLIPS, DRONE, FILM_CHAPTERS, FILM_SCREENS, JOIN, PART, clipTimes, drone
 //   2d    no WebGL: the cloud photo parts over a still of the site
 //   still reduced motion: one screen, a still, no scroll effects
 const USE_FILM = true; // false brings back the real-time 3D journey, untouched
+const SINGLE = USE_FILM && HERO_FILM !== null; // the client's one hero film replaces the two clips (film.ts)
 
 const JourneyScene = dynamic(() => import('./three/JourneyScene'), { ssr: false });
 
@@ -23,7 +25,7 @@ const IMG = '/images/journey';
 const FADE = .035; // caption fade length, in master progress
 
 type Chapter = { id: string; label: string; kicker: string; title: string; detail: string; show: readonly number[]; goto: number };
-const chapters: readonly Chapter[] = USE_FILM ? FILM_CHAPTERS : CHAPTERS;
+const chapters: readonly Chapter[] = SINGLE ? [] : USE_FILM ? FILM_CHAPTERS : CHAPTERS;
 
 // Photo clouds of the hero: cloud banks (cloud-bank.webp, cut out of the client's cloud-on-black
 // image) in front of a dense cloud deck. They drift in when the intro curtain lifts and part on scroll.
@@ -57,7 +59,6 @@ export default function Journey() {
   const [mode, setMode] = useState<'film' | '3d' | '2d' | 'still' | null>(null);
   const [quality, setQuality] = useState<Quality | null>(null);
   const [visible, setVisible] = useState(true);
-  const [chapter, setChapter] = useState(0);
   const live = mode === 'film' || mode === '3d' || mode === '2d';
 
   useEffect(() => {
@@ -79,7 +80,6 @@ export default function Journey() {
     const $ = gsap.utils.selector(root);
     const captions = $('.journey-caption');
     const puffs = $('.sky-puff'), deck = $('.sky-deck'), land = $('.sky-land'), sky = $('.journey-sky');
-    let current = -1;
 
     // Ambient life, separate from scroll: each bank floats slowly (inner image) and the banks
     // drift in (middle wrapper) as the intro curtain lifts. Neither touches the scroll-driven outer element.
@@ -107,6 +107,8 @@ export default function Journey() {
     const b = film && clipB.current ? scrubber(clipB.current) : null;
     const loadB = () => { const v = clipB.current; if (v && v.preload !== 'auto') { v.preload = 'auto'; v.load(); } };
     clipA.current?.addEventListener('canplaythrough', loadB, { once: true });
+    const onMeta = () => apply();
+    if (SINGLE) clipA.current?.addEventListener('loadedmetadata', onMeta);
     // iOS only paints a seeked frame after the video has played once: do that on the first touch
     const unlock = () => [clipA.current, clipB.current].forEach((v) => v?.play().then(() => v.pause()).catch(() => {}));
     if (film) window.addEventListener('touchstart', unlock, { once: true, passive: true });
@@ -128,20 +130,25 @@ export default function Journey() {
     // (The logo is not part of it: the preloader in Intro.tsx puts it in the header.)
     const apply = () => {
       const p = journey.p;
+      if (SINGLE) {
+        // one film across the whole opening; the title leaves over the first stretch of scroll
+        const title = 1 - smooth(range(p, 0, .14));
+        gsap.set($('.journey-cue'), { opacity: title });
+        gsap.set($('.film-title'), { autoAlpha: title, y: -40 * (1 - title) });
+        gsap.set($('.film-scrim'), { autoAlpha: .35 + .65 * title });
+        const d = clipA.current?.duration ?? 0;
+        a?.set(Number.isFinite(d) ? Math.min(p, .998) * d : 0);
+        return;
+      }
       const intro = 1 - range(film ? filmT('hero', p) : stageT('logo', p), 0, .5);
       gsap.set($('.journey-cue'), { opacity: intro, y: -16 * (1 - intro) });
-      let active = 0;
       chapters.forEach((c, i) => {
         const o = Math.min(range(p, c.show[0], c.show[0] + FADE), 1 - range(p, c.show[1], c.show[1] + FADE));
         gsap.set(captions[i], { opacity: o, y: 14 * (1 - o) });
-        if (p >= c.show[0] - .02) active = i;
       });
-      gsap.set($('.journey-nav'), { autoAlpha: range(p, chapters[0].show[0] - FADE, chapters[0].show[0]) });
-      if (active !== current) { current = active; setChapter(active); }
 
       if (film) {
         const part = filmT('part', p), drone = filmT('drone', p), site = filmT('site', p);
-        gsap.set($('.journey-nav'), { autoAlpha: range(p, filmAt('part', .8), filmAt('drone', 0)) });
         // the hero title leaves first, while clip A runs its own cloud dispersal (no photo clouds on top)
         const title = 1 - smooth(range(part, PART.title[0], PART.title[1]));
         gsap.set($('.film-title'), { autoAlpha: title, y: -40 * (1 - title) });
@@ -178,31 +185,26 @@ export default function Journey() {
       ro?.disconnect(); reveal?.destroy(); mo?.disconnect();
       a?.destroy(); b?.destroy();
       clipA.current?.removeEventListener('canplaythrough', loadB);
+      clipA.current?.removeEventListener('loadedmetadata', onMeta);
       window.removeEventListener('touchstart', unlock);
       floats.forEach((f) => f.kill()); enter.kill();
       journey.p = 0;
     };
   }, { scope: root, dependencies: [mode] });
 
-  // Chapter buttons scroll the page; the scene follows because it only listens to scroll.
-  const goTo = (p: number) => {
-    const el = root.current;
-    if (!el) return;
-    const top = el.getBoundingClientRect().top + window.scrollY;
-    window.scrollTo({ top: top + p * (el.offsetHeight - window.innerHeight), behavior: 'smooth' });
-    ScrollTrigger.update();
-  };
-
   return (
     <section
       id="home" ref={root} aria-label="From vision to reality"
       className={`journey${live ? ' journey--live' : ''}${mode === 'film' ? ' journey--film' : ''}`}
-      style={{ '--journey-screens': USE_FILM ? FILM_SCREENS : SCREENS } as CSSProperties}
+      style={{ '--journey-screens': HERO_FILM && SINGLE ? HERO_FILM.screens : USE_FILM ? FILM_SCREENS : SCREENS } as CSSProperties}
     >
       <div className="journey-stage">
         {mode === '3d' && quality && <JourneyScene quality={quality} active={visible} />}
         {mode === '2d' && <canvas ref={canvas2d} role="img" aria-label="Clouds parting above an empty plot in a green neighbourhood" />}
-        {mode === 'film' && <>
+        {mode === 'film' && HERO_FILM && SINGLE && (
+          <video className="film-clip" ref={clipA} src={HERO_FILM.src} muted playsInline preload="auto" aria-hidden="true" />
+        )}
+        {mode === 'film' && !SINGLE && <>
           <video className="film-clip" ref={clipA} src={CLIPS.a.src} muted playsInline preload="auto" aria-hidden="true" />
           <video className="film-clip" ref={clipB} src={CLIPS.b.src} muted playsInline preload="none" role="img"
             aria-label="An empty plot beside a road; the founder walks onto it and the outline of the building rises" />
@@ -225,25 +227,22 @@ export default function Journey() {
         {/* eslint-enable @next/next/no-img-element */}
         {mode === 'film' && <>
           <div className="film-scrim" aria-hidden="true" />
-          {/* hero title, as in the reference: large serif on the left, small spaced line under it */}
+          {/* hero title (the page's H1 from the SEO brief): large type on the left, small spaced line under it */}
           <div className="film-title">
-            <h1 className="film-title-in">A world<br />of possibility.</h1>
-            <p className="film-title-in">Above the clouds, the journey begins.</p>
+            <h1 className="film-title-in">{HOME.h1}</h1>
+            <p className="film-title-in">{BRAND.name} · Architecture · BIM engineering · Interior design</p>
           </div>
         </>}
+        {/* the bottom of the opening melts into the page canvas */}
+        <div className="journey-fade" aria-hidden="true" />
         <p className="journey-cue" aria-hidden="true">Scroll to begin</p>
         {chapters.map((c) => (
           <div className="journey-caption" key={c.id} data-chapter={c.id}>
             <p className="journey-kicker">{c.kicker}</p>
-            <h2>{c.title}</h2>
+            <p className="journey-title">{c.title}</p>
             <p>{c.detail}</p>
           </div>
         ))}
-        <nav className="journey-nav" aria-label="Journey chapters">
-          {chapters.map((c, i) => (
-            <button key={c.id} type="button" aria-current={chapter === i ? 'step' : undefined} onClick={() => goTo(c.goto)}>{c.label}</button>
-          ))}
-        </nav>
       </div>
     </section>
   );

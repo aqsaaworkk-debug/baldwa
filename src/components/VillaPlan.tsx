@@ -18,7 +18,7 @@ const LIGHTS: [PlanLight, string][] = [['evening', 'Evening'], ['day', 'Day']];
 
 export default function VillaPlan() {
   const [view, setViewState] = useState<PlanView>('iso');
-  const [light, setLight] = useState<PlanLight>('evening');
+  const [light, setLight] = useState<PlanLight>('day');
   const [spin, setSpin] = useState(false);
   const [labels, setLabels] = useState(false);
   const [specOpen, setSpecOpen] = useState(false);
@@ -85,13 +85,14 @@ export default function VillaPlan() {
   const onUp = () => { drag.current = null; viewEl.current?.classList.remove('dragging'); setTimeout(() => { ctl.current.dragged = false; }, 0); };
 
   return (
-    <section id="plan" className="plan">
+    // Evening light turns the whole section dark (villa-plan.css, .plan-night); Day keeps it on the page canvas.
+    <section id="plan" className={`plan${light === 'evening' ? ' plan-night' : ''}`}>
       <div className="gut"><div className="wrap plan-head rv">
         <div>
-          <p className="eyebrow on-dark">Interactive layout</p>
+          <p className="eyebrow">Interactive layout</p>
           <h2>Walk through <em>{villa.name}</em></h2>
         </div>
-        <p className="lede on-dark">Turn the model, look at it from above, switch the lights and pick any room. Every client sees their home like this long before construction starts.</p>
+        <p className="lede">Immersive 3D project walkthroughs: turn the model, look at it from above, switch the lights and pick any room, long before construction starts.</p>
       </div></div>
       <div>
         <div className="plan-app">
@@ -135,7 +136,7 @@ export default function VillaPlan() {
 
           <aside className="panel right" id="specPanel" aria-label="Rooms on this floor" hidden={!specOpen}>
             <div className="sp-head">
-              <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f4b251" strokeWidth="1.8" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" /></svg>Rooms</h3>
+              <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" /></svg>Rooms</h3>
               <button className="sp-close" aria-label="Hide room list" onClick={() => setSpecOpen(false)}>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M2 2l12 12M14 2L2 14" /></svg>
               </button>

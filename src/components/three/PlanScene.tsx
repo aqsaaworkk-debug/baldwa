@@ -8,7 +8,7 @@ import { buildPlanModel, groundShadow, wx, wz } from '@/lib/three/planModel';
 import { disposeObject } from '@/lib/three/scenes';
 
 // 3D floor plan of the walkthrough section, staged after the reference clip: the model floats on
-// a dark blue stage, its lights come on, the camera goes to the plan view from above, comes back
+// the page canvas, its lights come on, the camera goes to the plan view from above, comes back
 // down and turns around the model, and ends on the front view. Room names show only on request.
 
 export type PlanView = 'iso' | 'top' | 'front';
@@ -110,18 +110,19 @@ function Scene(p: Props) {
     model.lamp.emissiveIntensity = 2.6 * on * THREE.MathUtils.lerp(1, .25, day);
     gl.toneMappingExposure = THREE.MathUtils.lerp(1.05, .95, day);
 
-    // camera: orbit around the model, fitted into the part of the canvas the side panels leave free (desktop)
+    // camera: orbit around the model, always centred on the stage. On desktop it is sized to fit between
+    // equal margins as wide as the widest side panel, so the panels never cover it.
     const desktop = window.innerWidth > 900;
     const W = size.width, H = size.height;
-    const freeW = Math.max(260, desktop ? W - (p.specOpen ? 690 : 340) : W);
+    const side = desktop ? (p.specOpen ? 370 : 340) : 0;
+    const freeW = Math.max(260, W - 2 * side);
     const span = Math.max(19.5, 25 / (freeW / H)) / c.zoom;        // world height the frame shows at the model
     const dist = span / (2 * Math.tan((camera.fov * D2R) / 2));
-    const shift = desktop ? (((p.specOpen ? -30 : 340) / 2) / H) * span : 0;
     // the view leans a little with the pointer, so near and far parts shift against each other (depth)
     const lean = p.reduced || c.dragged ? 0 : 1 - THREE.MathUtils.smoothstep(c.el, 70 * D2R, 88 * D2R);
     par.x += (pointer.x * -.14 * lean - par.x) * .06; par.y += (pointer.y * -.07 * lean - par.y) * .06;
     const az = c.az + par.x, el = THREE.MathUtils.clamp(c.el + par.y, 10 * D2R, 89.5 * D2R);
-    target.set(-Math.cos(az) * shift, .4, Math.sin(az) * shift);
+    target.set(0, .4, 0);
     camera.position.set(target.x + Math.cos(el) * Math.sin(az) * dist, target.y + Math.sin(el) * dist, target.z + Math.cos(el) * Math.cos(az) * dist);
     camera.near = Math.max(.5, dist - 30); camera.far = dist + 60;
     camera.lookAt(target); camera.updateProjectionMatrix();

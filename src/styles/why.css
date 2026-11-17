@@ -1,31 +1,31 @@
-/* ---------- Why Baldwa: full-screen film with scroll-driven points in the top-right corner ---------- */
+/* ---------- Why Baldwa: full-screen film, heading on the left, scroll-driven points on the right ---------- */
 /* Default (no JS / reduced motion): a normal block with every point listed over a still frame.
    .why-live (added by Why.tsx): tall scroll track, the stage is pinned full-screen and the list slides up one point at a time. */
-.why{position:relative;background:var(--night);color:var(--white);
-  --why-serif:var(--f-tall);            /* tall, high-contrast serif, used light */
-  --why-sans:var(--f-body)}
+.why{position:relative;color:var(--white);--why-serif:var(--f-sans);--why-sans:var(--f-sans)}
 .why-track{position:relative}
-.why-edge{position:absolute;left:0;top:-1px;z-index:3;width:100%;height:clamp(30px,5vw,72px);display:block;fill:var(--white);pointer-events:none}
-.why-pin{position:relative;overflow:hidden;min-height:calc(100vh - var(--head));min-height:calc(100svh - var(--head))}
-.why-live .why-track{height:calc(var(--n,6) * 85vh + 100vh)}
-.why-live .why-pin{position:sticky;top:var(--head);height:calc(100vh - var(--head));height:calc(100svh - var(--head))}
+/* Full width and full height: the film runs edge to edge (the header floats over it) */
+.why-pin{position:relative;overflow:hidden;min-height:100vh;min-height:100svh}
+.why-live .why-track{height:calc(var(--n,6) * 85vh + 200vh)}
+.why-live .why-pin{position:sticky;top:0;height:100vh;height:100svh}
 
-.why-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-/* Light overlay: only the right edge is darkened, behind the small text column, so the film stays the focus */
-.why-shade{position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(270deg,rgba(47,65,86,.78) 0%,rgba(47,65,86,.5) 20%,rgba(47,65,86,.08) 42%,rgba(47,65,86,0) 60%),rgba(47,65,86,.1)}
+.why-video,.why-shade{position:absolute;inset:0;width:100%;height:100%}
+.why-video{object-fit:cover;display:block;background:var(--night)}
+/* Light overlay: both side edges are darkened, behind the heading (left) and the points (right), so the film stays the focus */
+.why-shade{pointer-events:none;
+  background:linear-gradient(90deg,rgba(47,65,86,.72) 0%,rgba(47,65,86,.38) 22%,rgba(47,65,86,0) 42%,rgba(47,65,86,0) 58%,rgba(47,65,86,.4) 78%,rgba(47,65,86,.75) 100%),rgba(47,65,86,.08)}
 
-/* Text column, pinned to the top-right corner */
-.why-in{position:relative;z-index:1;display:flex;justify-content:flex-end;
-  padding:clamp(24px,4.5vh,48px) max(clamp(20px,3vw,48px),env(safe-area-inset-right,0px)) clamp(24px,4vh,44px) max(24px,env(safe-area-inset-left,0px))}
+/* Heading pinned to the left, points to the right */
+.why-in{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:flex-start;gap:40px;
+  padding:calc(var(--head) + clamp(20px,4vh,44px)) max(clamp(20px,3vw,48px),env(safe-area-inset-right,0px)) clamp(24px,4vh,44px) max(clamp(20px,3vw,48px),env(safe-area-inset-left,0px))}
 .why-live .why-in{position:absolute;inset:0}
-.why-col{width:min(360px,100%);text-shadow:0 1px 14px rgba(47,65,86,.6);display:flex;flex-direction:column;min-height:0}
+.why-top{width:min(400px,38%);text-shadow:0 1px 14px rgba(47,65,86,.6)}
+.why-col{width:min(360px,100%);height:100%;text-shadow:0 1px 14px rgba(47,65,86,.6);display:flex;flex-direction:column;min-height:0}
 
 .why-eyebrow{margin:0;font:400 11px/1.4 var(--why-sans);letter-spacing:.4em;text-transform:uppercase;color:rgba(255,255,255,.78)}
-.why-top h2{margin-top:10px;font-family:var(--why-serif);font-variation-settings:"opsz" 100;font-weight:300;font-size:clamp(24px,2.1vw,32px);line-height:1.1;letter-spacing:.005em;text-wrap:balance}
+.why-top h2{margin-top:12px;font-family:var(--why-serif);font-weight:400;font-size:clamp(26px,2.8vw,44px);line-height:1.05;letter-spacing:-.015em;text-wrap:balance}
 
 /* Timeline: hairline rule with a small ring at each point */
-.why-view{margin-top:clamp(20px,3.5vh,36px);min-height:0}
+.why-view{min-height:0}
 .why-live .why-view{flex:1;overflow:hidden;padding-left:6px;margin-left:-6px;
   -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 58%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 58%,transparent 100%)}
 .why-points{position:relative;list-style:none;margin:0;padding:0;will-change:transform}
@@ -33,7 +33,7 @@
 .why-points li{position:relative;padding:0 0 clamp(26px,4.5vh,44px) 24px;transition:opacity .8s var(--ease-out)}
 .why-points li::before{content:"";position:absolute;left:-4px;top:0;width:9px;height:9px;border-radius:50%;border:1px solid rgba(255,255,255,.75);background:var(--night);transition:background-color .6s,border-color .6s}
 .why-num{display:block;font:400 11px/1 var(--why-sans);letter-spacing:.34em;color:rgba(255,255,255,.7)}
-.why-points h3{margin-top:12px;font-family:var(--why-serif);font-variation-settings:"opsz" 100;font-weight:400;font-size:clamp(23px,1.9vw,30px);line-height:1.1;letter-spacing:.005em}
+.why-points h3{margin-top:12px;font-family:var(--why-serif);font-weight:500;font-size:clamp(23px,1.9vw,30px);line-height:1.1;letter-spacing:.005em}
 .why-points p{margin:8px 0 0;max-width:36ch;font:400 15px/1.55 var(--why-sans);letter-spacing:.02em;color:rgba(255,255,255,.86)}
 
 /* Live: only the active point is visible; every other point (and the connecting rule) is hidden */
@@ -44,14 +44,24 @@
 
 @media (max-width:900px){
   .why-shade{background:linear-gradient(180deg,rgba(47,65,86,.74) 0%,rgba(47,65,86,.5) 34%,rgba(47,65,86,.06) 62%,rgba(47,65,86,0) 100%)}
-  .why-in{padding-right:20px}
-  .why-col{width:min(360px,100%)}
+  /* narrow screens: heading above, points below it */
+  .why-in{flex-direction:column;justify-content:flex-start;gap:20px}
+  .why-top{width:100%}
+  .why-top h2{font-size:clamp(26px,7vw,34px)}
+  .why-col{width:min(360px,100%);height:auto;flex:1}
 }
 /* Short screens: drop the heading so the active point always fits */
 @media (max-height:640px){
   .why-live .why-top h2{display:none}
-  .why-live .why-view{margin-top:20px}
 }
 @media (prefers-reduced-motion:reduce){
   .why-points li,.why-points li::before{transition:none}
 }
+
+/* Brand Philosophy slides up over the pinned film: it starts one screen early (negative margin) and sits above it.
+   The extra screen at the end of .why-track keeps the film pinned underneath while it does. Only with the live pin. */
+/* Why.tsx clips the film at Philosophy's bottom edge, so a Philosophy shorter than the screen never shows film below it. */
+.why.why-live + .philo{margin-top:-100vh;margin-top:-100svh;z-index:2}
+/* it paints the page colour (and its top shadow) only while the film is behind it: Why.tsx toggles .ph-over */
+.why.why-live + .philo.ph-over{background:var(--page-bg);box-shadow:0 -40px 80px -40px rgba(28,40,54,.45)}
+

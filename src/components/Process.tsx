@@ -261,10 +261,6 @@ export default function Process() {
 
   return (
     <section id="process" className="process gut" ref={root} aria-labelledby="process-title">
-      <svg className="pr-edge pr-edge-top" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-        <path d="M0 0H1440V30C1250 30 1080 104 820 108C560 112 330 46 0 76Z" />
-      </svg>
-
       <div className="wrap pr-head rv">
         <p className="eyebrow">Process</p>
         <h2 id="process-title">From an empty plot to the <em>keys</em></h2>

@@ -2,19 +2,13 @@
 import { useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { prefersReducedMotion } from '@/lib/dom';
+import { HOME } from '@/data/site';
 
 // Background film. The file lives in public/videos/.
 const VIDEO = '/videos/sukher-resort.mp4';
 
-// PLACEHOLDER COPY: adjust to what the studio actually offers.
-const POINTS = [
-  { title: 'Design and build under one roof', text: 'Architecture, interiors and site supervision handled by one accountable team.', key: 'Architecture · Interiors · Site' },
-  { title: 'Climate-first planning', text: 'Orientation, shading and cross-ventilation are settled before a single facade is drawn.', key: 'Sun path · Shade · Airflow' },
-  { title: 'See it before it is built', text: '3D models and walkthroughs at every stage, so decisions are made on sight.', key: '3D · Walkthroughs' },
-  { title: 'Vastu-aware layouts', text: 'Planning that respects Vastu principles where you want them, without giving up light or flow.', key: 'Orientation · Zoning' },
-  { title: 'Clear costs and timelines', text: 'Staged estimates and milestones agreed upfront, and updated openly as the project moves.', key: 'Estimates · Milestones' },
-  { title: 'Detail through handover', text: 'Material samples, on-site mockups and a final snag list before the keys change hands.', key: 'Samples · Mockups · Snags' },
-];
+// Why Choose Baldwa and Associates? (SEO brief)
+const POINTS = HOME.why.points;
 const two = (n: number) => String(n).padStart(2, '0');
 
 export default function Why() {
@@ -53,14 +47,31 @@ export default function Why() {
     show(0);
     const st = ScrollTrigger.create({
       onRefresh: () => { const li = items.current[current]; if (li) gsap.set(list.current, { y: -li.offsetTop }); },
-      trigger: track.current, start: () => `top top+=${parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--head')) || 76}`, end: 'bottom bottom', invalidateOnRefresh: true,
+      // the points use the track minus its last screen; during that screen Brand Philosophy slides over the pinned film
+      trigger: track.current, start: 'top top', end: () => `+=${track.current!.offsetHeight - 2 * window.innerHeight}`, invalidateOnRefresh: true,
       onUpdate: ({ progress }) => {
         show(Math.min(POINTS.length - 1, Math.floor(progress * POINTS.length)));
       },
     });
 
+    // Brand Philosophy slides up over the pinned film (why.css). The film is cut off at Philosophy's bottom edge, so where
+    // Philosophy is shorter than the screen, the film never shows below it.
+    const next = sec.nextElementSibling as HTMLElement | null;
+    // Philosophy only paints its own (cover) colour while the film is on screen behind it (.ph-over); otherwise it stays
+    // transparent, because a second painted copy of the page colour can render a shade off and show as a band.
+    const clip = () => {
+      const p = pin.current;
+      if (!p || !next) return;
+      const pr = p.getBoundingClientRect(), cut = pr.bottom - next.getBoundingClientRect().bottom;
+      p.style.clipPath = cut > 0 ? `inset(0 0 ${cut}px 0)` : '';
+      next.classList.toggle('ph-over', pr.bottom > 0);
+    };
+    const cover = next ? ScrollTrigger.create({ trigger: next, start: 'top bottom', end: 'bottom top', onUpdate: clip, onRefresh: clip, onLeave: clip, onLeaveBack: clip }) : null;
+
     return () => {
-      st.kill(); io.disconnect(); vid.pause();
+      st.kill(); cover?.kill(); io.disconnect(); vid.pause();
+      if (pin.current) pin.current.style.clipPath = '';
+      next?.classList.remove('ph-over');
       gsap.killTweensOf(list.current); gsap.set(list.current, { clearProps: 'transform' });
       sec.classList.remove('why-live');
       items.current.forEach((li) => li?.classList.remove('is-on', 'is-done'));
@@ -70,20 +81,17 @@ export default function Why() {
   return (
     <section id="why" className="why" ref={root} aria-labelledby="why-title">
       <div className="why-track" ref={track} style={{ ['--n' as string]: POINTS.length }}>
-        {/* Small white curve in the top-left corner, continuing the Process section above. It lies over the film and scrolls away. */}
-        <svg className="why-edge" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-          <path d="M0 0H700C470 4 190 34 0 120Z" />
-        </svg>
         <div className="why-pin" ref={pin}>
           <video className="why-video" ref={video} src={VIDEO} muted loop playsInline preload="metadata" aria-hidden="true" tabIndex={-1} />
           <div className="why-shade" aria-hidden="true" />
 
+          {/* Heading on the left, the scrolling points on the right */}
           <div className="why-in">
+            <div className="why-top">
+              <p className="why-eyebrow">Why Baldwa</p>
+              <h2 id="why-title">{HOME.why.h2}</h2>
+            </div>
             <div className="why-col">
-              <div className="why-top">
-                <p className="why-eyebrow">Why Baldwa</p>
-                <h2 id="why-title">One studio, from the first sketch to the last tile.</h2>
-              </div>
 
               <div className="why-view">
                 <ol className="why-points" ref={list}>
