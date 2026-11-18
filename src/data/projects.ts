@@ -7,14 +7,17 @@ import type { SceneKey, TodKey } from '@/lib/three/scenes';
 //         When null, the site renders a 3D placeholder image from `scene`.
 // scene:  procedural 3D scene in src/lib/three/scenes.ts (used when image is null).
 // tod:    lighting preset for that scene.
+// hover:  second photo the card turns to when the pointer is over it (Projects.tsx).
 // plan:   true shows the "Walk the plan" button linking to the interactive villa.
 
 export type Project = {
   name: string;
+  category: 'Residential' | 'Industrial' | 'Commercial' | 'Hospitality';
   type: string;
   location: string;
   text: string;
   image: string | null;
+  hover?: string;
   scene: SceneKey;
   tod: TodKey;
   plan?: boolean;
@@ -22,57 +25,68 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    name: 'Sunfold Villa',
-    type: 'Private residence',
+    name: 'Poolside Villa',
+    category: 'Residential',
+    type: 'Villa · Landscape & pool',
     location: '[Location]',
-    text: 'A two-storey villa whose upper floor folds out over a shaded pool terrace. Gold fins filter the low western sun into the living spaces.',
-    image: null,
+    text: 'A two-storey villa opening onto a lawn and a shaped pool, with a sunken lounge set into the water, a shaded cabana and sun loungers along the deck.',
+    image: '/images/projects/poolside-villa.jpg',
+    hover: '/images/projects/study-curved-timber.webp',
     scene: 'sunfold',
     tod: 'golden',
-    plan: true,
   },
   {
-    name: 'Courtyard House',
-    type: 'Family home',
+    name: 'Three-storey Residence',
+    category: 'Residential',
+    type: 'Family home · Exterior',
     location: '[Location]',
-    text: 'Four sandstone wings around an open courtyard, with a rooftop chhatri and projecting windows that catch the breeze.',
-    image: null,
+    text: 'Stepped volumes with deep overhangs, a stone-clad entrance, a perforated jaali screen and glass balconies on every floor, framed by a planted front garden.',
+    image: '/images/projects/residence-exterior.jpg',
+    hover: '/images/projects/residence-construction.webp',
     scene: 'courtyard',
     tod: 'day',
   },
   {
-    name: 'Light Pavilion',
-    type: 'Event pavilion',
+    name: 'Arched Living Room',
+    category: 'Residential',
+    type: 'Interior · Living & dining',
     location: '[Location]',
-    text: 'A single roof plane on slender columns, floating over a reflecting pool. At dusk the glass room glows like a lantern.',
-    image: null,
+    text: 'Curved seating around a sculpted timber table, arched openings and soft wall lighting, flowing into a dining area that opens to the terrace.',
+    image: '/images/projects/living-dining.jpg',
+    hover: '/images/projects/living-room-terracotta.webp',
     scene: 'pavilion',
     tod: 'dusk',
   },
   {
-    name: 'Terrace Residences',
-    type: 'Apartments',
+    name: 'Formal Dining Room',
+    category: 'Residential',
+    type: 'Interior · Dining',
     location: '[Location]',
-    text: 'Eight floors shifted in plan so that every home gets a deep, shaded terrace with planting.',
-    image: null,
+    text: 'A long marble table under a brass chandelier, with carved relief panels on a sage wall, inlaid stone floors and a full-height timber cabinet.',
+    image: '/images/projects/dining-room.jpg',
+    hover: '/images/projects/grocery-store.webp',
     scene: 'terraces',
     tod: 'morning',
   },
   {
-    name: 'Stepwell House',
-    type: 'Residence & garden',
+    name: 'Classic Bedroom',
+    category: 'Residential',
+    type: 'Interior · Bedroom',
     location: '[Location]',
-    text: 'Living spaces gathered around a sunken stepped court with water at its base, a modern take on the traditional stepwell.',
-    image: null,
+    text: 'A tufted bed with gilded detailing, carved timber doors and wardrobe, patterned floor tiles and a coffered ceiling with a brass chandelier.',
+    image: '/images/projects/classic-bedroom.jpg',
+    hover: '/images/projects/bedroom-mural-wall.webp',
     scene: 'stepwell',
     tod: 'noon',
   },
   {
-    name: 'Stone Studio',
-    type: 'Workplace',
+    name: 'Industrial Plant',
+    category: 'Industrial',
+    type: 'Industrial · Exterior & services',
     location: '[Location]',
-    text: 'A long sandstone building with deep vertical fins that cut glare while keeping the view open.',
-    image: null,
+    text: 'A steel-clad production hall on a concrete plinth, with covered loading bays and an open services yard: scrubbers, a cooling tower and colour-coded pipework laid out for easy maintenance.',
+    image: '/images/projects/industrial-plant.webp',
+    hover: '/images/projects/industrial-plant-services.webp',
     scene: 'studio',
     tod: 'dusk2',
   },

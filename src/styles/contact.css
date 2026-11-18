@@ -1,28 +1,76 @@
-/* ---------- Contact ---------- */
-.contact{background:var(--white);padding-block:140px 120px}
-.contact-in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(40px,7vw,120px)}
-.details{display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px 20px;margin:48px 0 0;padding-top:28px;border-top:1px solid var(--line)}
-.details dt{font:500 11px/1.9 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
-.details dd{margin:0;font-size:16px;user-select:all}
-.ph{color:var(--gold-deep);font-family:var(--f-mono);font-size:.92em}
-form.enq{display:grid;grid-template-columns:1fr 1fr;gap:26px 22px;align-content:start}
-.fld{display:flex;flex-direction:column;gap:8px;min-width:0}
+/* ---------- Contact: heading on the left, a minimal numbered form on the right, over the gold line ribbon ----------
+   The section sits on the blue smoke canvas (PageTone.tsx); the form is a light glass panel with no drop shadow,
+   so nothing spills into the footer below. */
+.contact{position:relative;padding-block:84px 76px;overflow-x:clip}
+.contact-waves{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.contact-in{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(32px,6vw,96px);align-items:center}
+/* Placeholder text style, also used by Projects.tsx */
+.ph{color:var(--gold-deep);font-size:.95em}
+
+.contact-head .eyebrow{color:var(--gold-deep)}
+.contact-head h2{margin-top:16px;max-width:12ch;font-size:clamp(36px,4.4vw,66px);line-height:1.05}
+.contact-head h2 em{color:var(--gold-deep)}
+.contact-head .lede{margin-top:20px;font-size:18px}
+
+/* Form panel */
+.enq{display:grid;grid-template-columns:1fr 1fr;gap:26px 28px;max-width:600px;justify-self:end;width:100%;
+  padding:clamp(24px,3vw,36px);border-radius:22px;border:1px solid rgba(242,237,231,.22);
+  background:rgba(28,40,54,.16);-webkit-backdrop-filter:blur(12px) saturate(1.1);backdrop-filter:blur(12px) saturate(1.1)}
+.fld{display:flex;flex-direction:column;gap:6px;min-width:0}
 .fld.full{grid-column:1/-1}
-.fld label{font:600 11px/1 var(--f-body);letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
-.fld input,.fld select,.fld-l{font:600 11px/1 var(--f-body);letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
-.fld textarea{font:400 17px/1.4 var(--f-body);color:var(--ink);background:transparent;border:0;border-bottom:1px solid #cfc9be;padding:10px 0 12px;border-radius:0;transition:border-color .3s;width:100%}
-.fld-l{font:600 11px/1 var(--f-body);letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
-.fld textarea{resize:vertical;min-height:96px}
-.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-bottom-color:var(--ink)}
-.fld input:focus-visible,.fld select:focus-visible,.fld textarea:focus-visible{box-shadow:0 2px 0 var(--gold)}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
+.fld label,.fld-l{display:flex;align-items:baseline;gap:10px;font:600 11px/1.2 var(--f-sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+.fld i{font-style:normal;font-weight:500;letter-spacing:.04em;color:var(--gold-deep);font-variant-numeric:tabular-nums}
+.fld input,.fld textarea{width:100%;font:400 17px/1.4 var(--f-sans);color:var(--ink);background:transparent;border:0;border-bottom:1px solid rgba(47,65,86,.35);
+  border-radius:0;padding:8px 0 10px;transition:border-color .3s}
+.fld textarea{resize:none;min-height:64px}
+.fld input:hover,.fld textarea:hover{border-bottom-color:var(--fog)}
+.fld input:focus,.fld textarea:focus{outline:none;border-bottom-color:var(--ink)}
+
+/* Project type chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
 .chips input{position:absolute;opacity:0;pointer-events:none}
-.chips label{font:500 13px/1 var(--f-body);letter-spacing:0;text-transform:none;color:var(--ink);border:1px solid #d5cfc4;border-radius:999px;padding:11px 16px;cursor:pointer;transition:.25s}
-.chips input:checked+label{background:var(--ink);color:#fff;border-color:var(--ink)}
-.chips input:focus-visible+label{outline:2px solid var(--gold);outline-offset:2px}
-.submit{grid-column:1/-1;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.btn-dark{display:inline-flex;align-items:center;gap:14px;min-height:56px;padding:0 28px;border-radius:999px;border:0;background:var(--ink);color:#fff;font:600 13px/1 var(--f-body);letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:background .3s,color .3s}
-.btn-dark:hover{background:var(--gold);color:var(--ink)}
-.form-note{font-size:14px;color:var(--mute);margin:0}
-.form-note.ok{color:var(--ink)}
+.chips label{display:inline-block;font:500 13px/1 var(--f-sans);letter-spacing:.01em;text-transform:none;color:var(--ink);
+  border:1px solid rgba(47,65,86,.35);border-radius:999px;padding:9px 14px;cursor:pointer;transition:background-color .25s,color .25s,border-color .25s}
+.chips label:hover{background:transparent;border-color:var(--fog);color:var(--fog)}
+.chips input:checked+label{background:transparent;border-color:var(--ink);color:var(--ink);box-shadow:inset 0 -2px var(--ink)}
+.chips input:focus-visible+label{outline:2px solid var(--ink);outline-offset:3px}
+
+/* Submit */
+.submit{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;padding-top:4px}
+.btn-pop{display:inline-flex;align-items:center;gap:14px;min-height:50px;padding:0 2px;border:0;border-bottom:1px solid currentColor;
+  background:transparent;color:var(--ink);font:600 13px/1 var(--f-sans);letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:color .3s}
+.btn-pop svg{box-sizing:content-box;padding:12px 2px;color:var(--ink);transition:translate .3s var(--ease-out)}
+.btn-pop:hover{color:var(--fog)}
+.btn-pop:hover svg{color:var(--fog)}
+.btn-pop:hover svg{translate:3px 0}
+.form-note{font:400 14px/1.5 var(--f-sans);color:var(--ink);margin:0;max-width:40ch}
+.form-note:empty{display:none}
 .form-note.err{color:#a3270f}
+
+/* On the blue smoke canvas (html.tone-light, PageTone.tsx): light text, light hairlines */
+.contact-head :is(.eyebrow,h2,h2 em,.lede),.fld label,.fld-l,.fld i,.fld input,.fld textarea,.chips label,.form-note{transition:color .6s,border-color .6s,background-color .25s}
+html.tone-light .contact-head .eyebrow{color:var(--paper)}
+html.tone-light .contact-head h2{color:#fff}
+html.tone-light .contact-head h2 em,html.tone-light .fld i{color:var(--gold)}
+html.tone-light .contact-head .lede{color:rgba(242,237,231,.88)}
+html.tone-light :is(.fld label,.fld-l){color:rgba(242,237,231,.82)}
+html.tone-light :is(.fld input,.fld textarea){color:#fff;border-bottom-color:rgba(242,237,231,.4)}
+html.tone-light :is(.fld input,.fld textarea):focus{border-bottom-color:#fff}
+html.tone-light .chips label{color:var(--paper);border-color:rgba(242,237,231,.45)}
+html.tone-light .chips label:hover{color:#fff;border-color:var(--fog)}
+html.tone-light .chips input:checked+label{color:#fff;border-color:#fff;box-shadow:inset 0 -2px #fff}
+html.tone-light .btn-pop,html.tone-light .btn-pop svg{color:#fff}
+html.tone-light .form-note{color:var(--paper)}
+html.tone-light .form-note.err{color:#ffd0c2}
+
+@media (max-width:900px){
+  .contact-in{grid-template-columns:1fr}
+  .enq{justify-self:stretch;max-width:none}
+}
+@media (max-width:560px){
+  .enq{grid-template-columns:1fr}
+  .contact-head .lede{font-size:17px}
+}
+@media (prefers-reduced-motion:reduce){
+  .fld input,.fld textarea,.chips label,.btn-pop,.btn-pop svg{transition:none}
+}

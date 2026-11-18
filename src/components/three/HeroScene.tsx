@@ -4,7 +4,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { compose, aimCamera, disposeObject, type SceneKey, type TodKey, type Composed } from '@/lib/three/scenes';
 
-type Props = { scene: SceneKey; tod: TodKey; pointer: RefObject<{ x: number; y: number }>; active: boolean; reduced: boolean };
+type Props = { scene: SceneKey; tod: TodKey; pointer: RefObject<{ x: number; y: number }>; active: boolean; reduced: boolean; label?: string };
 
 // Slow drift + eased mouse parallax around the building.
 function CameraRig({ c, pointer, reduced }: { c: Composed; pointer: Props['pointer']; reduced: boolean }) {
@@ -25,7 +25,7 @@ function Exposure({ value }: { value: number }) {
   return null;
 }
 
-export default function HeroScene({ scene, tod, pointer, active, reduced }: Props) {
+export default function HeroScene({ scene, tod, pointer, active, reduced, label = 'Live 3D rendering of the featured villa' }: Props) {
   const c = useMemo(() => compose(scene, tod), [scene, tod]);
   useEffect(() => () => disposeObject(c.root), [c]);
 
@@ -36,8 +36,9 @@ export default function HeroScene({ scene, tod, pointer, active, reduced }: Prop
       frameloop={active ? (reduced ? 'demand' : 'always') : 'never'}
       camera={{ fov: c.def.fov, near: .5, far: 2000, position: c.def.cam }}
       gl={{ antialias: true, powerPreference: 'high-performance' }}
+      resize={{ offsetSize: true }} // measure layout size, so a CSS-scaled parent (projects hero card) doesn't shrink the canvas
       style={{ position: 'absolute', inset: 0 }}
-      aria-label="Live 3D rendering of the featured villa"
+      aria-label={label}
       role="img"
     >
       <Exposure value={c.tod.exp} />

@@ -1,19 +1,84 @@
-/* ---------- Process ---------- */
-.process{padding-block:140px;background:var(--white)}
-.process-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,6vw,100px);margin-top:56px;align-items:start}
-.stack-wrap{position:sticky;top:calc(var(--head) + 40px);height:560px;display:grid;place-items:center;perspective:1800px}
-.iso{position:relative;width:300px;height:300px;transform-style:preserve-3d;transform:rotateX(57deg) rotateZ(-42deg);transition:transform 1.2s var(--ease-out)}
-.sheet{position:absolute;inset:0;background:rgba(255,255,255,.94);border:1px solid #d8d3c9;box-shadow:0 1px 0 rgba(0,0,0,.02),-18px 18px 40px rgba(20,16,8,.10);color:#55524b;transform:translateZ(calc(var(--i) * 46px));transition:transform .9s var(--ease-out),opacity .6s,color .4s,border-color .4s,box-shadow .6s}
-.sheet svg{width:100%;height:100%;display:block}
-.sheet.active{transform:translateZ(calc(var(--i) * 46px + 70px));color:var(--gold-deep);border-color:var(--gold);box-shadow:-30px 30px 60px rgba(183,123,0,.18)}
-.sheet.above{opacity:.22}
-.steps{list-style:none;margin:0;padding:0;counter-reset:s}
-.step{border-top:1px solid var(--line);padding-block:40px;display:grid;grid-template-columns:72px minmax(0,1fr);gap:8px 16px;cursor:pointer}
-.step:last-child{border-bottom:1px solid var(--line)}
-.step .n{font:400 42px/1 var(--f-display);color:#c9c4ba;transition:color .4s}
-.step h3{font:600 22px/1.25 var(--f-body);letter-spacing:-.01em;margin:6px 0 0}
-.step p{grid-column:2;margin:0;color:var(--mute);max-width:52ch}
-.step .tags{grid-column:2;display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
-.step .tags span{font:500 11px/1 var(--f-mono);letter-spacing:.06em;color:var(--ink-2);border:1px solid var(--line);border-radius:999px;padding:7px 10px}
-.step.active .n{color:var(--gold-deep)}
-.step:hover h3{text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:6px}
+/* ---------- Process: scroll-drawn route ---------- */
+.process{overflow-x:clip;--pr-road:var(--ink);--pr-band:clamp(120px,22vh,230px);position:relative;padding-block:72px 32px}
+
+.process .pr-head h2{margin-top:18px;max-width:16ch}
+.process .pr-track{position:relative;margin-top:20px}
+.process .pr-pin{display:flex;align-items:center}
+.process .pr-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:center}
+.process .pr-road{position:relative}
+
+/* Step pictures (illustrations only, no card or number), driven by the road's progress. Each card has the page colour
+   behind its picture, so the multiply blend turns the pictures' white backgrounds into the canvas beige.
+   .active = the stage just reached (visible); no class = earlier stages (faded out); .above = not reached yet. */
+.process .stack-wrap{position:relative;height:340px;display:grid;place-items:center;perspective:1400px}
+.process .deck{position:relative;height:calc(100% - 40px);aspect-ratio:380/460;max-width:calc(100% - 48px)}
+.process .step-card{position:absolute;inset:0;background:var(--paper);opacity:0;transform:translateY(-30px) scale(.94);transition:transform .9s var(--ease-out),opacity .6s}
+.process .step-card img{display:block;width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}
+.process .step-card.active{opacity:1;transform:none}
+.process .step-card.above{opacity:0;transform:translateY(40px) rotateY(-34deg) scale(.92)}
+
+/* Wide screens: card deck on the left, road on the right */
+@media (min-width:1101px){
+  .process .pr-layout{grid-template-columns:minmax(0,.34fr) minmax(0,1fr);gap:clamp(24px,3vw,56px)}
+  .process .stack-wrap{height:min(520px,calc(100svh - var(--head) - 120px))}
+  .process .deck{height:auto;width:min(calc(100% - 56px),340px);max-width:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .process .step-card{transition:none}
+}
+
+/* Route: a tilted 3D ground plane (pencil stroke, grid, anchors) under an upright layer (pins, pencil) */
+.process .pr-plane,.process .pr-over{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.process .pr-plane{z-index:0;transform-origin:50% 50%}
+.process .pr-over{z-index:2}
+.process .pr-grid-line{fill:none;stroke:var(--line);stroke-width:1}
+.process .pr-grid{opacity:.75}
+.process .pr-guide{fill:none;stroke:var(--mute);stroke-opacity:.28;stroke-width:1;stroke-dasharray:2 7;stroke-linecap:round}
+.process .pr-reveal{fill:none;stroke:#fff;stroke-width:16;stroke-linecap:butt;stroke-linejoin:round}
+.process .pr-ribbon{fill:var(--pr-road)}
+.process .pr-edge3d{fill:var(--pr-road);opacity:.32}
+.process .pr-measure{fill:none;stroke:none}
+.process .pr-anchor{fill:var(--pr-road);opacity:0;transition:opacity .5s}
+.process .pr-anchor.is-on{opacity:.12}
+
+/* Marker pins rise out of the ground when the pencil reaches them */
+.process .pr-mark-body{transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(0);opacity:0;transition:transform .7s var(--ease-out),opacity .3s}
+.process .pr-mark.is-on .pr-mark-body{transform:none;opacity:1}
+.process .pr-stem{stroke:var(--pr-road);stroke-width:1;stroke-dasharray:2 3}
+.process .pr-head-dot{fill:var(--pr-road);filter:drop-shadow(0 3px 3px rgba(47,65,86,.28))}
+.process .pr-halo{fill:none;stroke:var(--gold);stroke-width:1.2}
+.process.pr-vertical .pr-stem{display:none}
+
+/* Pencil (palette colours only) */
+.process .pr-pencil{opacity:0;transition:opacity .35s}
+.process .pr-pencil-shadow{fill:var(--ink);opacity:.14;filter:blur(3px)}
+.process .pr-pencil-wood{fill:var(--paper);stroke:var(--mute);stroke-width:.6;stroke-linejoin:round}
+.process .pr-pencil-lead{fill:var(--ink)}
+.process .pr-pencil-body{fill:var(--gold)}
+.process .pr-pencil-facet{fill:var(--gold-deep);opacity:.55}
+.process .pr-pencil-ferrule{fill:var(--mute)}
+.process .pr-pencil-eraser{fill:var(--sun)}
+
+/* Stage labels: two rows around the road band, each label centred on its marker */
+.process .pr-stages{list-style:none;margin:0;padding:0;position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto var(--pr-band) auto}
+.process .pr-stage{position:relative;grid-column:1;width:26%;margin-left:calc(var(--x) - 13%);text-align:center}
+.process .pr-up{grid-row:1;align-self:end;padding-bottom:12px;--pr-sy:-14px}
+.process .pr-down{grid-row:3;align-self:start;padding-top:30px;--pr-sy:14px}
+.process .pr-stage:first-child{margin-left:calc(var(--x) - 2.5%);text-align:left}
+.process .pr-stage:last-child{margin-left:calc(var(--x) - 23.5%);text-align:right}
+.process .pr-kicker{margin:0 0 8px;font:500 11px/1.4 var(--f-sans);letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.process .pr-kicker span{color:var(--gold-deep);margin-right:10px}
+.process .pr-stage h3{font:500 clamp(18px,1.5vw,24px)/1.15 var(--f-sans);letter-spacing:-.015em;color:var(--ink);padding-bottom:3px}
+.process .pr-text{margin:10px 0 0;font:400 15px/1.6 var(--f-sans);color:var(--mute)}
+.process .pr-tags{margin:10px 0 0;font:500 12px/1.5 var(--f-sans);letter-spacing:.02em;color:var(--gold-deep)}
+
+/* Scroll reveal (only once JS is running; without JS everything stays visible) */
+.process.pr-live .pr-stage{opacity:0;transform:translate(var(--pr-sx,0),var(--pr-sy,14px));transition:opacity .7s var(--ease-out),transform .9s var(--ease-out)}
+.process.pr-live .pr-stage.is-on{opacity:1;transform:none}
+
+/* Pinned road: the route stays on screen and draws as the visitor scrolls through a tall track */
+@media (min-width:1101px) and (min-height:641px) and (prefers-reduced-motion:no-preference){
+  /* centred but lifted: the extra room below pushes the pictures, the route and the pencil up a little */
+  .process .pr-pin{position:sticky;top:var(--head);height:calc(100vh - var(--head));height:calc(100svh - var(--head));padding-bottom:clamp(40px,9vh,110px)}
+  .process .pr-track{height:300vh;margin-top:-24px}
+}

@@ -1,19 +1,70 @@
-/* ---------- Philosophy ---------- */
-.philo{position:relative;background:var(--night);color:#fff;padding-block:160px 140px;overflow:hidden}
-.sunwrap{position:absolute;left:50%;top:0;bottom:0;width:min(1200px,140vw);transform:translateX(-50%);pointer-events:none}
-.sun{position:absolute;left:50%;top:52%;width:min(760px,110vw);aspect-ratio:1;transform:translate(-50%,calc(var(--rise,0.35) * 60%));opacity:.95}
-.sun svg{width:100%;height:100%;display:block}
-.sun .rays{transform-origin:0 0;animation:spin 90s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.horizon{position:absolute;left:0;right:0;top:calc(52% + min(380px,55vw));height:60%;background:var(--night)}
-.horizon::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(245,178,26,.7),transparent)}
-.philo-in{position:relative;z-index:1}
-.manifesto{font:400 clamp(36px,4.6vw,76px)/1.08 var(--f-display);margin:28px 0 0;max-width:20ch;letter-spacing:-.01em}
-.manifesto .w{color:#85817a;transition:color .5s}
-.manifesto .w.lit{color:#fff}
-.manifesto .w.g.lit{color:var(--gold);font-style:italic}
-.pillars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:clamp(120px,22vw,300px)}
-.pillar{border-top:1px solid rgba(255,255,255,.22);padding-top:22px;background:linear-gradient(rgba(11,11,10,.55),rgba(11,11,10,0))}
-.pillar .mono{font-size:11px;letter-spacing:.14em;color:var(--gold)}
-.pillar h3{font-size:40px;line-height:1;margin:12px 0 12px}
-.pillar p{margin:0;color:#c9c5bd;max-width:36ch}
+/* ---------- Philosophy: centred headline above the diary pages, on the page canvas ---------- */
+.philo{position:relative;color:var(--ink);padding-block:84px 96px;overflow-x:clip}
+.philo-in{position:relative}
+.philo .eyebrow{color:var(--gold-deep)}
+
+/* Top: the eyebrow centred, the headline and lede almost full width (centred under it) */
+.ph-top{text-align:center}
+.ph-title{margin:16px auto 0;max-width:min(92%,1180px);font-size:clamp(36px,5vw,76px);line-height:1.05}
+.ph-title .w{color:color-mix(in srgb,var(--ink) 28%,var(--paper));transition:color .5s}
+.ph-title .w.lit{color:var(--ink)}
+.ph-title .w.g.lit{color:var(--gold-deep)}
+.ph-lede{margin:20px auto 0;max-width:min(92%,62ch);font-size:clamp(17px,1.4vw,20px);line-height:1.6;color:var(--mute)}
+
+/* Diary pages: three identical white pages joined by gold binder rings. The side pages start folded over the centre
+   page and are opened by scroll (GSAP rotates .ph-card around the hinge; see Philosophy.tsx). Without JS all are open.
+   Each .ph-card carries half the gap as padding, so its edge is exactly the hinge line. */
+.ph-cards{--ph-gap:22px;position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:clamp(44px,5.5vw,76px) calc(var(--ph-gap) / -2) 0;text-align:left;perspective:1700px}
+.ph-card{position:relative;padding-inline:calc(var(--ph-gap) / 2);will-change:transform}
+.ph-card.mid{z-index:2}
+.ph-card.side-r{z-index:3}
+.ph-card.side-l{z-index:4}
+.ph-card-in{height:100%;padding:clamp(30px,3.2vw,46px) clamp(26px,3vw,44px) clamp(34px,3.4vw,50px);border-radius:34px;background:var(--surface);color:var(--ink);
+  box-shadow:0 34px 60px -34px rgba(47,65,86,.4),0 2px 8px rgba(47,65,86,.05)}
+.ph-card h3{margin:0 0 18px;font-size:clamp(26px,2.6vw,40px);line-height:1.05;color:var(--ink)}
+.ph-card p{margin:0;max-width:30ch;font-size:clamp(16px,1.25vw,19px);line-height:1.6;color:var(--ink)}
+/* A ring: two punched holes (background dots) and a gold loop running between them across the hinge */
+.ph-link{--ring:calc(var(--ph-gap) + 40px);position:absolute;z-index:6;width:var(--ring);height:22px;pointer-events:none;
+  background:radial-gradient(circle at 9px 50%,var(--page-bg) 0 6.5px,transparent 7px),radial-gradient(circle at calc(100% - 9px) 50%,var(--page-bg) 0 6.5px,transparent 7px)}
+.ph-link::after{content:"";position:absolute;inset:1px 7px;border:3.5px solid var(--gold);border-radius:999px;
+  box-shadow:0 3px 5px rgba(47,65,86,.3),inset 0 1px 0 rgba(255,255,255,.6)}
+.ph-link.a1,.ph-link.a2{left:calc(100% / 3 - var(--ring) / 2)}
+.ph-link.b1,.ph-link.b2{left:calc(200% / 3 - var(--ring) / 2)}
+.ph-link.a1,.ph-link.b1{top:calc(34% - 11px)}
+.ph-link.a2,.ph-link.b2{top:calc(66% - 11px)}
+
+@media (max-width:900px){
+  .philo{padding-block:60px 68px}
+  /* Pages stack in three equal rows; the hinges and rings become horizontal */
+  .ph-cards{grid-template-columns:1fr;grid-auto-rows:1fr;max-width:440px;margin:44px auto 0}
+  .ph-card{padding-inline:0;padding-block:calc(var(--ph-gap) / 2)}
+  .ph-link{width:22px;height:var(--ring);
+    background:radial-gradient(circle at 50% 9px,var(--page-bg) 0 6.5px,transparent 7px),radial-gradient(circle at 50% calc(100% - 9px),var(--page-bg) 0 6.5px,transparent 7px)}
+  .ph-link::after{inset:7px 1px}
+  .ph-link.a1,.ph-link.a2{top:calc(100% / 3 - var(--ring) / 2)}
+  .ph-link.b1,.ph-link.b2{top:calc(200% / 3 - var(--ring) / 2)}
+  .ph-link.a1,.ph-link.b1{left:calc(26% - 11px)}
+  .ph-link.a2,.ph-link.b2{left:calc(74% - 11px)}
+}
+@media (prefers-reduced-motion:reduce){
+  .ph-title .w{transition:none}
+}
+
+/* On the blue smoke canvas (html.tone-light, PageTone.tsx) */
+.philo .eyebrow,.ph-lede{transition:color .6s}
+html.tone-light .philo .eyebrow{color:var(--paper)}
+html.tone-light .ph-title .w{color:rgba(242,237,231,.34)}
+html.tone-light .ph-title .w.lit{color:#fff}
+html.tone-light .ph-title .w.g.lit{color:var(--gold)}
+html.tone-light .ph-lede{color:rgba(242,237,231,.88)}
+
+
+/* Service pages linked from the notebook (Our Professional services) */
+.ph-card-in{display:flex;flex-direction:column}
+.ph-more{margin-top:auto;padding-top:22px;align-self:flex-start;font:600 13px/1 var(--f-sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink);text-decoration:none;transition:color .3s}
+.ph-more:hover{color:var(--fog)}
+.ph-also{margin:36px 0 0;text-align:center;font-size:16px;color:var(--mute);transition:color .6s}
+.ph-also a{color:inherit;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px;transition:color .3s}
+.ph-also a:hover{color:var(--fog)}
+html.tone-light .ph-also{color:rgba(242,237,231,.9)}
+html.tone-light .ph-also a:hover{color:#fff}
