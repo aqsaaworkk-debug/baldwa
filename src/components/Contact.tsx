@@ -1,7 +1,7 @@
 'use client';
 import { useRef, useState, type FormEvent } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
-import { prefersReducedMotion } from '@/lib/dom';
+import { prefersReducedMotion, useNearViewport } from '@/lib/dom';
 
 const TYPES = ['Residence', 'Villa', 'Interiors', 'Commercial', 'Other'];
 
@@ -10,8 +10,10 @@ type Note = { kind: 'ok' | 'err'; text: string } | null;
 export default function Contact() {
   const [note, setNote] = useState<Note>(null);
   const root = useRef<HTMLElement>(null);
+  const near = useNearViewport(root, '600px');
 
   useGSAP(() => {
+    if (!near) return;
     if (prefersReducedMotion()) return;
     const form = root.current?.querySelector<HTMLElement>('.enq');
     if (!form) return;
@@ -20,16 +22,17 @@ export default function Contact() {
       y: 16, opacity: 0, duration: 0.6, stagger: 0.06, ease: 'power3.out',
       scrollTrigger: { trigger: form, start: 'top 85%', once: true },
     });
-  }, { scope: root });
+  }, { scope: root, dependencies: [near] });
 
   // Background: a ribbon of flowing parallel lines drawn on a canvas behind the card.
   useGSAP(() => {
+    if (!near) return;
     const canvas = root.current?.querySelector<HTMLCanvasElement>('.contact-waves');
     const ctx = canvas?.getContext('2d');
     if (!canvas || !ctx) return;
     const LINES = 24;
     const gold = getComputedStyle(canvas).getPropertyValue('--gold').trim() || '#f4b251';
-    let w = 0, h = 0, visible = true;
+    let w = 0, h = 0, visible = false;
 
     const draw = (t: number) => {
       ctx.clearRect(0, 0, w, h);
@@ -54,7 +57,7 @@ export default function Contact() {
     };
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       w = canvas.clientWidth; h = canvas.clientHeight;
       canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -71,7 +74,7 @@ export default function Contact() {
     const tick = (time: number) => { if (visible) draw(time); };
     gsap.ticker.add(tick);
     return () => { gsap.ticker.remove(tick); io.disconnect(); ro.disconnect(); };
-  }, { scope: root });
+  }, { scope: root, dependencies: [near] });
 
   // Validates but does NOT send yet. Connect it to a route handler (src/app/api/enquiry/route.ts)
   // or a form service (Formspree, Web3Forms, Resend…) at the TODO.

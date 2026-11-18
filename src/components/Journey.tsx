@@ -43,12 +43,22 @@ const PUFFS = [
 // busy only queues work); when a seek lands and the target has moved on, it seeks again.
 function scrubber(v: HTMLVideoElement) {
   let target = 0;
+  let raf = 0;
   const go = () => {
-    if (v.readyState >= 1 && !v.seeking && Math.abs(v.currentTime - target) > 1 / 60) v.currentTime = target;
+    if (raf || v.seeking) return;
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+      // The source is 30 fps. Seeking between source frames adds decoder work without producing
+      // a different visible frame, so cap assignments to one per paint and one source frame.
+      if (v.readyState >= 1 && !v.seeking && Math.abs(v.currentTime - target) >= 1 / 30) v.currentTime = target;
+    });
   };
   v.addEventListener('seeked', go);
   v.addEventListener('loadedmetadata', go);
-  return { set(t: number) { target = t; go(); }, destroy() { v.removeEventListener('seeked', go); v.removeEventListener('loadedmetadata', go); } };
+  return {
+    set(t: number) { target = t; go(); },
+    destroy() { cancelAnimationFrame(raf); v.removeEventListener('seeked', go); v.removeEventListener('loadedmetadata', go); },
+  };
 }
 
 export default function Journey() {
@@ -92,15 +102,21 @@ export default function Journey() {
     else enter
       .from($('.sky-in'), { opacity: 0, scale: 1.18, y: 70, duration: 2.2, ease: 'power3.out', stagger: { each: .12, from: 'end' } })
       .from(deck, { opacity: 0, duration: 1.4, ease: 'power2.out' }, 0);
+    // Keep the 20 MB film from competing with the poster, fonts and intro. The logo animation gives
+    // us a natural preload window; section/hash arrivals skip the intro and start it immediately.
+    const loadA = () => {
+      const v = clipA.current;
+      if (film && v && v.preload !== 'auto') { v.preload = 'auto'; v.load(); }
+    };
     const html = document.documentElement;
     let mo: MutationObserver | null = null;
     if (html.classList.contains('intro-on')) {
       mo = new MutationObserver(() => {
         if (html.classList.contains('intro-on')) return;
-        mo?.disconnect(); mo = null; enter.play();
+        mo?.disconnect(); mo = null; loadA(); enter.play();
       });
       mo.observe(html, { attributes: true, attributeFilter: ['class'] });
-    } else enter.progress(1);
+    } else { loadA(); enter.progress(1); }
 
     // film: two scrubbed clips. B starts loading once A has its first frames.
     const a = film && clipA.current ? scrubber(clipA.current) : null;
@@ -203,11 +219,11 @@ export default function Journey() {
         {mode === '3d' && quality && <JourneyScene quality={quality} active={visible} />}
         {mode === '2d' && <canvas ref={canvas2d} role="img" aria-label="Clouds parting above an empty plot in a green neighbourhood" />}
         {mode === 'film' && HERO_FILM && SINGLE && (
-          <video className="film-clip" ref={clipA} src={HERO_FILM.src} poster={HERO_FILM.poster} muted playsInline preload="auto" role="img"
+          <video className="film-clip" ref={clipA} src={HERO_FILM.src} poster={HERO_FILM.poster} muted playsInline preload="none" role="img"
             aria-label="Clouds part over a lake to reveal an empty plot; the blueprint of a building rises, construction follows, and the finished building and its model appear" />
         )}
         {mode === 'film' && !SINGLE && <>
-          <video className="film-clip" ref={clipA} src={CLIPS.a.src} muted playsInline preload="auto" aria-hidden="true" />
+          <video className="film-clip" ref={clipA} src={CLIPS.a.src} muted playsInline preload="none" aria-hidden="true" />
           <video className="film-clip" ref={clipB} src={CLIPS.b.src} muted playsInline preload="none" role="img"
             aria-label="An empty plot beside a road; the founder walks onto it and the outline of the building rises" />
         </>}

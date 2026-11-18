@@ -1,6 +1,7 @@
 'use client';
 import { useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
+import { useNearViewport } from '@/lib/dom';
 
 // Five stages along one hand-drawn route. `phase`, `text` and `tags` are the studio's existing process copy.
 const STAGES = [
@@ -40,6 +41,7 @@ const PIN_H = 26;           // height of the marker pins standing on the route (
 
 export default function Process() {
   const root = useRef<HTMLElement>(null);
+  const near = useNearViewport(root);
   const track = useRef<HTMLDivElement>(null);
   const road = useRef<HTMLDivElement>(null);
   const plane = useRef<SVGSVGElement>(null);
@@ -58,6 +60,7 @@ export default function Process() {
   const sheets = useRef<(HTMLDivElement | null)[]>([]);
 
   useGSAP(() => {
+    if (!near) return;
     const mm = gsap.matchMedia();
     mm.add({
       vertical: '(max-width: 760px)',
@@ -257,7 +260,7 @@ export default function Process() {
       };
     });
     return () => mm.revert();
-  }, { scope: root });
+  }, { scope: root, dependencies: [near] });
 
   return (
     <section id="process" className="process gut" ref={root} aria-labelledby="process-title">

@@ -5,22 +5,14 @@ import { Html, PerformanceMonitor } from '@react-three/drei';
 import * as THREE from 'three';
 import { LIGHTS, PLAN, ROOMS, type PlanRoom } from '@/data/floorplan';
 import { buildPlanModel, groundShadow, wx, wz } from '@/lib/three/planModel';
+import { PLAN_VIEWS, type PlanControls, type PlanLight, type PlanView } from '@/lib/three/planControls';
 import { disposeObject } from '@/lib/three/scenes';
 
 // 3D floor plan of the walkthrough section, staged after the reference clip: the model floats on
 // the page canvas, its lights come on, the camera goes to the plan view from above, comes back
 // down and turns around the model, and ends on the front view. Room names show only on request.
 
-export type PlanView = 'iso' | 'top' | 'front';
-export type PlanLight = 'evening' | 'day';
-// Mutable camera targets shared with the UI (drag, zoom, view buttons). The scene eases toward them.
-// intro: the opening sequence is running and owns the camera until the visitor touches anything.
-export type PlanControls = { az: number; azT: number; el: number; elT: number; zoom: number; zoomT: number; spin: boolean; dragged: boolean; intro: boolean };
-
 const D2R = Math.PI / 180, PI = Math.PI;
-export const PLAN_VIEWS: Record<PlanView, { az: number; el: number }> = {
-  iso: { az: -.7, el: 32 * D2R }, top: { az: 0, el: 89.5 * D2R }, front: { az: 0, el: 46 * D2R },
-};
 // The opening sequence: [seconds, what happens]
 const INTRO = { lightsOn: .1, top: 3.4, iso: 7.6, turnTo: .75, turnEnd: 13.4, front: 13.6, end: 16 };
 
@@ -158,8 +150,10 @@ function Scene(p: Props) {
 }
 
 export default function PlanScene(props: Props) {
-  const range: [number, number] = props.low ? [.9, 1.5] : [1, 2];
-  const [dpr, setDpr] = useState(range[1]);
+  const range: [number, number] = props.low ? [.8, 1.25] : [1, 1.75];
+  // Enter at the inexpensive end of the range. PerformanceMonitor raises detail only when the
+  // device demonstrates that it has frame time to spare, avoiding a large first-frame hitch.
+  const [dpr, setDpr] = useState(range[0]);
   return (
     <Canvas
       shadows="percentage"

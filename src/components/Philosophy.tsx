@@ -2,7 +2,7 @@
 import { useRef } from 'react';
 import Link from 'next/link';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
-import { prefersReducedMotion } from '@/lib/dom';
+import { prefersReducedMotion, useNearViewport } from '@/lib/dom';
 import { HOME, SERVICES, servicePath } from '@/data/site';
 
 // Our Professional services (SEO brief): the headline, then the three services the brief lists on the homepage as notebook pages.
@@ -24,8 +24,10 @@ const PAGES = [
 
 export default function Philosophy() {
   const root = useRef<HTMLElement>(null);
+  const near = useNearViewport(root);
 
   useGSAP(() => {
+    if (!near) return;
     const sec = root.current!;
     const words = Array.from(sec.querySelectorAll<HTMLElement>('.ph-title .w'));
 
@@ -42,11 +44,12 @@ export default function Philosophy() {
         words.forEach((w, i) => w.classList.toggle('lit', i < lit));
       },
     });
-  }, { scope: root });
+  }, { scope: root, dependencies: [near] });
 
   // Diary: one blank page first; on scroll a page opens to the right, then one to the left, then the centre page gets its text.
   // On narrow screens the same thing happens vertically (a page opens downwards, then one upwards).
   useGSAP(() => {
+    if (!near) return;
     const mm = gsap.matchMedia();
     mm.add({ wide: '(min-width: 901px)', narrow: '(max-width: 900px)', reduce: '(prefers-reduced-motion: reduce)' }, (ctx) => {
       const { wide, reduce } = ctx.conditions as { wide: boolean; reduce: boolean };
@@ -76,7 +79,7 @@ export default function Philosophy() {
         .fromTo(q('.mid .ph-card-in > *'), { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.14, ease: 'power2.out' }, 2)
         .to({}, { duration: wide ? 0.9 : 0 }); // the extra scroll: all three pages read, the notebook holds
     });
-  }, { scope: root });
+  }, { scope: root, dependencies: [near] });
 
   return (
     <section id="services" className="philo gut" ref={root} aria-labelledby="services-title">

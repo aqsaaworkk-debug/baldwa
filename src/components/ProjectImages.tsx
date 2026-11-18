@@ -12,7 +12,9 @@ export default function ProjectImagesProvider({ children }: { children: ReactNod
   const [images, setImages] = useState<(string | null)[]>(() => projects.map((p) => p.image));
 
   useEffect(() => {
-    if (!hasWebGL() || projects.every((p) => p.image)) return;
+    // Most production projects have real photos. Check that first so we do not create a throwaway
+    // WebGL context during startup merely to discover that no procedural stills are needed.
+    if (projects.every((p) => p.image) || !hasWebGL()) return;
     let stop: (() => void) | undefined;
     let cancelled = false;
     import('@/lib/three/renderStills').then(({ renderStills }) => {

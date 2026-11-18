@@ -1,7 +1,7 @@
 'use client';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
-import { prefersReducedMotion } from '@/lib/dom';
+import { prefersReducedMotion, useNearViewport } from '@/lib/dom';
 import { projects } from '@/data/projects';
 import { HOME } from '@/data/site';
 import { useProjectImages } from './ProjectImages';
@@ -49,10 +49,12 @@ export default function Projects() {
   const opening = useRef(false);
   const swapping = useRef(false);
   const [sel, setSel] = useState<number | null>(null);
+  const near = useNearViewport(root, '1000px');
   const total = projects.length;
   const p = projects[sel ?? 0];
 
   const { contextSafe } = useGSAP(() => {
+    if (!near) return;
     const mm = gsap.matchMedia();
     mm.add({
       pinned: '(min-width: 1101px) and (min-height: 641px)',
@@ -157,7 +159,7 @@ export default function Projects() {
       return () => { sec.classList.remove('pj-pinned'); offs.forEach((f) => f()); };
     });
     return () => mm.revert();
-  }, { scope: root });
+  }, { scope: root, dependencies: [near] });
 
   // ---------- Project detail: the clicked tile expands into a full panel with a 3D depth move ----------
   const reduced = () => prefersReducedMotion();
@@ -231,7 +233,7 @@ export default function Projects() {
               <article className="pj-hero" ref={hero} aria-labelledby="pj-title">
                 <div className="pj-hero-inner" ref={heroInner}>
                   <div className="pj-hero-media" ref={heroMedia}>
-                    <img src={HERO.src} alt={HERO.alt} />
+                    <img src={HERO.src} alt={HERO.alt} loading="lazy" decoding="async" />
                   </div>
                   <div className="pj-hero-shade" />
                   <div className="pj-hero-copy">
@@ -251,9 +253,9 @@ export default function Projects() {
                       <span className={`pj-t-art${images[t.i] ? '' : ' img-wait'}`}>
                         <span className="pj-flip">
                           <span className="pj-side pj-front">
-                            {images[t.i] && <img className="pj-a" src={images[t.i]!} alt="" />}
+                            {images[t.i] && <img className="pj-a" src={images[t.i]!} alt="" loading="lazy" decoding="async" />}
                           </span>
-                          {projects[t.i].hover && <span className="pj-side pj-back"><img src={projects[t.i].hover} alt="" loading="lazy" /></span>}
+                          {projects[t.i].hover && <span className="pj-side pj-back"><img src={projects[t.i].hover} alt="" loading="lazy" decoding="async" /></span>}
                         </span>
                       </span>
                       <span className="pj-shade" aria-hidden="true" />
@@ -302,7 +304,7 @@ export default function Projects() {
         onClick={(e) => { if (e.target === e.currentTarget) closeProject(); }}>
         <div className="pj-panel" ref={panel}>
           <div className={`pj-panel-media${images[sel ?? 0] ? '' : ' img-wait'}`}>
-            {sel !== null && images[sel] && <img src={images[sel]!} alt={p.image ? p.name : `Rendering of ${p.name}`} />}
+            {sel !== null && images[sel] && <img src={images[sel]!} alt={p.image ? p.name : `Rendering of ${p.name}`} decoding="async" />}
           </div>
           <div className="pj-panel-copy">
             <p className="eyebrow on-dark pj-reveal">{String((sel ?? 0) + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</p>

@@ -1,7 +1,7 @@
 'use client';
 import { useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
-import { prefersReducedMotion } from '@/lib/dom';
+import { prefersReducedMotion, useNearViewport } from '@/lib/dom';
 import { HOME } from '@/data/site';
 
 // Background film. The file lives in public/videos/.
@@ -13,6 +13,7 @@ const two = (n: number) => String(n).padStart(2, '0');
 
 export default function Why() {
   const root = useRef<HTMLElement>(null);
+  const near = useNearViewport(root, '1000px');
   const track = useRef<HTMLDivElement>(null);
   const pin = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
@@ -20,11 +21,15 @@ export default function Why() {
   const items = useRef<(HTMLLIElement | null)[]>([]);
 
   useGSAP(() => {
+    if (!near) return;
     const sec = root.current!, vid = video.current!;
     // Without JS or with reduced motion the section is a plain list over a still frame: every point open, nothing pinned.
-    if (prefersReducedMotion()) return;
+    if (prefersReducedMotion()) { vid.preload = 'metadata'; vid.load(); return; }
 
-    // The film only plays while the section is on screen.
+    // Start buffering shortly before arrival; the 53 MB film otherwise competes with the hero
+    // during initial load. It only decodes and plays while the section is actually visible.
+    vid.preload = 'auto';
+    vid.load();
     const io = new IntersectionObserver(([e]) => {
       if (e.isIntersecting) vid.play().catch(() => { }); else vid.pause();
     }, { threshold: 0.05 });
@@ -76,13 +81,13 @@ export default function Why() {
       sec.classList.remove('why-live');
       items.current.forEach((li) => li?.classList.remove('is-on', 'is-done'));
     };
-  }, { scope: root });
+  }, { scope: root, dependencies: [near] });
 
   return (
     <section id="why" className="why" ref={root} aria-labelledby="why-title">
       <div className="why-track" ref={track} style={{ ['--n' as string]: POINTS.length }}>
         <div className="why-pin" ref={pin}>
-          <video className="why-video" ref={video} src={VIDEO} muted loop playsInline preload="metadata" aria-hidden="true" tabIndex={-1} />
+          <video className="why-video" ref={video} src={VIDEO} muted loop playsInline preload="none" aria-hidden="true" tabIndex={-1} />
           <div className="why-shade" aria-hidden="true" />
 
           {/* Heading on the left, the scrolling points on the right */}

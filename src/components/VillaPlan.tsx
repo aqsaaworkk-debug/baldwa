@@ -5,7 +5,7 @@ import Logo from './Logo';
 import { villa } from '@/data/villa';
 import { PLAN_FACTS, ROOMS } from '@/data/floorplan';
 import { hasWebGL, prefersReducedMotion } from '@/lib/dom';
-import { PLAN_VIEWS, type PlanControls, type PlanLight, type PlanView } from './three/PlanScene';
+import { PLAN_VIEWS, type PlanControls, type PlanLight, type PlanView } from '@/lib/three/planControls';
 
 // Walkthrough: the 3D floor plan (three/PlanScene) with its controls. The model plays a short
 // opening sequence as soon as it enters the screen (lights on, plan view, turn, front view); any touch of the model or the controls hands the camera to the visitor.
@@ -36,10 +36,15 @@ export default function VillaPlan() {
     const reduced = prefersReducedMotion();
     const nav = navigator as Navigator & { deviceMemory?: number };
     const low = window.matchMedia('(max-width: 820px)').matches || (nav.hardwareConcurrency ?? 8) <= 4 || (nav.deviceMemory ?? 8) <= 4;
-    setEnv({ webgl: hasWebGL(), reduced, low });
     if (reduced) { Object.assign(ctl.current, { intro: false, az: PLAN_VIEWS.iso.az, azT: PLAN_VIEWS.iso.az, el: PLAN_VIEWS.iso.el, elT: PLAN_VIEWS.iso.el }); }
     const el = viewEl.current!;
-    const mount = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setNear(true); mount.disconnect(); } }, { rootMargin: '400px' });
+    const mount = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      // WebGL probing can itself create a GPU context, so do it only when the plan is close.
+      setEnv({ webgl: hasWebGL(), reduced, low });
+      setNear(true);
+      mount.disconnect();
+    }, { rootMargin: '600px' });
     const start = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setPlay(true); start.disconnect(); } }, { threshold: .08 });
     const seen = new IntersectionObserver(([e]) => setOnScreen(e.isIntersecting));
     mount.observe(el); start.observe(el); seen.observe(el);
