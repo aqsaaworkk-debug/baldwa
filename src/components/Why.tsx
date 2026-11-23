@@ -4,8 +4,9 @@ import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { prefersReducedMotion } from '@/lib/dom';
 import { HOME } from '@/data/site';
 
-// Background film. The file lives in public/videos/.
-const VIDEO = '/videos/sukher-resort.mp4';
+// Background film (client, 2026-11-21: from VN20261121_105128.mp4, re-encoded to 1920 px, 30 fps, H.264 CRF 28, no audio,
+// faststart). The file lives in public/videos/.
+const VIDEO = '/videos/why.mp4';
 
 // Why Choose Baldwa and Associates? (SEO brief)
 const POINTS = HOME.why.points;

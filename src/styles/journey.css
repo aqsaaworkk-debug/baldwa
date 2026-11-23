@@ -49,4 +49,4 @@ html.js .journey{height:calc((var(--journey-screens,4) + 1)*100vh);height:calc((
 /* One extra screen holds the final video frame while Projects covers it from below.
    The negative margin shares that screen, preserving the overall journey length. */
 html.js .journey--live{height:calc((var(--journey-screens,4) + 2)*100vh);height:calc((var(--journey-screens,4) + 2)*100svh)}
-.journey--live + .work{position:relative;z-index:1;margin-top:-100vh;margin-top:-100svh;background:var(--page-bg)}
+.journey--live + .work{position:relative;z-index:1;margin-top:-100vh;margin-top:-100svh}

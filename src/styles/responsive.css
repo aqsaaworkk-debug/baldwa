@@ -19,9 +19,6 @@
   .brand svg{height:42px}
   .work{padding-block:64px 44px}
   .plan-head{grid-template-columns:1fr}
-  .pj-panel{grid-template-columns:1fr;overflow:auto}
-  .pj-panel-media{min-height:0;aspect-ratio:16/10}
-  .pj-panel-copy{padding:28px 24px 28px;overflow:visible}
   .plan{padding-block:52px 44px}
   .plan-app{height:auto;display:flex;flex-direction:column;gap:12px;overflow:visible}
   .plan-app{background:none}
@@ -47,6 +44,10 @@
   .hero-meta .hide-sm{display:none}
 }
 @media (max-width:760px){
+  /* Services page: photo above the text; the cards stay curved and keep alternating sides as they arrive */
+  .sv-card,.sv-right .sv-card{grid-template-columns:minmax(0,1fr);width:94%}
+  .sv-right .sv-media{order:0}
+  .sv-media{aspect-ratio:4/3}
   /* Process: the route turns vertical and winds down the left edge; labels stack to its right */
   .process .pr-track{margin-top:20px}
   .process .stack-wrap{height:300px;margin-top:56px;--pr-iso:.6}
@@ -72,13 +73,6 @@
   .journey-caption{bottom:calc(var(--curve) + 88px + env(safe-area-inset-bottom,0px));padding:20px 22px 22px;border-radius:24px}
   .journey-nav{right:auto;left:24px;bottom:calc(var(--curve) + 28px + env(safe-area-inset-bottom,0px))}
   .hero-frame{height:clamp(520px,78vh,760px)}
-  /* Featured projects: taller hero tile so the heading fits */
-  .pj-hero{aspect-ratio:4/5}
-  .pj-hero-shade{background:linear-gradient(0deg,rgba(47,65,86,.85) 0%,rgba(47,65,86,.35) 50%,rgba(47,65,86,0) 75%)}
-  .pj-hero-copy{left:7cqi;right:7cqi;bottom:7cqb}
-  .pj-hero-copy h2{font-size:clamp(30px,11cqi,52px)}
-  .pj-hero-copy .lede{font-size:16px}
-  .pj-mosaic{gap:10px}
 }
 @media (prefers-reduced-motion:reduce){
   html.js .journey{height:100vh;height:100svh}

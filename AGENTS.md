@@ -10,14 +10,17 @@ Stack: Next.js 16 App Router + TypeScript, React 19, React Three Fiber 9 + drei,
 
 ## Content and SEO (client brief "Baldwa project.pdf", 2026-11-17)
 - All copy and SEO for the site lives in `src/data/site.ts` (homepage, About, five service pages, FAQ, structured data). Use the brief's wording as supplied; only obvious typos were fixed. Don't invent claims, numbers or contact details.
-- Pages: `/` (homepage), `/about`, `/services/[slug]` (architecture, interior-design, bim-engineering, architectural-consultancy, project-management-consultancy). Inner pages use `PageShell.tsx` (breadcrumb, links to the other pages, Start a project, footer).
+- Pages: `/` (homepage), `/about`, `/projects`, `/services`, `/contact`. The five service pages (`/services/[slug]`) were removed on request (2026-11-21); their content is on the Services page, and `next.config.ts` redirects the old addresses to the right tab.
+- Service groups (client, 2026-11-21): `SERVICE_GROUPS` in `site.ts`, in this order: 1 PMC and Construction Management (`#pmc`), 2 Architecture, Interior Design and Consultancy (`#design`), 3 BIM Engineering (`#bim`). Homepage notebook (`Philosophy.tsx`): pages numbered 01 left, 02 centre, 03 right, opening left, then right, then the centre fills in; each page links to its tab. Services page (`ServiceCards.tsx` + `services.css`): tabs styled exactly like the Projects page categories (`project-filters`); the open tab shows each of its services in full (h1, body, photo) on wide curved cards that swing in from alternating sides. The tab follows the URL hash; `servicePath()` and `groupPath()` return tab links.
 - One H1 per page. Homepage H1 is the hero title (Journey.tsx); hero caption cards are not headings.
-- Navigation: the menu and footer list the pages plus "Start a project" (`/#contact`). The old section links were removed on request; don't add them back. `NavLink` goes to the homepage section from any page.
+- Navigation: the menu lists four pages only (client, 2026-11-21): About Us, Projects, Services, Contact Us (`PAGE_LINKS` in `site.ts`), plus "Start a project" (`/#contact`). The individual services are reached from the Services page. The old section links were removed on request; don't add them back. `NavLink` goes to the homepage section from any page.
 - The logo intro runs on the homepage only, and is skipped when the homepage is opened at a section (`/#contact`).
 
 ## Where things live
 - Page: `src/app/page.tsx` lists sections in order; each section is a component in `src/components/`.
-- Content data: `src/data/projects.ts` (carousel + hero scene), `src/data/villa.ts` (interactive plan).
+- Content data: `src/data/projects.ts` (featured projects + hero scene), `src/data/villa.ts` (interactive plan).
+- Featured projects (client, 2026-11-20, after `From Klickpin.com- 25 Dreamy garden wedding decor ….gif`; an earlier vertical-reel version was rejected): `Projects.tsx` pins and shows a horizontal accordion of tall rounded photo panels. One is open wide, the rest are narrow pills with a number badge, and scrolling opens them left to right. Small screens get the same accordion stacked vertically; reduced motion gets a plain list. One scroll gesture moves exactly one project (client, 2026-11-21): a wheel/touch handler in `Projects.tsx` blocks native scrolling while the section is in view and glides one step per gesture (a gesture = wheel events with no gap over `QUIET` ms, or one touch); at the first or last project a gesture heading out scrolls the page on normally. Names only, no descriptions. One photo per project (the hover/flip second photo was removed on request). The background is `--cream` `#F6EEE1` (client asked for "a little bit creamy"), fading into almond at the section's edges.
+- Why Baldwa background film: `public/videos/why.mp4` (client, 2026-11-21, from `VN20261121_105128.mp4`, 4K re-encoded to 1920 px H.264 CRF 28, no audio, faststart). `sukher-resort.mp4` is no longer used.
 - 3D: R3F canvases in `src/components/three/`; scene builders and helpers in `src/lib/three/`.
 - Styles: plain global CSS in `src/styles/`, imported in `src/app/layout.tsx`. Tokens in `base.css`; one file per section; all breakpoints in `responsive.css`.
 
@@ -54,3 +57,13 @@ Stack: Next.js 16 App Router + TypeScript, React 19, React Three Fiber 9 + drei,
 - Rooms are rectangles in feet on a 60 × 44 ft grid, north at z = 0. Walls are generated between rooms in `villaModel.ts`; door openings come from `doors` in `villa.ts`.
 - Furniture is chosen by room `kind` in `furnish()` in `villaModel.ts`; add a `case` for a new kind.
 - Room floor slabs are R3F meshes in `VillaScene.tsx` (hover/click); camera targets live in the shared `Controls` ref.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import Header from './Header';
 import Footer from './Footer';
-import { ABOUT, BRAND, CONTACT_PAGE, PROJECTS_PAGE, SERVICES, servicePath } from '@/data/site';
+import { ABOUT, BRAND, CONTACT_PAGE, PROJECTS_PAGE, SERVICES_PAGE } from '@/data/site';
 
 // Frame for the inner pages (About, services): header, a breadcrumb, the page's own content, links to the other pages
 // (internal linking from the SEO brief), the Start a project call to action and the footer.
@@ -15,7 +15,7 @@ export default function PageShell({ crumbs, current, children, showCta = true }:
   const others = [
     { href: ABOUT.path, label: ABOUT.nav },
     { href: PROJECTS_PAGE.path, label: PROJECTS_PAGE.nav },
-    ...SERVICES.map((s) => ({ href: servicePath(s), label: s.h1 })),
+    { href: SERVICES_PAGE.path, label: SERVICES_PAGE.nav },
     { href: CONTACT_PAGE.path, label: CONTACT_PAGE.nav },
   ].filter((l) => l.href !== current);
   return (
