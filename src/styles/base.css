@@ -23,14 +23,17 @@ img{max-width:100%}
   --deep:#1c2836;
   --page-bg:var(--paper);
   --beige:#f2ede7;
+  --cream:#f6eee1; /* featured projects canvas (client, 2026-11-20: "a little bit creamy") */
   --night-2:#283849;
   --night-line:#45596e;
   --night-mute:#b9cbd9;
   --gold:#f4b251;
   --gold-deep:#96620c;
   --sun:#ef5a12;
-  /* One typeface everywhere (Bricolage Grotesque: weight + optical size). The old token names stay as aliases. */
-  --f-sans:"Bricolage Grotesque Variable","Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;
+  /* One typeface everywhere (client, 2026-11-23): Josefin Sans (variable weight), a free stand-in for the client's chosen
+     font, Athena by Ellen Luff (paid licence). To switch to Athena once licensed: add its @font-face (or Adobe Fonts kit)
+     and put "Athena" first in this list. The old token names stay as aliases. */
+  --f-sans:"Josefin Sans Variable","Josefin Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-display:var(--f-sans);
   --f-body:var(--f-sans);
   --f-mono:var(--f-sans);

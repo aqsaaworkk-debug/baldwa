@@ -65,7 +65,7 @@ export default function Header() {
         {/* Full screen: the pages in the middle of the screen, Start a project at the foot */}
         <nav className="menu-nav" aria-label="Main">
           {PAGE_LINKS.map((l) => (
-            <Link key={l.href} href={l.href} aria-current={path === l.href ? 'page' : undefined} onClick={() => { closeMenu(); }}>{l.label}</Link>
+            <Link key={l.href} href={l.href} aria-current={path === l.href || path.startsWith(`${l.href}/`) ? 'page' : undefined} onClick={() => { closeMenu(); }}>{l.label}</Link>
           ))}
         </nav>
         <div className="menu-cta-row">

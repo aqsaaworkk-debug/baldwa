@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 
 // Self-hosted fonts (no request to Google at runtime). One family for the whole site (weight + optical size axes);
 // Archivo is only for the BALDWA wordmark inside the logo.
-import '@fontsource-variable/bricolage-grotesque/opsz.css';
+import '@fontsource-variable/josefin-sans/wght.css';
 import '@fontsource/archivo/900.css';
 
 import { BRAND, HOME } from '@/data/site';
@@ -11,6 +11,7 @@ import '@/styles/intro.css';
 import '@/styles/header.css';
 import '@/styles/menu.css';
 import '@/styles/journey.css';
+import '@/styles/paper-story.css';
 import '@/styles/projects.css';
 import '@/styles/villa-plan.css';
 import '@/styles/process.css';
@@ -20,6 +21,7 @@ import '@/styles/philosophy.css';
 import '@/styles/contact.css';
 import '@/styles/footer.css';
 import '@/styles/pages.css';
+import '@/styles/services.css';
 import '@/styles/responsive.css';
 
 // Defaults are the homepage's SEO title and description (SEO brief); inner pages set their own.

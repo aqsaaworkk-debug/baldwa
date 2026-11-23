@@ -1,6 +1,7 @@
 import Intro from '@/components/Intro';
 import Header from '@/components/Header';
 import Journey from '@/components/Journey';
+import PaperStory from '@/components/PaperStory';
 import Projects from '@/components/Projects';
 import VillaPlan from '@/components/VillaPlan';
 import Process from '@/components/Process';
@@ -22,6 +23,7 @@ export default function Home() {
       <Header />
       <main>
         <Journey />
+        <PaperStory />
         <Projects />
         <VillaPlan />
         <Process />

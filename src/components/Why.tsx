@@ -1,11 +1,12 @@
 'use client';
 import { useRef } from 'react';
-import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
+import { gsap, ScrollTrigger, useGSAP, relayout } from '@/lib/gsap';
 import { prefersReducedMotion, useNearViewport } from '@/lib/dom';
 import { HOME } from '@/data/site';
 
-// Background film. The file lives in public/videos/.
-const VIDEO = '/videos/sukher-resort.mp4';
+// Background film (client, 2026-11-21: from VN20261121_105128.mp4, re-encoded to 1920 px, 30 fps, H.264 CRF 28, no audio,
+// faststart). The file lives in public/videos/.
+const VIDEO = '/videos/why.mp4';
 
 // Why Choose Baldwa and Associates? (SEO brief)
 const POINTS = HOME.why.points;
@@ -72,6 +73,8 @@ export default function Why() {
       next.classList.toggle('ph-over', pr.bottom > 0);
     };
     const cover = next ? ScrollTrigger.create({ trigger: next, start: 'top bottom', end: 'bottom top', onUpdate: clip, onRefresh: clip, onLeave: clip, onLeaveBack: clip }) : null;
+    // .why-live just made the track several screens taller: re-measure everything below (Philosophy's pin, page tone, footer).
+    relayout();
 
     return () => {
       st.kill(); cover?.kill(); io.disconnect(); vid.pause();

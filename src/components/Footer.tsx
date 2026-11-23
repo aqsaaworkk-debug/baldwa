@@ -43,7 +43,7 @@ export default function Footer({ showFilm = true }: { showFilm?: boolean }) {
             <p className="foot-line">{BRAND.summary}</p>
           </div>
           <nav className="foot-nav" aria-label="Footer">
-            {links.map((l) => <Link key={l.href} href={l.href}>{l.label}</Link>)}
+            {links.map((l) => <Link key={`${l.href} ${l.label}`} href={l.href}>{l.label}</Link>)}
             <NavLink to="contact" className="foot-cta">Start a project</NavLink>
           </nav>
         </div>

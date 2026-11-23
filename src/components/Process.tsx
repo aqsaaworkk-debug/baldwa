@@ -1,6 +1,6 @@
 'use client';
 import { useRef } from 'react';
-import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
+import { gsap, ScrollTrigger, useGSAP, relayout } from '@/lib/gsap';
 import { useNearViewport } from '@/lib/dom';
 
 // Five stages along one hand-drawn route. `phase`, `text` and `tags` are the studio's existing process copy.
@@ -237,6 +237,8 @@ export default function Process() {
         tl.to(state, { p: 1, duration: 1, ease: 'none', onUpdate: apply });
         if (pinned) tl.to({}, { duration: 0.12 }); // hold the finished route briefly before the section scrolls on
       }
+      // pr-live / pr-ready change the section's height after the triggers below it were measured: re-measure them.
+      relayout();
 
       // Rebuild when fonts load, labels re-wrap or the page layout shifts.
       let raf = 0, timer = 0, lastW = box.clientWidth, lastH = box.clientHeight;

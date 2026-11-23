@@ -109,7 +109,43 @@ export const SERVICES: Service[] = [
   },
 ];
 
-export const servicePath = (s: Service) => `/services/${s.slug}`;
+// The services no longer have pages of their own (client, 2026-11-21): each one is shown under its group's tab on the
+// Services page, so a service's link opens that tab.
+export const servicePath = (s: Service) => `/services#${SERVICE_GROUPS.find((g) => g.slugs.includes(s.slug))!.key}`;
+
+// The services grouped in three (client, 2026-11-21), in this order, on the homepage notebook and the Services page.
+// Text is the brief's own wording for those services. Each group links to the pages of the services it covers.
+export type ServiceGroup = { key: string; title: string; text: string; slugs: string[]; image: { src: string; alt: string } };
+const svc = (slug: string) => SERVICES.find((s) => s.slug === slug)!;
+export const SERVICE_GROUPS: ServiceGroup[] = [
+  {
+    key: 'pmc', title: 'PMC and Construction Management',
+    text: 'Baldwa and Associates oversees every phase of construction to safeguard timely, cost-effective and quality-assured distribution: vendor coordination, budget control, schedule tracking and quality declaration audits.',
+    slugs: ['project-management-consultancy'], image: svc('project-management-consultancy').image,
+  },
+  {
+    key: 'design', title: 'Architecture, Interior Design and Consultancy',
+    text: 'End-to-end preparation, conceptual design and operational management for residential, financial and institutional projects, with modified, practical and modern interior solutions and strategic architectural consultancy.',
+    slugs: ['architecture', 'interior-design', 'architectural-consultancy'], image: svc('architecture').image,
+  },
+  {
+    key: 'bim', title: 'BIM Engineering',
+    text: svc('bim-engineering').home!.text,
+    slugs: ['bim-engineering'], image: svc('bim-engineering').image,
+  },
+];
+// Link for a group: its tab on the Services page.
+export const groupPath = (g: ServiceGroup) => `/services#${g.key}`;
+export const groupLinks = (g: ServiceGroup) => [{ href: groupPath(g), label: 'View details' }];
+
+// Services page (client, 2026-11-21): the three service groups as tabs, like the project categories; each tab shows its services in full.
+export const SERVICES_PAGE = {
+  path: '/services',
+  nav: 'Services',
+  title: 'Architecture, Interior Design, BIM and PMC Services in Udaipur | Baldwa & Associates',
+  description: 'Baldwa and Associates offers architecture, interior design, BIM engineering, architectural consultancy and project management consultancy (PMC) in Udaipur, Rajasthan.',
+  h1: HOME.servicesH2,
+};
 
 // ---------- Projects and Contact ----------
 export const PROJECTS_PAGE = {
@@ -122,7 +158,7 @@ export const PROJECTS_PAGE = {
 
 export const CONTACT_PAGE = {
   path: '/contact',
-  nav: 'Contact',
+  nav: 'Contact Us',
   title: 'Contact Baldwa and Associates | Start a Project',
   description: 'Start a conversation with Baldwa and Associates about architecture, interior design, BIM engineering or project management.',
   h1: 'Start with a site and a conversation',
@@ -137,7 +173,8 @@ export const FAQ = [
   { q: 'Does Baldwa and Associates handle both architecture and interior design?', a: 'Yes. We provide incorporated architecture and interior design services, handling everything from initial structural plans and 3D advancements to material selection and turnkey interior implementation.' },
 ];
 
-// ---------- Navigation: the pages, plus the one in-page link kept from before (Start a project) ----------
+// ---------- Navigation ----------
+// Menu (client, 2026-11-21): four pages only. The services are reached from the Services page.
 export const HOME_FOOTER_LINKS = [
   { href: ABOUT.path, label: ABOUT.nav },
   ...SERVICES.map((s) => ({ href: servicePath(s), label: s.nav })),
@@ -146,7 +183,7 @@ export const HOME_FOOTER_LINKS = [
 export const PAGE_LINKS = [
   { href: ABOUT.path, label: ABOUT.nav },
   { href: PROJECTS_PAGE.path, label: PROJECTS_PAGE.nav },
-  ...SERVICES.map((s) => ({ href: servicePath(s), label: s.nav })),
+  { href: SERVICES_PAGE.path, label: SERVICES_PAGE.nav },
   { href: CONTACT_PAGE.path, label: CONTACT_PAGE.nav },
 ];
 

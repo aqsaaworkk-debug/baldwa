@@ -39,14 +39,13 @@ html.js .journey{height:calc((var(--journey-screens,4) + 1)*100vh);height:calc((
 .film-title p{margin:.9em 0 0;font:500 clamp(11px,.95vw,14px)/1.4 var(--f-sans);letter-spacing:.32em;text-transform:uppercase;color:rgba(255,255,255,.86)}
 /* in the film the first chapter is the hero title, so it has no card */
 .journey--film .journey-caption[data-chapter="sky"]{display:none}
-/* The opening melts into the page canvas at its bottom edge, so the hero and the page read as one surface. */
-.journey-fade{position:absolute;left:0;right:0;bottom:-1px;height:clamp(90px,16vh,180px);pointer-events:none;
-  background:linear-gradient(to top,var(--paper) 0%,rgba(242,237,231,.7) 35%,rgba(242,237,231,0) 100%)}
+/* Single hero film: the photo clouds cover its first frame and part on scroll (Journey.tsx, HERO_CLOUDS). The cloud photos
+   are a cool grey; a light warm grade matches them to the film's golden sunrise clouds. */
+.film-sky :is(.sky-deck,.sky-puff img){filter:sepia(.3) saturate(1.15) brightness(1.03)}
 
 /* single hero film: its first frame backs the stage while the video loads */
 .journey--film .journey-stage{background-image:url(/images/hero-poster.jpg)}
 
-/* One extra screen holds the final video frame while Projects covers it from below.
-   The negative margin shares that screen, preserving the overall journey length. */
+/* One extra screen holds the final video frame. The paper story (paper-story.css) overlaps it and takes over from that
+   frame with an identical still. */
 html.js .journey--live{height:calc((var(--journey-screens,4) + 2)*100vh);height:calc((var(--journey-screens,4) + 2)*100svh)}
-.journey--live + .work{position:relative;z-index:1;margin-top:-100vh;margin-top:-100svh;background:var(--page-bg)}

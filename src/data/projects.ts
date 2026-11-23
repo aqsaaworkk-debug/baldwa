@@ -1,13 +1,12 @@
 import type { SceneKey, TodKey } from '@/lib/three/scenes';
 
-// Featured projects shown in the carousel.
+// Featured projects shown in the reel (one photo per project).
 // PLACEHOLDER CONTENT: replace names, types, locations and text with real projects.
 //
 // image:  path to a real photo in /public/images (e.g. '/images/sunfold.jpg').
 //         When null, the site renders a 3D placeholder image from `scene`.
 // scene:  procedural 3D scene in src/lib/three/scenes.ts (used when image is null).
 // tod:    lighting preset for that scene.
-// hover:  second photo the card turns to when the pointer is over it (Projects.tsx).
 // plan:   true shows the "Walk the plan" button linking to the interactive villa.
 
 export type Project = {
@@ -17,7 +16,6 @@ export type Project = {
   location: string;
   text: string;
   image: string | null;
-  hover?: string;
   scene: SceneKey;
   tod: TodKey;
   plan?: boolean;
@@ -31,7 +29,6 @@ export const projects: Project[] = [
     location: '[Location]',
     text: 'A two-storey villa opening onto a lawn and a shaped pool, with a sunken lounge set into the water, a shaded cabana and sun loungers along the deck.',
     image: '/images/projects/poolside-villa.jpg',
-    hover: '/images/projects/study-curved-timber.webp',
     scene: 'sunfold',
     tod: 'golden',
   },
@@ -42,7 +39,6 @@ export const projects: Project[] = [
     location: '[Location]',
     text: 'Stepped volumes with deep overhangs, a stone-clad entrance, a perforated jaali screen and glass balconies on every floor, framed by a planted front garden.',
     image: '/images/projects/residence-exterior.jpg',
-    hover: '/images/projects/residence-construction.webp',
     scene: 'courtyard',
     tod: 'day',
   },
@@ -53,7 +49,6 @@ export const projects: Project[] = [
     location: '[Location]',
     text: 'Curved seating around a sculpted timber table, arched openings and soft wall lighting, flowing into a dining area that opens to the terrace.',
     image: '/images/projects/living-dining.jpg',
-    hover: '/images/projects/living-room-terracotta.webp',
     scene: 'pavilion',
     tod: 'dusk',
   },
@@ -64,7 +59,6 @@ export const projects: Project[] = [
     location: '[Location]',
     text: 'A long marble table under a brass chandelier, with carved relief panels on a sage wall, inlaid stone floors and a full-height timber cabinet.',
     image: '/images/projects/dining-room.jpg',
-    hover: '/images/projects/grocery-store.webp',
     scene: 'terraces',
     tod: 'morning',
   },
@@ -75,7 +69,6 @@ export const projects: Project[] = [
     location: '[Location]',
     text: 'A tufted bed with gilded detailing, carved timber doors and wardrobe, patterned floor tiles and a coffered ceiling with a brass chandelier.',
     image: '/images/projects/classic-bedroom.jpg',
-    hover: '/images/projects/bedroom-mural-wall.webp',
     scene: 'stepwell',
     tod: 'noon',
   },
@@ -86,7 +79,6 @@ export const projects: Project[] = [
     location: '[Location]',
     text: 'A steel-clad production hall on a concrete plinth, with covered loading bays and an open services yard: scrubbers, a cooling tower and colour-coded pipework laid out for easy maintenance.',
     image: '/images/projects/industrial-plant.webp',
-    hover: '/images/projects/industrial-plant-services.webp',
     scene: 'studio',
     tod: 'dusk2',
   },

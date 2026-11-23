@@ -13,9 +13,18 @@ import { clamp, lerp, range } from './stages';
 // The client's full hero film: one clip, scrubbed by scroll across the whole opening (title over its first frames).
 // Put the file in public/videos and set it here, e.g. { src: '/videos/hero.mp4', screens: 4 } (screens = scroll length).
 // While it is null, the two-clip opening below is used. Encode it with frequent keyframes so scrubbing stays smooth.
-// Client hero film ("BALDWA VIDEO (1).mp4", 42 s: clouds, the plot, blueprint, construction, the finished building, the model),
-// re-encoded for scrubbing: 1280 px, 30 fps, a keyframe every 10 frames, no audio. poster = its first frame.
+// Client hero film (client, 2026-11-23: "baldwa hero.webm", 23.6 s, 4K: clouds, the land, the model on a desk), re-encoded
+// for scrubbing: 1280 px, 30 fps, a keyframe every 10 frames, no audio, faststart, with the generator marks in the
+// bottom-right corner removed. poster = its first frame. (The earlier film was "BALDWA VIDEO (1).mp4".)
+// Full length (23.58 s, not trimmed). The generator marks in the bottom-right corner ("Veo" label, and the sparkle that
+// appears in the last half-second) are filled in with ffmpeg removelogo.
 export const HERO_FILM = { src: '/videos/hero.mp4', poster: '/images/hero-poster.jpg', screens: 9 } as { src: string; poster: string; screens: number } | null;
+
+// Cloud opening of the hero film (client, 2026-11-23: "cloud dispersal on scroll like before", i.e. like the earlier film,
+// which opened fully clouded and parted as you scrolled). Photo clouds cover the first frame and part on scroll while the film
+// dives through its own clouds. All in master progress p; the film's first `cloudTime` seconds (sky, clouds, the dive to the
+// land) are spread over the first `film` of p so they aren't over in a flick, the rest plays on evenly.
+export const HERO_CLOUDS = { part: [.02, .17], film: .2, cloudTime: 3 } as const;
 
 export const CLIPS = {
   a: { src: '/video/opening-clouds.mp4', from: 13, to: 20 },  // client clip gemini_generated_video_9366a321, first 13 s unused

@@ -1,0 +1,54 @@
+/* ---------- Paper story: after the hero film, a sheet lifts off the table, gets written on and rolls away ---------- */
+/* One sticky stage holds everything (PaperStory.tsx): the hero photo with a cream panel under it (slid up by script inside
+   the stage) and the paper on top. The Projects section sits behind the stage (z 1 < 2), already pinned at the top when the
+   hero is released, and only moves by normal scrolling, so nothing jitters.
+   Default (no JS / reduced motion, .ps-still): one screen, the hero photo with the paper centred and all points written.
+   With JS and motion: the stage sticks for --ps-screens of scroll (the pinned stages in config.ts), then scrolls away. */
+.paper-story{position:relative;pointer-events:none}
+.ps-stage{position:relative;z-index:2;height:100vh;height:100svh;overflow:hidden;background:var(--night)}
+html.js .paper-story:not(.ps-still){height:calc((var(--ps-screens,6) + 1)*100vh);height:calc((var(--ps-screens,6) + 1)*100svh)}
+html.js .paper-story:not(.ps-still) .ps-stage{position:sticky;top:0;visibility:hidden;background:none} /* GSAP fades it in at the handoff */
+
+/* Starts two screens early, under the end of the hero film (Journey holds its last frame for one extra screen); it stays
+   invisible until the film has finished, then crossfades to the identical still. Only when the film is live. */
+.journey--live + .paper-story:not(.ps-still){margin-top:-200vh;margin-top:-200svh}
+
+/* Projects sits behind the stage's last screen (margin -100vh, z 1), so it is at the top of the screen, pinned, the moment the
+   hero is released; the hero then scrolls away off it with the rolling paper while its heading and panels slide in from the
+   right. --pj-lead (read by Projects.tsx) starts its accordion one screen later, and the track is one screen taller to
+   match, so the accordion itself is unchanged. Its top edge is plain cream here (same as the stage's cream panel). */
+html.js .paper-story:not(.ps-still) + .work{position:relative;z-index:1;margin-top:-100vh;margin-top:-100svh;--pj-lead:1;background:linear-gradient(180deg,var(--cream) 0,var(--cream) calc(100% - 90px),var(--paper) 100%)}
+
+html.js .paper-story:not(.ps-still) + .work.pj-acc .pj-track{height:calc((var(--pj-n,6) * 60 + 70) * 1vh + 100vh);height:calc((var(--pj-n,6) * 60 + 70) * 1svh + 100svh)}
+
+/* The hero photo: the film's last frame, covering the screen exactly like the video (object-fit: cover, centred), plus a
+   pre-blurred copy and a dim layer that GSAP fades in while the paper is up, and the cream panel right under it. */
+.ps-hero{position:absolute;inset:0;will-change:transform}
+.ps-bg,.ps-dim,.ps-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ps-bg{object-fit:cover;object-position:50% 50%}
+.ps-bg-blur,.ps-dim{opacity:0}
+.ps-dim{background:var(--deep)}
+.ps-panel{position:absolute;left:0;right:0;top:100%;height:100%;background:var(--cream)}
+
+/* The paper layer, on top of the hero photo inside the stage (so the rolled tube scrolls away with the hero) */
+.ps-float{position:absolute;inset:0;z-index:1;pointer-events:none}
+html.js .paper-story:not(.ps-still) .ps-float{visibility:hidden}
+
+/* The paper as HTML (2d and still versions; screen-reader copy in the WebGL version). Text sizes scale with the sheet. */
+.ps-sheet{position:absolute;left:50%;top:50%;width:min(calc(70svh * var(--ps-arn)),88vw);aspect-ratio:var(--ps-ar);transform:translate(-50%,-50%);container-type:inline-size;color:var(--ps-ink)}
+.ps-paper{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ps-points{position:absolute;inset:0;margin:0;padding:0;list-style:none}
+.ps-title{position:absolute;margin:0;left:calc(var(--x) * 100%);top:calc(var(--y) * 100%);transform:translateY(-78%);
+  font:400 calc(var(--ps-line) * 100cqw)/1 var(--f-sans);white-space:nowrap}
+.ps-title::after{content:"";position:absolute;left:0;top:calc(100% + 1.4cqw);width:calc((var(--rule-to) - var(--x)) * 100cqw);border-top:1px solid currentColor;opacity:.3}
+.ps-points li{position:absolute;left:calc(var(--x) * 100%);top:calc(var(--y) * 100%);transform:translateY(-78%);
+  font:400 calc(var(--ps-size) * 100cqw)/1 var(--f-sans);white-space:nowrap}
+/* faint pencil rule under each point (HTML versions) */
+.ps-points li::after{content:"";position:absolute;left:0;top:calc(100% + 1.2cqw);width:calc((var(--rule-to) - var(--x)) * 100cqw);border-top:1px solid currentColor;opacity:.2}
+.ps-sticker{position:absolute;left:calc(var(--sx) * 100%);top:calc(var(--sy) * 100%);width:calc(var(--ss) * 100%);height:auto;
+  transform:translate(-50%,-50%) rotate(var(--sr))} /* the one sticker, at the end of the paper */
+/* 2d fallback: GSAP moves the sheet, reveals each line and pops the sticker */
+.ps-2d .ps-sheet{transform:none}
+.ps-2d .ps-sticker{transform:translate(-50%,-50%) scale(0)}
+/* WebGL: the writing lives on the paper texture; this copy is only for screen readers */
+.ps-gl .ps-sheet{width:1px;height:1px;max-width:none;overflow:hidden;clip-path:inset(50%);white-space:nowrap}

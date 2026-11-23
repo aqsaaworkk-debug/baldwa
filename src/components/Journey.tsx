@@ -6,7 +6,7 @@ import { hasWebGL, prefersReducedMotion } from '@/lib/dom';
 import { createCloudReveal } from '@/lib/journey/cloudReveal2d';
 import { CHAPTERS, SCREENS, journey, lerp, pickQuality, range, smooth, stageT, type Quality } from '@/lib/journey/stages';
 import { BRAND, HOME } from '@/data/site';
-import { CLIPS, DRONE, FILM_CHAPTERS, FILM_SCREENS, HERO_FILM, JOIN, PART, clipTimes, droneAt, filmAt, filmT } from '@/lib/journey/film';
+import { CLIPS, DRONE, FILM_CHAPTERS, FILM_SCREENS, HERO_CLOUDS, HERO_FILM, JOIN, PART, clipTimes, droneAt, filmAt, filmT } from '@/lib/journey/film';
 
 // Opening scroll journey. A tall section with a sticky stage; one scrubbed ScrollTrigger
 // writes the master progress (journey.p) and everything else follows from that number.
@@ -98,8 +98,10 @@ export default function Journey() {
       return gsap.to(img, { x: i % 2 ? -26 : 26, y: i % 2 ? 8 : -8, duration: 7 + i * 1.3, ease: 'sine.inOut', yoyo: true, repeat: -1 });
     });
     const enter = gsap.timeline({ paused: true });
-    if (film) enter.from($('.film-title-in'), { opacity: 0, y: 34, duration: 1.4, ease: 'expo.out', stagger: .12 }, .5);
-    else enter
+    if (film) {
+      enter.from($('.film-title-in'), { opacity: 0, y: 34, duration: 1.4, ease: 'expo.out', stagger: .12 }, .5);
+      if (SINGLE) enter.from($('.sky-in'), { opacity: 0, scale: 1.12, y: 50, duration: 2, ease: 'power3.out', stagger: { each: .12, from: 'end' } }, 0);
+    } else enter
       .from($('.sky-in'), { opacity: 0, scale: 1.18, y: 70, duration: 2.2, ease: 'power3.out', stagger: { each: .12, from: 'end' } })
       .from(deck, { opacity: 0, duration: 1.4, ease: 'power2.out' }, 0);
     // Keep the 20 MB film from competing with the poster, fonts and intro. The logo animation gives
@@ -152,8 +154,18 @@ export default function Journey() {
         gsap.set($('.journey-cue'), { opacity: title });
         gsap.set($('.film-title'), { autoAlpha: title, y: -40 * (1 - title) });
         gsap.set($('.film-scrim'), { autoAlpha: .35 + .65 * title });
+        // the photo clouds over the first frame part as you scroll, while the film dives through its own clouds
+        const open = range(p, HERO_CLOUDS.part[0], HERO_CLOUDS.part[1]);
+        setPuffs(open, 0);
+        gsap.set(deck, { scale: 1 + .12 * smooth(open), opacity: 1 - smooth(range(open, .1, .7)) });
+        gsap.set(sky, { autoAlpha: open >= 1 ? 0 : 1 });
+        // film time: its cloud opening is spread over the first stretch of scroll, the rest plays on evenly
         const d = clipA.current?.duration ?? 0;
-        a?.set(Number.isFinite(d) ? Math.min(p, .998) * d : 0);
+        if (Number.isFinite(d) && d > 0) {
+          const { film: fp, cloudTime: ct } = HERO_CLOUDS;
+          const t = p < fp ? (p / fp) * ct : ct + ((p - fp) / (1 - fp)) * (d - ct);
+          a?.set(Math.min(t, .998 * d));
+        } else a?.set(0);
         return;
       }
       const intro = 1 - range(film ? filmT('hero', p) : stageT('logo', p), 0, .5);
@@ -220,7 +232,7 @@ export default function Journey() {
         {mode === '2d' && <canvas ref={canvas2d} role="img" aria-label="Clouds parting above an empty plot in a green neighbourhood" />}
         {mode === 'film' && HERO_FILM && SINGLE && (
           <video className="film-clip" ref={clipA} src={HERO_FILM.src} poster={HERO_FILM.poster} muted playsInline preload="none" role="img"
-            aria-label="Clouds part over a lake to reveal an empty plot; the blueprint of a building rises, construction follows, and the finished building and its model appear" />
+            aria-label="Clouds part and the camera dives to a plot on a lake shore; construction rises, the finished building appears, and its model sits on a desk" />
         )}
         {mode === 'film' && !SINGLE && <>
           <video className="film-clip" ref={clipA} src={CLIPS.a.src} muted playsInline preload="none" aria-hidden="true" />
@@ -229,13 +241,13 @@ export default function Journey() {
         </>}
         {/* eslint-disable @next/next/no-img-element */}
         {mode === 'still' && (HERO_FILM && SINGLE
-          ? <img className="journey-still" src={HERO_FILM.poster} alt="Clouds over a lake and hills at sunrise, with a plot of land on the shore" />
+          ? <img className="journey-still" src={HERO_FILM.poster} alt="Sunlit clouds high above green hills, seen from the edge of the sky" />
           : USE_FILM
           ? <img className="journey-still" src={`${IMG}/plot.webp`} alt="An empty plot beside a road, with houses and trees around it" />
           : <img className="journey-still" src={`${IMG}/site.webp`} alt="A wide, empty plot beside a road in a green neighbourhood, seen from above" />)}
-        {live && mode !== 'film' && (
-          <div className="journey-sky" aria-hidden="true">
-            <img className="sky-land" src={`${IMG}/land.webp`} alt="" />
+        {live && (mode !== 'film' || SINGLE) && (
+          <div className={`journey-sky${mode === 'film' ? ' film-sky' : ''}`} aria-hidden="true">
+            {mode !== 'film' && <img className="sky-land" src={`${IMG}/land.webp`} alt="" />}
             <img className="sky-deck" src={`${IMG}/cloud-deck.webp`} alt="" />
             {PUFFS.map((c, i) => (
               <div className="sky-puff" key={i} style={{ left: `${c.x}%`, top: `${c.y}%`, '--w': c.w } as CSSProperties}>
@@ -253,8 +265,6 @@ export default function Journey() {
             <p className="film-title-in">{BRAND.name} · Architecture · BIM engineering · Interior design</p>
           </div>
         </>}
-        {/* the bottom of the opening melts into the page canvas */}
-        <div className="journey-fade" aria-hidden="true" />
         <p className="journey-cue" aria-hidden="true">Scroll to begin</p>
         {chapters.map((c) => (
           <div className="journey-caption" key={c.id} data-chapter={c.id}>

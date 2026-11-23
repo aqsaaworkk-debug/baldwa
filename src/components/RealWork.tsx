@@ -1,30 +1,43 @@
 'use client';
-import { Fragment, useRef } from 'react';
+import { useRef } from 'react';
 import { gsap, useGSAP } from '@/lib/gsap';
 import { prefersReducedMotion, useNearViewport } from '@/lib/dom';
-import { REAL_WORK } from '@/data/realwork';
-import HomeIntro from './HomeIntro';
+import { REAL_WORK, REAL_WORK_VIDEO } from '@/data/realwork';
 
-// Full-width photo story: two site views, the studio introduction beside the portrait,
-// then the team and construction photos. Copy stays on the clear page canvas.
+// Real work (client, 2026-11-23): a "Real work" heading, then the site film and the site photos together in one compact grid.
+// The film is the large tile; the photos sit beside and under it. The studio introduction (HomeIntro) that used to sit
+// beside the founder photo was taken out on request; it will be placed elsewhere later.
 
 /* eslint-disable @next/next/no-img-element */
 export default function RealWork() {
   const root = useRef<HTMLElement>(null);
+  const video = useRef<HTMLVideoElement>(null);
   const near = useNearViewport(root);
 
+  // The film loads only once the section is close, and plays only while it is on screen (muted, looping).
   useGSAP(() => {
-    if (!near) return;
-    if (prefersReducedMotion()) return;
+    const v = video.current;
+    if (!near || !v) return;
+    if (prefersReducedMotion()) { v.controls = true; v.preload = 'metadata'; v.load(); return; } // poster + controls, no autoplay
+    v.preload = 'auto';
+    v.load();
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) v.play().catch(() => { }); else v.pause(); }, { threshold: .15 });
+    io.observe(v);
+    return () => { io.disconnect(); v.pause(); };
+  }, { scope: root, dependencies: [near] });
+
+  // Each tile opens from the bottom as it comes into view; the photo or film drifts slightly inside its frame.
+  useGSAP(() => {
+    if (!near || prefersReducedMotion()) return;
     const mm = gsap.matchMedia();
     mm.add('(min-width: 0px)', () => {
-      gsap.utils.toArray<HTMLElement>('.rw-frame').forEach((f) => {
+      gsap.utils.toArray<HTMLElement>('.rw-frame').forEach((f, i) => {
         gsap.fromTo(f, { clipPath: 'inset(100% 0% 0% 0% round 18px)' }, {
-          clipPath: 'inset(0% 0% 0% 0% round 18px)', duration: 1.4, ease: 'expo.out',
+          clipPath: 'inset(0% 0% 0% 0% round 18px)', duration: 1.3, ease: 'expo.out', delay: (i % 3) * .08,
           scrollTrigger: { trigger: f, start: 'top 90%', once: true },
         });
-        const img = f.querySelector('img');
-        if (img) gsap.fromTo(img, { yPercent: -6 }, { yPercent: 6, ease: 'none', scrollTrigger: { trigger: f, start: 'top bottom', end: 'bottom top', scrub: true } });
+        const media = f.querySelector('img, video');
+        if (media) gsap.fromTo(media, { yPercent: -5 }, { yPercent: 5, ease: 'none', scrollTrigger: { trigger: f, start: 'top bottom', end: 'bottom top', scrub: true } });
       });
     });
     return () => mm.revert();
@@ -32,30 +45,23 @@ export default function RealWork() {
 
   return (
     <section id="real-work" className="rw gut" ref={root} aria-labelledby="rw-title">
-      <div className="rw-in">
-        <div className="rw-head">
-          <div>
-            <p className="eyebrow rv">Real work</p>
-            <h2 id="rw-title" className="rv">On site, with the people who build it</h2>
+      <h2 id="rw-title" className="rw-title rv">Real work</h2>
+      <div className="rw-grid">
+        <figure className="rw-item rw-film">
+          <div className="rw-frame">
+            <video ref={video} src={REAL_WORK_VIDEO.src} poster={REAL_WORK_VIDEO.poster} muted loop playsInline preload="none"
+              aria-label={REAL_WORK_VIDEO.label} />
           </div>
-          <p className="lede rv">From initial 3D modelling to final implementation, we focus on long-lasting structural integrity and refined aesthetics.</p>
-        </div>
-
-        <div className="rw-grid">
-          {REAL_WORK.map((it, i) => (
-            <Fragment key={it.src ?? i}>
-              {i === 2 && <HomeIntro />}
-              <figure className={`rw-item rw-photo-${i + 1}`}>
-                <div className={`rw-frame ${it.shape}${it.src ? '' : ' empty'}`}>
-                  {it.src
-                    ? <img src={it.src} alt={it.alt} loading="lazy" decoding="async" />
-                    : <span className="rw-ph" aria-hidden="true">Photo · {it.kind}</span>}
-                </div>
-                <figcaption><span>{String(i + 1).padStart(2, '0')} · {it.kind}</span>{it.caption}</figcaption>
-              </figure>
-            </Fragment>
-          ))}
-        </div>
+        </figure>
+        {REAL_WORK.map((it, i) => (
+          <figure key={it.src ?? i} className={`rw-item rw-photo rw-photo-${i + 1}`}>
+            <div className={`rw-frame${it.src ? '' : ' empty'}`}>
+              {it.src
+                ? <img src={it.src} alt={it.alt} loading="lazy" decoding="async" style={it.focus ? { objectPosition: it.focus } : undefined} />
+                : <span className="rw-ph" aria-hidden="true">Photo · {it.kind}</span>}
+            </div>
+          </figure>
+        ))}
       </div>
     </section>
   );

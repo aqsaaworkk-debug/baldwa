@@ -1,0 +1,30 @@
+/* ---------- Services page (ServiceCards.tsx): service tabs like the project categories; each service in full on a wide curved card,
+   alternating left and right.
+   Curves: every card is well rounded, its outer top corner sweeps in a much larger curve, and the photo has an arched top. ---------- */
+.sv-lede{margin:clamp(28px,4vw,48px) 0 0}
+.sv-list{list-style:none;margin:clamp(40px,6vw,80px) 0 0;padding:0;display:grid;gap:clamp(28px,4vw,56px)}
+.sv-item{display:flex}
+.sv-right{justify-content:flex-end}
+
+.sv-card{--r:clamp(26px,3vw,40px);--sweep:clamp(90px,13vw,200px);
+  position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(20px,3vw,48px);align-items:center;
+  width:min(92%,1240px);padding:clamp(16px,2vw,24px);border-radius:var(--sweep) var(--r) var(--r) var(--r);
+  background:var(--surface);color:var(--ink);text-decoration:none;will-change:transform,opacity;
+  box-shadow:0 40px 80px -48px rgba(47,65,86,.55)}
+.sv-right .sv-card{border-radius:var(--r) var(--sweep) var(--r) var(--r);grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+.sv-right .sv-media{order:2}
+
+/* Photo with an arched top (elliptical, to suit the wide photo) */
+/* Wide and low (client, 2026-11-21): landscape photo, so the cards are wider than they are tall */
+.sv-media{position:relative;display:block;aspect-ratio:16/10;max-height:340px;width:100%;overflow:hidden;
+  border-radius:50% 50% calc(var(--r) - 8px) calc(var(--r) - 8px) / 42% 42% calc(var(--r) - 8px) calc(var(--r) - 8px);background:var(--fog)}
+.sv-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:scale .9s var(--ease-out)}
+.sv-card:hover .sv-media img{scale:1.05}
+
+.sv-copy{display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding:clamp(4px,1.4vw,18px) clamp(4px,1.6vw,24px)}
+.sv-no{font:600 12px/1.3 var(--f-sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.sv-name{margin:0;font-size:clamp(26px,2.6vw,40px);line-height:1.05;letter-spacing:-.035em;color:var(--ink)}
+.sv-text{margin:0;font-size:clamp(15px,1.1vw,17px);line-height:1.6;color:var(--ink-2);max-width:62ch}
+
+/* Tabs: the same buttons as the project categories (pages.css); the open tab's cards follow below */
+.sv-index .sv-list{margin-top:clamp(32px,4vw,56px)}
