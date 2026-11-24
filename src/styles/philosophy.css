@@ -11,7 +11,7 @@
 .ph-title .w.g.lit{color:var(--gold-deep)}
 .ph-lede{margin:20px auto 0;max-width:min(92%,62ch);font-size:clamp(17px,1.4vw,20px);line-height:1.6;color:var(--mute)}
 
-/* Diary pages: three identical white pages joined by gold binder rings. The side pages start folded over the centre
+/* Diary pages: three identical almond pages on the blue smoke canvas (client, 2026-11-24) joined by gold binder rings. The side pages start folded over the centre
    page and are opened by scroll (GSAP rotates .ph-card around the hinge; see Philosophy.tsx). Without JS all are open.
    Each .ph-card carries half the gap as padding, so its edge is exactly the hinge line. */
 .ph-cards{--ph-gap:22px;position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:clamp(44px,5.5vw,76px) calc(var(--ph-gap) / -2) 0;text-align:left;perspective:1700px}
@@ -19,8 +19,8 @@
 .ph-card.mid{z-index:2}
 .ph-card.side-r{z-index:3}
 .ph-card.side-l{z-index:4}
-.ph-card-in{height:100%;padding:clamp(22px,2.2vw,32px) clamp(22px,2.4vw,36px) clamp(22px,2.2vw,32px);border-radius:30px;background:var(--surface);color:var(--ink);
-  box-shadow:0 34px 60px -34px rgba(47,65,86,.4),0 2px 8px rgba(47,65,86,.05)}
+.ph-card-in{height:100%;padding:clamp(22px,2.2vw,32px) clamp(22px,2.4vw,36px) clamp(22px,2.2vw,32px);border-radius:30px;background:var(--paper);color:var(--ink);
+  box-shadow:0 34px 60px -30px rgba(28,40,54,.55),0 2px 8px rgba(28,40,54,.08)}
 .ph-card h3{margin:0 0 12px;font-size:clamp(22px,2vw,32px);line-height:1.05;color:var(--ink)}
 /* Shorter pages (client, 2026-11-21): compact padding and type, text across the full page width */
 .ph-card p{margin:0;font-size:clamp(14px,1.05vw,16px);line-height:1.55;color:var(--ink)}
@@ -34,6 +34,9 @@
 .ph-link.a1,.ph-link.b1{top:calc(34% - 11px)}
 .ph-link.a2,.ph-link.b2{top:calc(66% - 11px)}
 
+@media (prefers-reduced-motion:reduce){
+  .ph-title .w{transition:none}
+}
 @media (max-width:900px){
   .philo{padding-block:60px 68px}
   /* Pages stack in three equal rows; the hinges and rings become horizontal */
@@ -46,9 +49,6 @@
   .ph-link.b1,.ph-link.b2{top:calc(200% / 3 - var(--ring) / 2)}
   .ph-link.a1,.ph-link.b1{left:calc(26% - 11px)}
   .ph-link.a2,.ph-link.b2{left:calc(74% - 11px)}
-}
-@media (prefers-reduced-motion:reduce){
-  .ph-title .w{transition:none}
 }
 
 /* On the blue smoke canvas (html.tone-light, PageTone.tsx) */
@@ -65,5 +65,5 @@ html.tone-light .ph-lede{color:rgba(242,237,231,.88)}
 .ph-no{display:block;margin-bottom:10px;font:600 13px/1 var(--f-sans);letter-spacing:.2em;color:var(--ink-2);font-variant-numeric:tabular-nums}
 /* Links at the foot of a page: one "View details", or each service by name when a page covers several */
 .ph-links{margin-top:auto;padding-top:16px;display:flex;flex-wrap:wrap;gap:12px 22px}
-.ph-more{align-self:flex-start;font:600 13px/1 var(--f-sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink);text-decoration:none;transition:color .3s}
+.ph-more{align-self:flex-start;font:600 13px/1 var(--f-sans);letter-spacing:.12em;text-transform:uppercase;color:var(--gold-deep);text-decoration:none;transition:color .3s}
 .ph-more:hover{color:var(--fog)}

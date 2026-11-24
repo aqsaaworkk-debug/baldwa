@@ -9,7 +9,9 @@ import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 //   DEEP     the footer (changes as the footer comes in)
 // The colour lives in --page-bg (base.css), so every section and the page behind them change together.
 // Over these tones the text sitting on the canvas turns light: html.tone-light (styles in the section files).
-const ALMOND = '#f2ede7', PHILO = '#aab3b8', SMOKE = '#748795', DEEP = '#1c2836';
+// PHILO was a pale grey-blue (#aab3b8) that sat too close to the sky-grey cards and looked dull (client, 2026-11-24): it is now
+// the blue smoke, with almond pages on it (philosophy.css).
+const ALMOND = '#f2ede7', PHILO = '#748795', SMOKE = '#748795', DEEP = '#1c2836';
 
 export default function PageTone() {
   useGSAP(() => {

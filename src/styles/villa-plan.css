@@ -2,8 +2,7 @@
 /* The 3D model stands directly on the page canvas, centred on a full-width stage; the controls float over it on
    light frosted panels. A faint sky-blue pool under the model grounds it without drawing a box. */
 .plan{color:var(--ink);padding-block:72px 56px}
-.plan-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.8fr);gap:40px;align-items:end}
-.plan-head h2{margin-top:18px}
+.plan-head{display:block} /* section label only (client, 2026-11-24) */
 .plan-app{position:relative;height:clamp(640px,50vw,900px);margin-top:28px;overflow:hidden;
   background:radial-gradient(ellipse 40% 44% at 50% 54%,color-mix(in srgb,var(--sky) 55%,transparent) 0%,color-mix(in srgb,var(--sky) 16%,transparent) 55%,transparent 100%)}
 .plan-view{position:absolute;inset:0}
@@ -81,11 +80,10 @@
 .plan-app::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .8s var(--ease-out);
   background:radial-gradient(ellipse 70% 62% at 50% 50%,#41607b 0%,#2a3b4f 48%,rgba(47,65,86,0) 100%)}
 .plan-night::before,.plan-night .plan-app::before{opacity:1}
-.plan-head :is(h2,.eyebrow,.lede){transition:color .8s}
+.plan-head .eyebrow{transition:color .8s}
 .plan-night{color:#eef3f7}
 .plan-night .plan-app{background:transparent}
-.plan-night .plan-head h2{color:#fff}
-.plan-night .plan-head :is(.eyebrow,.lede){color:var(--night-mute)}
+.plan-night .plan-head .eyebrow{color:color-mix(in srgb,var(--night-mute) 60%,var(--paper))}
 .panel,.plan-hint,.zoom button,.sp-open{transition:background-color .6s,color .6s}
 .plan-night .panel{background:rgba(38,54,74,.84);color:#eef3f7;box-shadow:0 24px 50px -28px rgba(0,0,0,.6),0 1px 0 rgba(255,255,255,.06) inset}
 .plan-night :is(.pl-title,.pl-brand span,.sp-sub,.sp-foot,.plan-hint){color:var(--night-mute)}

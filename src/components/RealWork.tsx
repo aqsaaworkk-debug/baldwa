@@ -4,7 +4,7 @@ import { gsap, useGSAP } from '@/lib/gsap';
 import { prefersReducedMotion, useNearViewport } from '@/lib/dom';
 import { REAL_WORK, REAL_WORK_VIDEO } from '@/data/realwork';
 
-// Real work (client, 2026-11-23): a "Real work" heading, then the site film and the site photos together in one compact grid.
+// Real work (client, 2026-11-23; full width 2026-11-24): an eyebrow and "Real work" heading styled like the other sections, then the site film and the site photos together in one compact grid.
 // The film is the large tile; the photos sit beside and under it. The studio introduction (HomeIntro) that used to sit
 // beside the founder photo was taken out on request; it will be placed elsewhere later.
 
@@ -45,7 +45,11 @@ export default function RealWork() {
 
   return (
     <section id="real-work" className="rw gut" ref={root} aria-labelledby="rw-title">
-      <h2 id="rw-title" className="rw-title rv">Real work</h2>
+      {/* Faded line sketch (client, 2026-11-24) filling the gap between Process and this section; it sits behind everything */}
+      <img className="rw-sketch" src="/images/process-to-site-sketch.webp" alt="" aria-hidden="true" width={1737} height={441} loading="lazy" decoding="async" />
+      <div className="rw-head rv">
+        <h2 className="eyebrow sec-label" id="rw-title">On site</h2>
+      </div>
       <div className="rw-grid">
         <figure className="rw-item rw-film">
           <div className="rw-frame">

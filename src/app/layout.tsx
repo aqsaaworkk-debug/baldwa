@@ -22,6 +22,7 @@ import '@/styles/contact.css';
 import '@/styles/footer.css';
 import '@/styles/pages.css';
 import '@/styles/services.css';
+import '@/styles/about.css';
 import '@/styles/responsive.css';
 
 // Defaults are the homepage's SEO title and description (SEO brief); inner pages set their own.

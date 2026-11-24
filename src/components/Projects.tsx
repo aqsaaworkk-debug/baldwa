@@ -2,7 +2,6 @@
 import { useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap';
 import { projects } from '@/data/projects';
-import { HOME } from '@/data/site';
 import { useProjectImages } from './ProjectImages';
 
 // Featured projects (client, 2026-11-20, after the Klickpin "garden wedding" GIF): a row of tall rounded photo panels on a
@@ -158,8 +157,7 @@ export default function Projects() {
       <div className="pj-track" ref={track} style={{ ['--pj-n' as string]: total }}>
         <div className="pj-pin">
           <div className="pj-head">
-            <p className="eyebrow">Featured projects</p>
-            <h2 id="pj-title">{HOME.thoughtful.h2}</h2>
+            <h2 className="eyebrow sec-label" id="pj-title">Featured projects</h2>
           </div>
           <div className="pj-row" ref={row}>
             {projects.map((q, i) => (

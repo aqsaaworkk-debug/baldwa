@@ -59,6 +59,9 @@ button{font-family:inherit}
 .eyebrow{font:600 12px/1.4 var(--f-body);letter-spacing:.28em;text-transform:uppercase;margin:0;color:var(--mute)}
 .eyebrow.on-dark{color:var(--night-mute)}
 .eyebrow.gold{color:var(--gold)}
+/* Section labels that stand alone as a section's heading (Featured projects, Interactive layout, Process, On site;
+   client, 2026-11-24): centred, a little larger, and a clearer (not darker) navy than the teal eyebrow */
+.eyebrow.sec-label{display:block;text-align:center;font-size:18px;color:var(--ink-2)}
 h1,h2,h3{font-family:var(--f-sans);font-weight:500;margin:0;text-wrap:balance;letter-spacing:-.025em}
 h2{font-size:clamp(42px,5.6vw,88px);line-height:1}
 h2 em{font-style:normal;font-weight:300;color:inherit}

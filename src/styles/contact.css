@@ -10,7 +10,6 @@
 .contact-head .eyebrow{color:var(--gold-deep)}
 .contact-head h2{margin-top:16px;max-width:12ch;font-size:clamp(36px,4.4vw,66px);line-height:1.05}
 .contact-head h2 em{color:var(--gold-deep)}
-.contact-head .lede{margin-top:20px;font-size:18px}
 
 /* Form panel */
 .enq{display:grid;grid-template-columns:1fr 1fr;gap:26px 28px;max-width:600px;justify-self:end;width:100%;
@@ -48,11 +47,10 @@
 .form-note.err{color:#a3270f}
 
 /* On the blue smoke canvas (html.tone-light, PageTone.tsx): light text, light hairlines */
-.contact-head :is(.eyebrow,h2,h2 em,.lede),.fld label,.fld-l,.fld i,.fld input,.fld textarea,.chips label,.form-note{transition:color .6s,border-color .6s,background-color .25s}
+.contact-head :is(.eyebrow,h2,h2 em),.fld label,.fld-l,.fld i,.fld input,.fld textarea,.chips label,.form-note{transition:color .6s,border-color .6s,background-color .25s}
 html.tone-light .contact-head .eyebrow{color:var(--paper)}
 html.tone-light .contact-head h2{color:#fff}
 html.tone-light .contact-head h2 em,html.tone-light .fld i{color:var(--gold)}
-html.tone-light .contact-head .lede{color:rgba(242,237,231,.88)}
 html.tone-light :is(.fld label,.fld-l){color:rgba(242,237,231,.82)}
 html.tone-light :is(.fld input,.fld textarea){color:#fff;border-bottom-color:rgba(242,237,231,.4)}
 html.tone-light :is(.fld input,.fld textarea):focus{border-bottom-color:#fff}
@@ -69,7 +67,6 @@ html.tone-light .form-note.err{color:#ffd0c2}
 }
 @media (max-width:560px){
   .enq{grid-template-columns:1fr}
-  .contact-head .lede{font-size:17px}
 }
 @media (prefers-reduced-motion:reduce){
   .fld input,.fld textarea,.chips label,.btn-pop,.btn-pop svg{transition:none}

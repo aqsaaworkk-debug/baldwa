@@ -7,12 +7,17 @@
 .why-pin{position:relative;overflow:hidden;min-height:100vh;min-height:100svh}
 .why-live .why-track{height:calc(var(--n,6) * 85vh + 200vh)}
 .why-live .why-pin{position:sticky;top:0;height:100vh;height:100svh}
+/* On site reveals the film (client, 2026-11-24, after "Recording 2026-11-24 141513.mp4"): Why Baldwa starts one screen early,
+   underneath the last screen of On site, with its film already pinned; On site scrolls up and away to uncover it, so the film
+   reads as static. z-index -1 puts it under On site (and under nothing else: the page colour is painted on the canvas).
+   The track is one screen longer and Why.tsx starts the points one screen later (--why-lead), so they wait until uncovered. */
+.rw + .why.why-live{--why-lead:1;z-index:-1;margin-top:-100vh;margin-top:-100svh}
+.rw + .why.why-live .why-track{height:calc(var(--n,6) * 85vh + 300vh)}
+/* On site covers the film with the page colour over its last screen only (the sketch at its top stays clear) */
+.rw:has(+ .why.why-live){background:linear-gradient(0deg,var(--page-bg) 0,var(--page-bg) 100vh,transparent 100vh)}
 
-.why-video,.why-shade{position:absolute;inset:0;width:100%;height:100%}
+.why-video{position:absolute;inset:0;width:100%;height:100%}
 .why-video{object-fit:cover;display:block;background:var(--night)}
-/* Light overlay: both side edges are darkened, behind the heading (left) and the points (right), so the film stays the focus */
-.why-shade{pointer-events:none;
-  background:linear-gradient(90deg,rgba(47,65,86,.72) 0%,rgba(47,65,86,.38) 22%,rgba(47,65,86,0) 42%,rgba(47,65,86,0) 58%,rgba(47,65,86,.4) 78%,rgba(47,65,86,.75) 100%),rgba(47,65,86,.08)}
 
 /* Heading pinned to the left, points to the right */
 .why-in{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:flex-start;gap:40px;
@@ -43,7 +48,6 @@
 .why-live .why-points li.is-on::before{background:var(--white);border-color:var(--white)}
 
 @media (max-width:900px){
-  .why-shade{background:linear-gradient(180deg,rgba(47,65,86,.74) 0%,rgba(47,65,86,.5) 34%,rgba(47,65,86,.06) 62%,rgba(47,65,86,0) 100%)}
   /* narrow screens: heading above, points below it */
   .why-in{flex-direction:column;justify-content:flex-start;gap:20px}
   .why-top{width:100%}

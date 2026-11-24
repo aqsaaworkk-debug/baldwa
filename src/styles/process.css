@@ -1,7 +1,6 @@
 /* ---------- Process: scroll-drawn route ---------- */
 .process{overflow-x:clip;--pr-road:var(--ink);--pr-band:clamp(120px,22vh,230px);position:relative;padding-block:72px 32px}
 
-.process .pr-head h2{margin-top:18px;max-width:16ch}
 .process .pr-track{position:relative;margin-top:20px}
 .process .pr-pin{display:flex;align-items:center}
 .process .pr-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:center}

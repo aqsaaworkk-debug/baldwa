@@ -3,6 +3,23 @@
 .brand{display:block;line-height:0;text-decoration:none}
 .brand svg{height:50px;width:auto;display:block}
 html.brand-wait .brand{visibility:hidden}
+/* Over the footer the header steps aside (Header.tsx toggles .top--away) */
+.top{transition:opacity .4s var(--ease),visibility .4s}
+.top.top--away{opacity:0;visibility:hidden;pointer-events:none}
+/* Inner pages: the page links in the header instead of the menu button (homepage keeps the menu) */
+.top-nav{display:none}
+@media (min-width:701px){
+  .top--inline .top-nav{display:flex;align-items:center;gap:clamp(20px,2.6vw,40px)}
+  .top--inline .burger{display:none}
+}
+.top-nav a{position:relative;padding:8px 0;font:600 13px/1 var(--f-sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink);text-decoration:none;transition:color .3s}
+.top-nav a:hover,.top-nav a:focus-visible{color:var(--fog)}
+.top-nav a[aria-current="page"]{color:var(--fog)}
+.top--light .top-nav a{color:var(--paper)}
+.top--light .top-nav a:hover,.top--light .top-nav a:focus-visible{color:var(--surface)}
+.top--light .top-nav a[aria-current="page"]{color:var(--gold)}
+.top--light .burger span{background:var(--paper)}
+.top-nav a[aria-current="page"]::after{content:"";position:absolute;left:0;right:.14em;bottom:0;height:1px;background:currentColor}
 .burger{width:52px;height:52px;display:grid;place-content:center;gap:7px;background:none;border:1px solid transparent;cursor:pointer;border-radius:50%;transition:border-color .3s}
 .burger:hover{border-color:var(--fog)}
 .burger:hover span{background:var(--fog)}

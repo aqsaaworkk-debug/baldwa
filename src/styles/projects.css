@@ -5,7 +5,7 @@
   background:linear-gradient(180deg,var(--paper) 0,var(--cream) 90px,var(--cream) calc(100% - 90px),var(--paper) 100%)}
 .work{padding-block:72px 56px;overflow-x:clip}
 
-.pj-head h2{margin-top:12px;font-size:clamp(32px,4vw,60px)}
+/* Section label only, no big heading (client, 2026-11-24) */
 
 /* Panels: the photo fills the panel; at the foot a round number badge, and the name once the panel is open */
 .pj-row{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-top:32px}
@@ -31,9 +31,7 @@
 .work.pj-acc .pj-panel{aspect-ratio:auto;will-change:width,height}
 .work.pj-acc .pj-panel.is-open{cursor:default}
 .work.pj-acc-x .pj-panel{height:100%;width:64px}
-.work.pj-acc-x .pj-head h2{font-size:clamp(30px,3.2vw,52px)}
 .work.pj-acc-y .pj-row{flex-direction:column;gap:8px}
 .work.pj-acc-y .pj-panel{width:100%;height:46px;border-radius:23px}
 .work.pj-acc-y .pj-foot{left:8px;bottom:8px}
 .work.pj-acc-y .pj-badge{width:30px;height:30px}
-.work.pj-acc-y .pj-head h2{font-size:clamp(28px,8vw,40px)}

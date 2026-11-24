@@ -51,10 +51,13 @@ export default function Why() {
       if (li) gsap.to(list.current, { y: -li.offsetTop, duration: 1, ease: 'power3.out', overwrite: true });
     };
     show(0);
+    // --why-lead (screens, CSS): the section starts this many screens early, under On site, which scrolls away to reveal the
+    // pinned film (why.css). The points wait until it is uncovered. 0 when nothing covers it.
+    const lead = () => (parseFloat(getComputedStyle(sec).getPropertyValue('--why-lead')) || 0) * window.innerHeight;
     const st = ScrollTrigger.create({
       onRefresh: () => { const li = items.current[current]; if (li) gsap.set(list.current, { y: -li.offsetTop }); },
       // the points use the track minus its last screen; during that screen Brand Philosophy slides over the pinned film
-      trigger: track.current, start: 'top top', end: () => `+=${track.current!.offsetHeight - 2 * window.innerHeight}`, invalidateOnRefresh: true,
+      trigger: track.current, start: () => `top+=${lead()} top`, end: () => `+=${track.current!.offsetHeight - 2 * window.innerHeight - lead()}`, invalidateOnRefresh: true,
       onUpdate: ({ progress }) => {
         show(Math.min(POINTS.length - 1, Math.floor(progress * POINTS.length)));
       },
@@ -91,7 +94,6 @@ export default function Why() {
       <div className="why-track" ref={track} style={{ ['--n' as string]: POINTS.length }}>
         <div className="why-pin" ref={pin}>
           <video className="why-video" ref={video} src={VIDEO} muted loop playsInline preload="none" aria-hidden="true" tabIndex={-1} />
-          <div className="why-shade" aria-hidden="true" />
 
           {/* Heading on the left, the scrolling points on the right */}
           <div className="why-in">

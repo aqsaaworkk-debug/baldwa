@@ -18,7 +18,7 @@ const LIGHTS: [PlanLight, string][] = [['evening', 'Evening'], ['day', 'Day']];
 
 export default function VillaPlan() {
   const [view, setViewState] = useState<PlanView>('iso');
-  const [light, setLight] = useState<PlanLight>('day');
+  const [light, setLight] = useState<PlanLight>('evening');
   const [spin, setSpin] = useState(false);
   const [labels, setLabels] = useState(false);
   const [specOpen, setSpecOpen] = useState(false);
@@ -93,11 +93,7 @@ export default function VillaPlan() {
     // Evening light turns the whole section dark (villa-plan.css, .plan-night); Day keeps it on the page canvas.
     <section id="plan" className={`plan${light === 'evening' ? ' plan-night' : ''}`}>
       <div className="gut"><div className="wrap plan-head rv">
-        <div>
-          <p className="eyebrow">Interactive layout</p>
-          <h2>Walk through <em>{villa.name}</em></h2>
-        </div>
-        <p className="lede">Immersive 3D project walkthroughs: turn the model, look at it from above, switch the lights and pick any room, long before construction starts.</p>
+        <h2 className="eyebrow sec-label">Interactive layout</h2>
       </div></div>
       <div>
         <div className="plan-app">

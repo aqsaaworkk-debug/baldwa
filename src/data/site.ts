@@ -53,6 +53,19 @@ export const ABOUT = {
     'Our practice complements creative exploration with severe technical accuracy. Through this balanced approach, we advance environments that seamlessly combine structural functionality, aesthetic modification and practical implementation.',
     'We function on the value that every instruction warrants a custom-made strategy, wherein architectural design, visualisation and engineering disciplines attention to accomplishes measurable and meaningful results.',
   ],
+  // About page layout (client, 2026-11-24, after a StoryMuse "About us" reference). The statement is the brief's own sentence
+  // from HOME.thoughtful.text; the parts marked `em` are set in the light weight.
+  statement: [
+    { text: 'Our aim is to engineer spaces which operate with ' }, { text: 'efficiency', em: true }, { text: ', encourage ' },
+    { text: 'comfort', em: true }, { text: ' and articulate a different architectural vision.' },
+  ] as { text: string; em?: boolean }[],
+  // Founder portrait supplied by the client (2026-11-24). Name is a placeholder until the client gives it.
+  founder: {
+    name: '[Founder name]',
+    role: 'Founder',
+    image: { src: '/images/about/founder.webp', alt: 'Portrait of the founder of Baldwa and Associates in a checked blazer, arms folded, in front of a timber slat wall', width: 853, height: 1280 },
+  },
+  whyImage: { src: '/images/projects/arched-villa-dusk.webp', alt: 'Cream villa at dusk with arched windows, a carved timber door and a columned rotunda lounge, designed by Baldwa and Associates' },
 };
 
 // ---------- Service pages ----------

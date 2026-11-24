@@ -99,7 +99,6 @@ export default function Contact() {
         <div className="contact-head rv">
           <p className="eyebrow">Start a project</p>
           <h2>Bring us a plot and a <em>conversation</em></h2>
-          <p className="lede">Tell us about the site and how you want to live.</p>
         </div>
 
         {/* A numbered spec sheet: underline fields on a light glass panel, no card shadow */}

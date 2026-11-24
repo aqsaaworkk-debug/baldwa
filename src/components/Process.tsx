@@ -267,8 +267,7 @@ export default function Process() {
   return (
     <section id="process" className="process gut" ref={root} aria-labelledby="process-title">
       <div className="wrap pr-head rv">
-        <p className="eyebrow">Process</p>
-        <h2 id="process-title">From an empty plot to the <em>keys</em></h2>
+        <h2 className="eyebrow sec-label" id="process-title">Process</h2>
       </div>
 
       <div className="pr-track" ref={track}>

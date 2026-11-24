@@ -27,7 +27,7 @@
 .faq-item summary:hover .faq-icon::before,.faq-item summary:hover .faq-icon::after{background:var(--fog)}
 
 /* ---------- Inner pages (PageShell.tsx) ---------- */
-.pg{position:relative;min-height:100vh;padding-top:calc(var(--head) + 20px);background:var(--paper);overflow:clip}
+.pg{position:relative;min-height:100vh;padding-top:calc(var(--head) + 40px);background:var(--paper);overflow:clip}
 .pg-crumbs{padding-block:12px 20px}
 .pg-crumbs ol{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none;font:600 11px/1.4 var(--f-sans);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
 .pg-crumbs li+li::before{content:"/";margin-right:6px;opacity:.6}
