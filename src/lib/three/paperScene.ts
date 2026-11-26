@@ -8,7 +8,7 @@ import { paperState, range, smooth, stageBounds } from '@/lib/paper/timeline';
 import { createPaperWriter, type PaperArt } from '@/lib/paper/texture';
 import { createPaperMaterial, createShadowTexture } from './paperRoll';
 
-const FOV = 30, CAM_Z = 10;
+const CAM_Z = 10;
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 type Pose = { x: number; y: number; z: number; rx: number; ry: number; rz: number; s: number };
 
@@ -17,6 +17,7 @@ export function createPaperScene(canvas: HTMLCanvasElement, cfg: PaperConfig, ar
   renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   const scene = new THREE.Scene();
+  const FOV = cfg.fov; // matched to the film's desk shot (config.ts)
   const camera = new THREE.PerspectiveCamera(FOV, 1, .1, 60);
   camera.position.set(0, 0, CAM_Z);
 
@@ -159,7 +160,7 @@ export function createPaperScene(canvas: HTMLCanvasElement, cfg: PaperConfig, ar
   function resize() {
     const r = canvas.getBoundingClientRect();
     vw = Math.max(1, r.width); vh = Math.max(1, r.height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); // capped at 2
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5)); // capped at 1.5 (2026-11-24, smoother scrolling; no visible loss)
     renderer.setSize(vw, vh, false);
     camera.aspect = vw / vh;
     camera.updateProjectionMatrix();

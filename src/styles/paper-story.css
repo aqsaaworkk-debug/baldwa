@@ -15,11 +15,11 @@ html.js .paper-story:not(.ps-still) .ps-stage{position:sticky;top:0;visibility:h
 
 /* Projects sits behind the stage's last screen (margin -100vh, z 1), so it is at the top of the screen, pinned, the moment the
    hero is released; the hero then scrolls away off it with the rolling paper while its heading and panels slide in from the
-   right. --pj-lead (read by Projects.tsx) starts its accordion one screen later, and the track is one screen taller to
-   match, so the accordion itself is unchanged. Its top edge is plain cream here (same as the stage's cream panel). */
+   right. --pj-lead (read by Projects.tsx) starts its block grid one screen later, and the track is one screen taller to
+   match, so the grid itself is unchanged. Its top edge is plain cream here (same as the stage's cream panel). */
 html.js .paper-story:not(.ps-still) + .work{position:relative;z-index:1;margin-top:-100vh;margin-top:-100svh;--pj-lead:1;background:linear-gradient(180deg,var(--cream) 0,var(--cream) calc(100% - 90px),var(--paper) 100%)}
 
-html.js .paper-story:not(.ps-still) + .work.pj-acc .pj-track{height:calc((var(--pj-n,6) * 60 + 70) * 1vh + 100vh);height:calc((var(--pj-n,6) * 60 + 70) * 1svh + 100svh)}
+html.js .paper-story:not(.ps-still) + .work.pj-pinned .pj-track{height:400vh;height:400svh}
 
 /* The hero photo: the film's last frame, covering the screen exactly like the video (object-fit: cover, centred), plus a
    pre-blurred copy and a dim layer that GSAP fades in while the paper is up, and the cream panel right under it. */

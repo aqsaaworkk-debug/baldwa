@@ -8,6 +8,14 @@ import { REAL_WORK, REAL_WORK_VIDEO } from '@/data/realwork';
 // The film is the large tile; the photos sit beside and under it. The studio introduction (HomeIntro) that used to sit
 // beside the founder photo was taken out on request; it will be placed elsewhere later.
 
+// Photos after the first two run three to a row; a short last row is widened so the grid ends square
+// (one photo left: full width; two left: half each). On small screens (two columns) an odd last photo goes full width.
+const lastRow = (i: number) => {
+  const n = REAL_WORK.length, rest = n - 2, short = rest % 3, odd = n % 2 === 1 && i === n - 1 ? ' rw-odd-last' : '';
+  if (i < 2 || short === 0 || i < n - short) return odd;
+  return (short === 1 ? ' rw-row-full' : ' rw-row-half') + odd;
+};
+
 /* eslint-disable @next/next/no-img-element */
 export default function RealWork() {
   const root = useRef<HTMLElement>(null);
@@ -58,7 +66,7 @@ export default function RealWork() {
           </div>
         </figure>
         {REAL_WORK.map((it, i) => (
-          <figure key={it.src ?? i} className={`rw-item rw-photo rw-photo-${i + 1}`}>
+          <figure key={it.src ?? i} className={`rw-item rw-photo rw-photo-${i + 1}${lastRow(i)}`}>
             <div className={`rw-frame${it.src ? '' : ' empty'}`}>
               {it.src
                 ? <img src={it.src} alt={it.alt} loading="lazy" decoding="async" style={it.focus ? { objectPosition: it.focus } : undefined} />

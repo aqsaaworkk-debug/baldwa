@@ -6,8 +6,9 @@ import { SERVICES, SERVICE_GROUPS } from '@/data/site';
 
 // Services page (client, 2026-11-21): all services on one page, sorted into the three groups like the project categories on
 // the Projects page (same tab buttons): 1 PMC and Construction Management, 2 Architecture, Interior Design and Consultancy,
-// 3 BIM Engineering. The open tab shows each of its services in full on a wide curved card. The cards swing in from
-// alternating sides (first from the left, then the right) as they come into view and whenever the tab changes.
+// 3 BIM Engineering. The open tab shows each of its services plainly across the full width (client, 2026-11-26: the curved
+// swinging cards were removed): number, title and text on the left, its pictures on the right (`pics` takes more than one;
+// the client will add more per service). Rows rise in gently as they come into view and whenever the tab changes.
 // The tab follows the address (#pmc, #design, #bim), so links from elsewhere open the right one.
 
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -41,13 +42,8 @@ export default function ServiceCards() {
 
   useGSAP(() => {
     if (prefersReducedMotion()) return;
-    gsap.utils.toArray<HTMLElement>('.sv-card').forEach((card, i) => {
-      const fromLeft = i % 2 === 0;
-      // Swings in on a curve: slides from its side while turning up from the far bottom corner.
-      gsap.fromTo(card,
-        { xPercent: fromLeft ? -60 : 60, rotation: fromLeft ? -6 : 6, opacity: 0, transformOrigin: fromLeft ? '0% 100%' : '100% 100%' },
-        { xPercent: 0, rotation: 0, opacity: 1, duration: 1, ease: 'power3.out', delay: i * 0.12,
-          scrollTrigger: { trigger: card, start: 'top 92%', toggleActions: 'play none none reverse' } });
+    gsap.utils.toArray<HTMLElement>('.sv-row').forEach((row) => {
+      gsap.from(row, { y: 28, opacity: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: row, start: 'top 90%', once: true } });
     });
   }, { scope: root, dependencies: [active], revertOnUpdate: true });
 
@@ -69,18 +65,21 @@ export default function ServiceCards() {
       </div>
 
       <ol className="sv-list" key={active} aria-label={group.title}>
-        {items.map((s, i) => (
-          <li key={s.slug} className={`sv-item ${i % 2 === 0 ? 'sv-left' : 'sv-right'}`}>
-            <article className="sv-card">
-              <span className="sv-media"><img src={s.image.src} alt={s.image.alt} /></span>
+        {items.map((s, i) => {
+          const pics = [s.image, ...(s.more ?? [])];
+          return (
+            <li key={s.slug} className="sv-row">
               <div className="sv-copy">
                 <span className="sv-no">{pad(i + 1)} · {s.nav}</span>
                 <h3 className="sv-name">{s.h1}</h3>
                 <p className="sv-text">{s.body}</p>
               </div>
-            </article>
-          </li>
-        ))}
+              <div className={`sv-pics sv-pics-${Math.min(pics.length, 3)}`}>
+                {pics.map((im) => <span key={im.src} className="sv-pic"><img src={im.src} alt={im.alt} loading="lazy" decoding="async" /></span>)}
+              </div>
+            </li>
+          );
+        })}
       </ol>
     </section>
   );

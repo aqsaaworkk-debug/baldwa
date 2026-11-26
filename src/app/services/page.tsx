@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import PageShell from '@/components/PageShell';
+import PageHero from '@/components/PageHero';
+import PageMotion from '@/components/PageMotion';
 import ServiceCards from '@/components/ServiceCards';
-import { BRAND, HOME, SERVICES, SERVICES_PAGE } from '@/data/site';
+import { BRAND, HOME, SERVICES, SERVICES_PAGE, SERVICE_GROUPS, groupPath } from '@/data/site';
 
 export const metadata: Metadata = {
   title: SERVICES_PAGE.title,
@@ -17,19 +19,24 @@ const LD = SERVICES.map((s) => ({
   areaServed: BRAND.city,
 }));
 
+// Services, in the About page's layout (client, 2026-11-24): blue hero with three photos in one even row, one per service group
+// (where About has the founder's portrait), each opening its tab below; then the service tabs with each service shown plainly
+// across the full width; then the statement, aligned left (client, 2026-11-26; the Start a project band was removed).
 export default function ServicesPage() {
   return (
-    <PageShell crumbs={[{ label: SERVICES_PAGE.nav }]} current={SERVICES_PAGE.path}>
+    <PageShell crumbs={[{ label: SERVICES_PAGE.nav }]} current={SERVICES_PAGE.path} showCta={false}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(LD) }} />
-      <article className="pg-art pg-services gut">
-        <div className="wrap">
-          <header className="pg-head">
-            <p className="eyebrow">Baldwa &amp; Associates</p>
-            <h1>{SERVICES_PAGE.h1}</h1>
-          </header>
-          <p className="lede sv-lede">{HOME.thoughtful.support}</p>
+      <PageMotion />
+      <article className="pg-v2 pg-services">
+        <PageHero display={SERVICES_PAGE.nav} h1={SERVICES_PAGE.h1} tone="smoke"
+          media={{ kind: 'trio', items: SERVICE_GROUPS.map((g) => ({ image: g.image, label: g.title, href: groupPath(g) })) }} />
+        <section className="ab-body ab-body--up gut">
           <ServiceCards />
-        </div>
+        </section>
+        <section className="ab-story ab-story--left gut" aria-labelledby="sv-statement">
+          <p className="ab-kicker ab-rv">{HOME.thoughtful.h2}</p>
+          <h2 className="ab-statement ab-statement--sm ab-rv" id="sv-statement">{HOME.thoughtful.support}</h2>
+        </section>
       </article>
     </PageShell>
   );

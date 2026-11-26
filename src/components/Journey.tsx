@@ -241,7 +241,7 @@ export default function Journey() {
         </>}
         {/* eslint-disable @next/next/no-img-element */}
         {mode === 'still' && (HERO_FILM && SINGLE
-          ? <img className="journey-still" src={HERO_FILM.poster} alt="Sunlit clouds high above green hills, seen from the edge of the sky" />
+          ? <img className="journey-still" src={HERO_FILM.poster} alt="Sunlit clouds parting over a lake and hills at dawn" />
           : USE_FILM
           ? <img className="journey-still" src={`${IMG}/plot.webp`} alt="An empty plot beside a road, with houses and trees around it" />
           : <img className="journey-still" src={`${IMG}/site.webp`} alt="A wide, empty plot beside a road in a green neighbourhood, seen from above" />)}
@@ -262,7 +262,7 @@ export default function Journey() {
           {/* hero title (the page's H1 from the SEO brief): large type on the left, small spaced line under it */}
           <div className="film-title">
             <h1 className="film-title-in">{HOME.h1}</h1>
-            <p className="film-title-in">{BRAND.name} · Architecture · BIM engineering · Interior design</p>
+            <p className="film-title-in">{BRAND.name} · Architecture · BIM engineering · PMC</p>
           </div>
         </>}
         <p className="journey-cue" aria-hidden="true">Scroll to begin</p>

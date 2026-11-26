@@ -6,6 +6,11 @@
 .contact-in{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(32px,6vw,96px);align-items:center}
 /* Placeholder text style, also used by Projects.tsx */
 .ph{color:var(--gold-deep);font-size:.95em}
+/* Card variant (Contact page hero): the form alone, on solid almond so it reads over both the blue band and the page */
+.contact--card{padding:0;overflow:visible}
+.contact--card .contact-in{display:block}
+.contact--card .enq{max-width:none;justify-self:auto;border:0;background:var(--paper);-webkit-backdrop-filter:none;backdrop-filter:none;
+  box-shadow:0 40px 80px -40px rgba(28,40,54,.55)}
 
 .contact-head .eyebrow{color:var(--gold-deep)}
 .contact-head h2{margin-top:16px;max-width:12ch;font-size:clamp(36px,4.4vw,66px);line-height:1.05}

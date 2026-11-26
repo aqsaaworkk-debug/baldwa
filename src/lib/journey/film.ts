@@ -13,12 +13,14 @@ import { clamp, lerp, range } from './stages';
 // The client's full hero film: one clip, scrubbed by scroll across the whole opening (title over its first frames).
 // Put the file in public/videos and set it here, e.g. { src: '/videos/hero.mp4', screens: 4 } (screens = scroll length).
 // While it is null, the two-clip opening below is used. Encode it with frequent keyframes so scrubbing stays smooth.
-// Client hero film (client, 2026-11-23: "baldwa hero.webm", 23.6 s, 4K: clouds, the land, the model on a desk), re-encoded
-// for scrubbing: 1280 px, 30 fps, a keyframe every 10 frames, no audio, faststart, with the generator marks in the
-// bottom-right corner removed. poster = its first frame. (The earlier film was "BALDWA VIDEO (1).mp4".)
-// Full length (23.58 s, not trimmed). The generator marks in the bottom-right corner ("Veo" label, and the sparkle that
-// appears in the last half-second) are filled in with ffmpeg removelogo.
-export const HERO_FILM = { src: '/videos/hero.mp4', poster: '/images/hero-poster.jpg', screens: 9 } as { src: string; poster: string; screens: number } | null;
+// Client hero film (client, 2026-11-26: "BALDWA VIDEO (1).mp4" again, replacing "baldwa hero.webm"; 42.2 s, 1080p60: clouds part
+// over the lake, the island plot, the wireframe rises, the engineer walks up the path as it is built, the finished resort from
+// the air, then the model and a sketched sheet on a desk). Re-encoded for scrubbing: 1280 px, 30 fps, a keyframe every 10
+// frames, no audio, faststart, ~2.6 Mbit/s. The name "NISHIT" is printed on the back of the engineer's hard hat (17.3-23 s and
+// 24.1-26 s): the hat was tracked frame by frame and the name burned into the video (no text overlay on the page, so it cannot
+// slip). Full length, not trimmed. poster = its first frame. screens: scroll length; fewer screens play it faster (15 at first,
+// 11 since 2026-11-26: "a little faster, less hero scroll"; it was 9 for the 23.6 s film).
+export const HERO_FILM = { src: '/videos/hero.mp4', poster: '/images/hero-poster.jpg', screens: 11 } as { src: string; poster: string; screens: number } | null;
 
 // Cloud opening of the hero film (client, 2026-11-23: "cloud dispersal on scroll like before", i.e. like the earlier film,
 // which opened fully clouded and parted as you scrolled). Photo clouds cover the first frame and part on scroll while the film
@@ -77,6 +79,6 @@ export function clipTimes(p: number) {
 
 // The first chapter is the hero title itself (no card in film mode, see journey.css).
 export const FILM_CHAPTERS = [
-  { id: 'sky', label: 'Sky', kicker: 'Baldwa & Associates', title: 'Architecture and interior design solutions in Udaipur', detail: 'Architecture, BIM engineering and interior design.', show: [0, filmAt('part', .25)], goto: 0 },
+  { id: 'sky', label: 'Sky', kicker: 'Baldwa & Associates', title: 'Architecture and interior design solutions', detail: 'Architecture, BIM engineering and interior design.', show: [0, filmAt('part', .25)], goto: 0 },
   { id: 'site', label: 'Site', kicker: 'Baldwa & Associates · Udaipur', title: 'Architecture, BIM engineering and interior design', detail: 'A cross-functional architecture and design organisation based in Udaipur, Rajasthan.', show: [filmAt('site', .12), filmAt('site', .3)], goto: filmAt('site', .1) },
 ] as const;

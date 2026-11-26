@@ -54,7 +54,7 @@ export default function PaperStory() {
     const float = $('.ps-float')[0], sheet = $('.ps-sheet')[0], texts = $('.ps-pt-text'), sticker = $('.ps-sticker')[0];
     // the Projects section right after this one, and the parts of it that slide in from the right
     const work = sec.nextElementSibling instanceof HTMLElement && sec.nextElementSibling.matches('.work') ? sec.nextElementSibling : null;
-    const slide = work ? gsap.utils.toArray<HTMLElement>(work.querySelectorAll('.pj-head, .pj-row')) : [];
+    const slide = work ? gsap.utils.toArray<HTMLElement>(work.querySelectorAll('.pj-head, .pj-mosaic')) : [];
     const total = totalScreens(PAPER);
     let scene: PaperScene | null = null, disposed = false, p = 0;
     let trigger: ScrollTrigger | null = null;
@@ -82,7 +82,7 @@ export default function PaperStory() {
       gsap.set(blur, { opacity: st.backdrop * PAPER.backdrop.blur });
       gsap.set(dim, { opacity: st.backdrop * PAPER.backdrop.dim });
       if (work) {
-        // Projects' heading and panels slide in from the right (they start fully off screen)
+        // Projects' label and block grid slide in from the right (they start fully off screen)
         slide.forEach((el) => {
           const t = el.matches('.pj-head') ? st.headingIn : st.projectsIn;
           gsap.set(el, { x: p >= 1 ? 0 : (1 - t) * PAPER.projectsFrom * window.innerWidth });

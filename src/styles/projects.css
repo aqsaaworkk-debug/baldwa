@@ -1,37 +1,131 @@
-/* ---------- Work (featured projects): accordion of tall rounded photo panels on a cream canvas (Projects.tsx).
-   One panel is open wide, the others are narrow pills with a number badge; scrolling opens them left to right.
+/* ---------- Work (featured projects): bento grid of blocks on a cream canvas (Projects.tsx; restored 2026-11-26).
+   Wide screens pin: a photo card fills the grid, shrinks to the centre and fades while the blocks fly in from depth.
    The cream fades in and out of the almond page at the section's edges so the canvas stays seamless. ---------- */
 .work,.journey--live + .work{color:var(--ink);
   background:linear-gradient(180deg,var(--paper) 0,var(--cream) 90px,var(--cream) calc(100% - 90px),var(--paper) 100%)}
 .work{padding-block:72px 56px;overflow-x:clip}
 
 /* Section label only, no big heading (client, 2026-11-24) */
+.pj-stage{position:relative;margin-top:32px}
+.pj-mosaic{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:dense;gap:12px;transform-style:preserve-3d}
 
-/* Panels: the photo fills the panel; at the foot a round number badge, and the name once the panel is open */
-.pj-row{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-top:32px}
-.pj-panel{position:relative;display:block;width:100%;aspect-ratio:16/10;padding:0;margin:0;border:0;border-radius:28px;overflow:hidden;
-  background:var(--surface);color:#fff;text-align:left;font:inherit;cursor:pointer;flex:none}
-.pj-art{position:absolute;inset:0}
-.pj-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.pj-panel::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
-  background:linear-gradient(0deg,rgba(47,65,86,.62) 0%,rgba(47,65,86,0) 38%)}
-.pj-foot{position:absolute;left:15px;right:15px;bottom:15px;z-index:1;display:flex;align-items:center;gap:12px;white-space:nowrap}
-.pj-badge{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--paper);color:var(--ink);
-  font:700 11px/1 var(--f-sans);letter-spacing:.04em;font-variant-numeric:tabular-nums;box-shadow:0 4px 14px rgba(47,65,86,.25)}
-.pj-name{font:500 clamp(17px,1.5vw,24px)/1.1 var(--f-sans);letter-spacing:-.01em;color:#fff;text-shadow:0 1px 12px rgba(47,65,86,.45)}
-.pj-panel:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+/* Blocks */
+.pj-tile{position:relative;aspect-ratio:4/5;transform-style:preserve-3d;will-change:transform,opacity}
+.pj-b,.pj-h,.pj-i{grid-column:1 / -1;aspect-ratio:2.1}
+.pj-b,.pj-h{aspect-ratio:1.5}
+.pj-face{--fg:var(--ink);--sub:var(--ink-2);--bg:var(--surface);
+  position:relative;display:block;width:100%;height:100%;padding:0;margin:0;border:0;border-radius:16px;overflow:hidden;cursor:pointer;
+  background:var(--bg);color:var(--fg);text-align:left;text-decoration:none;font:inherit;container-type:size;isolation:isolate;
+  box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 24px 50px -18px rgba(47,65,86,.32),0 4px 12px rgba(47,65,86,.08)}
+.pj-face:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.pj-tone-night .pj-face{--bg:var(--night-2);--fg:#fff;--sub:var(--night-mute);border:1px solid var(--night-line)}
+.pj-tone-paper .pj-face{--bg:var(--sky)}
+.pj-tone-white .pj-face{--bg:var(--surface)}
+.pj-tone-stone .pj-face{--bg:var(--line)}
+.pj-i .pj-face{--fg:var(--gold)}
 
-/* Accordion (set by Projects.tsx): the section pins; GSAP sets each panel's width (desktop) or height (small screens) */
-.work.pj-acc{padding-block:0}
-.work.pj-acc-x{padding-inline:clamp(16px,3.4vw,56px)}
-.work.pj-acc .pj-track{height:calc((var(--pj-n,6) * 60 + 70) * 1vh);height:calc((var(--pj-n,6) * 60 + 70) * 1svh)}
-.work.pj-acc .pj-pin{position:sticky;top:0;height:100vh;height:100svh;display:flex;flex-direction:column;
+.pj-t-head{position:absolute;left:9cqi;right:9cqi;top:max(8cqi,18px);z-index:2;display:flex;flex-direction:column;gap:max(2.4cqi,8px)}
+.pj-t-title{font:500 clamp(18px,min(11cqi,13cqb),46px)/1.02 var(--f-sans);letter-spacing:-.025em;color:var(--fg)}
+.pj-t-sub{font:500 clamp(9px,min(3.4cqi,4cqb),11px)/1.3 var(--f-sans);letter-spacing:.12em;text-transform:uppercase;color:var(--sub)}
+/* Project blocks: the photo fills the block; number and name sit on a soft navy shade at the foot */
+.pj-t-art{position:absolute;inset:0;z-index:1;background:var(--bg)}
+.pj-t-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+/* a drawing on a white sheet: shown whole, on white */
+.pj-t-contain{background:#fff}
+.pj-t-contain img{object-fit:contain;padding:8%}
+.pj-shade{position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(0deg,rgba(47,65,86,.82) 0%,rgba(47,65,86,.32) 34%,rgba(47,65,86,0) 58%)}
+.pj-photo .pj-t-head{top:auto;bottom:max(7cqi,16px);left:max(7cqi,16px);right:max(7cqi,16px);z-index:5;gap:max(1.4cqi,6px)}
+.pj-photo .pj-t-title{color:#fff;font-size:clamp(17px,min(8cqi,9cqb),34px)}
+.pj-photo .pj-t-sub{color:rgba(255,255,255,.82)}
+.pj-t-plan{position:absolute;right:9cqi;bottom:9cqi;width:min(46cqi,40cqb);height:auto;color:var(--gold)}
+.pj-brand{display:grid;place-items:center;cursor:default}
+.pj-brand svg{width:62%;height:62%}
+
+.pj-open{position:absolute;left:9cqi;bottom:8cqi;z-index:5;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;
+  border:1px solid currentColor;color:var(--fg);opacity:.55;transition:opacity .3s,background-color .3s,color .3s}
+.pj-open svg{width:12px;height:12px}
+.pj-photo .pj-open{left:auto;bottom:auto;top:max(6cqi,14px);right:max(6cqi,14px);color:#fff;opacity:.85}
+.pj-face:hover .pj-open,.pj-face:focus-visible .pj-open{opacity:1}
+.pj-photo:hover .pj-open,.pj-photo:focus-visible .pj-open{background-color:#fff;color:var(--ink)}
+
+/* Stage cards (projectStages.ts, animated in Projects.tsx): the blueprint and render share one frame on the drawings' own
+   paper colour; --wipe (0-1, GSAP) sweeps the render in from the left behind a soft feathered edge. The 3D model sits over
+   the card, hidden until the card turns away; it may grow past the block's edges (no clipping on the tile). */
+.pj-stages{perspective:1400px}
+.pj-st-card{position:absolute;inset:0;border-radius:16px;overflow:hidden;background:var(--paper);
+  box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 24px 50px -18px rgba(47,65,86,.32),0 4px 12px rgba(47,65,86,.08);will-change:transform,opacity}
+.pj-st-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
+/* The drawings have transparent backgrounds, so the blueprint is wiped out by the same edge as the render is wiped in
+   (inverse mask): behind the edge only the render shows, inside the feathered band the two crossfade. */
+.pj-st-card{--wipe:0}
+.pj-st-render{
+  -webkit-mask-image:linear-gradient(90deg,#000 calc(var(--wipe) * 140% - 40%),transparent calc(var(--wipe) * 140%));
+  mask-image:linear-gradient(90deg,#000 calc(var(--wipe) * 140% - 40%),transparent calc(var(--wipe) * 140%))}
+.pj-st-blue{
+  -webkit-mask-image:linear-gradient(90deg,transparent calc(var(--wipe) * 140% - 40%),#000 calc(var(--wipe) * 140%));
+  mask-image:linear-gradient(90deg,transparent calc(var(--wipe) * 140% - 40%),#000 calc(var(--wipe) * 140%))}
+.pj-st-model{position:absolute;inset:0;display:block;width:100%;height:100%;padding:0;margin:0;border:0;background:none;font:inherit;cursor:pointer;
+  opacity:0;visibility:hidden;will-change:transform,opacity}
+.pj-st-model img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 30px 34px rgba(47,65,86,.22))}
+.pj-st-model:focus-visible{outline:2px solid var(--gold);outline-offset:4px;border-radius:16px}
+/* Interactive 3D view (ModelViewer.tsx / ModelTilt in Projects.tsx): a full-screen almond panel */
+.pj-3d{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:16px;border:0;background:transparent;overflow:hidden}
+.pj-3d::backdrop{background:rgba(47,65,86,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.pj-3d-box{position:relative;width:100%;height:100%;border-radius:20px;overflow:hidden;
+  background:radial-gradient(ellipse 60% 55% at 50% 55%,#fbf8f3 0%,var(--paper) 70%)}
+.pj-3d-stage{position:absolute;inset:0;touch-action:none}
+.pj-3d-stage canvas{cursor:grab}
+.pj-3d-stage canvas:active{cursor:grabbing}
+.pj-3d-title{position:absolute;left:28px;top:26px;z-index:2;color:var(--ink-2);pointer-events:none}
+.pj-3d-hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:2;margin:0;font:500 12px/1 var(--f-sans);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);pointer-events:none;white-space:nowrap}
+.pj-3d-wait{font:500 13px/1 var(--f-sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
+.pj-3d-tilt{position:absolute;inset:8% 8% 12%;display:grid;place-items:center}
+.pj-3d-tilt img{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 40px 50px rgba(47,65,86,.25));will-change:transform}
+.pj-3d .pj-close{z-index:3}
+.pj-st-name{position:absolute;left:16px;bottom:12px;z-index:2;font:500 clamp(13px,1vw,16px)/1.2 var(--f-sans);letter-spacing:.02em;color:var(--ink);pointer-events:none}
+@media (prefers-reduced-motion:reduce){.pj-st-card{--wipe:1}}
+
+/* Pinned (wide screens; class added by Projects.tsx only when the scroll animation runs): the grid fills the screen under the label */
+.work.pj-pinned{padding-block:0}
+.work.pj-pinned .pj-track{height:300vh;height:300svh} /* the pinned screen + 2 screens of scroll for the stage cards */
+.work.pj-pinned .pj-pin{position:sticky;top:0;height:100vh;height:100svh;display:flex;flex-direction:column;
   padding:calc(var(--head) + 8px) 0 clamp(20px,4vh,40px)}
-.work.pj-acc .pj-row{flex:1;min-height:0;display:flex;margin-top:clamp(18px,3vh,32px);gap:12px}
-.work.pj-acc .pj-panel{aspect-ratio:auto;will-change:width,height}
-.work.pj-acc .pj-panel.is-open{cursor:default}
-.work.pj-acc-x .pj-panel{height:100%;width:64px}
-.work.pj-acc-y .pj-row{flex-direction:column;gap:8px}
-.work.pj-acc-y .pj-panel{width:100%;height:46px;border-radius:23px}
-.work.pj-acc-y .pj-foot{left:8px;bottom:8px}
-.work.pj-acc-y .pj-badge{width:30px;height:30px}
+.work.pj-pinned .pj-stage{flex:1;min-height:0;margin-top:clamp(18px,3vh,32px);perspective:1900px}
+.work.pj-pinned .pj-mosaic{height:100%;gap:14px;
+  grid-template-columns:2.6fr 3.65fr 1fr 3.65fr 2.6fr;grid-template-rows:2.35fr 1fr 2.35fr;
+  grid-template-areas:"a b b c d" "a e f c i" "g e h h i"}
+.work.pj-pinned .pj-tile{aspect-ratio:auto}
+.work.pj-pinned .pj-a{grid-area:a}.work.pj-pinned .pj-b{grid-area:b}.work.pj-pinned .pj-c{grid-area:c}
+.work.pj-pinned .pj-d{grid-area:d}.work.pj-pinned .pj-e{grid-area:e}.work.pj-pinned .pj-f{grid-area:f}
+.work.pj-pinned .pj-g{grid-area:g}.work.pj-pinned .pj-h{grid-area:h}.work.pj-pinned .pj-i{grid-area:i}
+.work.pj-pinned .pj-f .pj-face{border-radius:12px}
+
+/* Detail panel */
+html.pj-lock body{overflow:hidden}
+.pj-modal{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:16px;border:0;background:transparent;color:#f5efeb;overflow:hidden}
+.pj-modal[open]{display:grid;place-items:center}
+.pj-modal::backdrop{background:rgba(47,65,86,.74);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.pj-panel{position:relative;width:min(1080px,100%);max-height:calc(100svh - 48px);display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);
+  background:var(--night-2);border:1px solid var(--night-line);border-radius:20px;overflow:hidden;box-shadow:0 80px 160px rgba(28,40,54,.6);will-change:transform}
+.pj-panel-media{position:relative;min-height:420px}
+.pj-panel-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.pj-panel-copy{padding:48px 44px 40px;display:flex;flex-direction:column;gap:20px;overflow:auto}
+.pj-panel-copy h3{font-size:clamp(36px,3.6vw,56px);line-height:1;color:#fff}
+.pj-panel-copy dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:14px}
+.pj-panel-copy dt{font:500 11px/1.9 var(--f-sans);letter-spacing:.12em;text-transform:uppercase;color:var(--night-mute)}
+.pj-panel-copy dd{margin:0}
+.pj-panel-copy dd.ph{color:var(--gold)}
+.pj-panel-copy > p:not(.eyebrow){margin:0;color:#d7e3ec;font-size:16px;line-height:1.65}
+.pj-panel-nav{display:flex;gap:10px;margin-top:auto;padding-top:8px}
+.pj-panel-nav button,.pj-close{border:1px solid var(--night-line);background:transparent;color:#fff;cursor:pointer;display:grid;place-items:center;transition:background-color .3s,color .3s,border-color .3s}
+.pj-panel-nav button{width:64px;height:44px;border-radius:999px}
+.pj-panel-nav svg{width:26px}
+.pj-close{position:absolute;top:14px;right:14px;width:42px;height:42px;border-radius:50%;background:rgba(47,65,86,.6)}
+.pj-close svg{width:14px;height:14px}
+.pj-panel-nav button:hover,.pj-close:hover{border-color:var(--fog);color:var(--fog)}
+
+.btn-line{display:inline-flex;align-items:center;gap:12px;font:600 12px/1 var(--f-body);letter-spacing:.24em;text-transform:uppercase;text-decoration:none;color:var(--gold);border:1px solid rgba(244,178,81,.5);padding:16px 22px;border-radius:999px;white-space:nowrap;transition:border-color .3s,color .3s}
+.btn-line:hover{border-color:var(--gold);color:#fff}
+.img-wait{background:linear-gradient(110deg,var(--surface) 30%,var(--paper) 50%,var(--surface) 70%);background-size:200% 100%;animation:pj-shimmer 1.6s linear infinite}
+@keyframes pj-shimmer{to{background-position:-200% 0}}

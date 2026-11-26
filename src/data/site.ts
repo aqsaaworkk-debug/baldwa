@@ -20,7 +20,7 @@ export const HOME = {
     'BIM engineering services', 'Architectural consultancy in Udaipur', 'Interior design company in Rajasthan', 'Building design consultants',
     'Professional architecture services', 'Project management consultants',
   ],
-  h1: 'Architecture and interior design solutions in Udaipur',
+  h1: 'Architecture and interior design solutions', // "in Udaipur" removed from the hero on request (2026-11-26); SEO title and description keep it
   intro: [
     'At Baldwa and Associates, we believe every great space commences with a verified idea and converts meaningfully with the help of strategic design. As a cross-functional architecture and design organisation in Udaipur, we combine originality, practical accuracy and attention to detail to bring your vision to the real-world.',
     'Whether you are planning a new development from the ground up or renovating a present property, our team offers functional, aesthetically striking and well-planned spaces personalised to your precise requirements.',
@@ -74,6 +74,7 @@ export type Service = {
   slug: string; nav: string; keyword: string; title: string; description: string; h1: string; body: string;
   home?: { h3: string; text: string };
   image: { src: string; alt: string };
+  more?: { src: string; alt: string }[]; // extra pictures for the Services page (the client will add more per service)
 };
 
 export const SERVICES: Service[] = [

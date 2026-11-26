@@ -36,7 +36,12 @@ export const PAPER = {
   // u / v: where the paper's centre sits on the background image (0..1 of the image, so it stays on the same spot of the table
   // whatever the screen shape). z: depth (camera is at z = 10; larger z is nearer). rotation in radians (x tilts it back onto
   // the table). scale: paper height as a fraction of the image's on-screen height.
-  start: { u: .61, v: .8, z: 5.464, rotX: -1.447, rotY: .013, rotZ: -.812, scale: .415 },
+  // Fitted 2026-11-26 to the sheet in the last frame of "BALDWA VIDEO (1).mp4" (42.15 s; corners on the 1280 px frame: top left
+  // 136,411, top right 1196,460, bottom right 1107,738 and bottom left -227,639, the last two just off the frame).
+  start: { u: .4248, v: .757, z: 5.464, rotX: -1.3416, rotY: -.0058, rotZ: -.2318, scale: 1.2708 },
+  // Camera field of view (degrees). The film's desk shot is long-lens (little perspective), so the scene's camera matches it;
+  // it was 30 for the previous film. Fitted with the start pose; refit both together if the film changes.
+  fov: 11.58,
 
   // Centred pose: paper height as a fraction of the viewport height.
   center: { height: .82, arc: .6 }, // arc: how far it swings towards the camera mid-lift (world units)
@@ -67,12 +72,13 @@ export const PAPER = {
   drop: { opacity: .34, offsetX: -.035, offsetY: -.05, depth: .12, spread: 1.32 },
 
   // Writing on the paper (drawn on a canvas texture, so it rolls up with it), in this order: the heading, then the points.
-  // Heading and services: client, 2026-11-23 (the studio's name, then the services it provides).
-  title: { text: BRAND.name, size: .062, y: .21, rule: { to: .86, alpha: .3 } }, // size: fraction of the paper width; y: baseline
+  // Heading and services: client, 2026-11-23 (the studio's name, then the services it provides); "Welcome to" added and all
+  // the writing made a little smaller on 2026-11-24 (heading .062 → .046, points .034 → .03).
+  title: { text: `Welcome to ${BRAND.name}`, size: .046, y: .21, rule: { to: .88, alpha: .3 } }, // size: fraction of the paper width; y: baseline
   points: ['PMC & Construction Management', 'BIM Engineering', 'Architecture', 'Interior Consultancy'],
   numbered: true,
   text: {
-    font: 'Josefin Sans Variable', weight: 400, size: .034, ink: '#2F4156', // points; size: fraction of the paper width (the site font, loaded in layout.tsx)
+    font: 'Josefin Sans Variable', weight: 400, size: .03, ink: '#2F4156', // points; size: fraction of the paper width (the site font, loaded in layout.tsx)
     x: .13, rows: [.39, .52, .65, .78], // left edge, and baseline of each point, fractions of the paper (landscape sheet)
     feather: .06, // soft edge of the left-to-right reveal, fraction of the line width
     rule: { to: .7, below: .028, alpha: .2 }, // faint pencil rule under each point: right end and offset below the baseline (fractions of the paper), opacity
@@ -82,7 +88,7 @@ export const PAPER = {
   sticker: { x: .84, y: .73, size: .16, rotate: -.14 },
 
   assets: {
-    frame: '/images/paper/table-frame.jpg', // last frame of the hero film (23.5 s), its sheet patched out (this 3D sheet replaces it)
+    frame: '/images/paper/table-frame.jpg', // last shown frame of the hero film (42.15 s), its sheet and pencil patched out with the table's wood (this 3D sheet replaces it)
     frameBlur: '/images/paper/table-frame-blur.jpg',
     frameSize: [1920, 1080] as [number, number],
     paper: '/images/paper/paper.webp',

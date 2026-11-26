@@ -7,7 +7,8 @@ const TYPES = ['Residence', 'Villa', 'Interiors', 'Commercial', 'Other'];
 
 type Note = { kind: 'ok' | 'err'; text: string } | null;
 
-export default function Contact() {
+// variant 'card' (Contact page hero): only the form card, no heading and no line ribbon behind it.
+export default function Contact({ variant = 'section' }: { variant?: 'section' | 'card' }) {
   const [note, setNote] = useState<Note>(null);
   const root = useRef<HTMLElement>(null);
   const near = useNearViewport(root, '600px');
@@ -93,13 +94,15 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="contact gut" ref={root}>
-      <canvas className="contact-waves" aria-hidden="true" />
-      <div className="wrap contact-in">
-        <div className="contact-head rv">
-          <p className="eyebrow">Start a project</p>
-          <h2>Bring us a plot and a <em>conversation</em></h2>
-        </div>
+    <section id="contact" className={variant === 'card' ? 'contact contact--card' : 'contact gut'} ref={root} aria-label={variant === 'card' ? 'Enquiry form' : undefined}>
+      {variant === 'section' && <canvas className="contact-waves" aria-hidden="true" />}
+      <div className={variant === 'card' ? 'contact-in' : 'wrap contact-in'}>
+        {variant === 'section' && (
+          <div className="contact-head rv">
+            <p className="eyebrow">Start a project</p>
+            <h2>Bring us a plot and a <em>conversation</em></h2>
+          </div>
+        )}
 
         {/* A numbered spec sheet: underline fields on a light glass panel, no card shadow */}
         <form className="enq" onSubmit={onSubmit} noValidate>

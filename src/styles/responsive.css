@@ -13,11 +13,15 @@
   /* Real work: two columns; the film full width on top, photos in pairs */
   .rw-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:clamp(140px,28vw,220px)}
   .rw-film{grid-column:1 / -1}
-  .rw-photo,.rw-photo-1,.rw-photo-2{grid-column:span 1}
-  .rw-photo-5{grid-column:1 / -1}
+  .rw-photo,.rw-photo-1,.rw-photo-2,.rw-photo.rw-row-half,.rw-photo.rw-row-full{grid-column:span 1}
+  .rw-photo.rw-odd-last{grid-column:1 / -1}
   :root{--head:66px}
   .brand svg{height:42px}
   .work{padding-block:64px 44px}
+  .pj-mosaic{gap:10px}
+  .pj-panel{grid-template-columns:1fr;overflow:auto}
+  .pj-panel-media{min-height:0;aspect-ratio:16/10}
+  .pj-panel-copy{padding:28px 24px 28px;overflow:visible}
   .plan{padding-block:52px 44px}
   .plan-app{height:auto;display:flex;flex-direction:column;gap:12px;overflow:visible}
   .plan-app{background:none}
@@ -44,9 +48,7 @@
 }
 @media (max-width:760px){
   /* Services page: photo above the text; the cards stay curved and keep alternating sides as they arrive */
-  .sv-card,.sv-right .sv-card{grid-template-columns:minmax(0,1fr);width:94%}
-  .sv-right .sv-media{order:0}
-  .sv-media{aspect-ratio:4/3}
+  .sv-row{grid-template-columns:minmax(0,1fr)}
   /* Process: the route turns vertical and winds down the left edge; labels stack to its right */
   .process .pr-track{margin-top:20px}
   .process .stack-wrap{height:300px;margin-top:56px;--pr-iso:.6}

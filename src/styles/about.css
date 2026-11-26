@@ -3,37 +3,83 @@
    About text in two columns, a photo beside "Why choose", and a navy services band with staggered photo cards.
    Navy is --ink (the palette's navy); the footer below is --deep, so the two stay apart. */
 
+/* Shared by the inner pages (About, Projects, Services, Contact; client 2026-11-24): .pg-v2 wraps the page, PageHero.tsx is the
+   hero, PageCta.tsx the closing band. */
 /* the hero starts under the header (no top padding on the page frame) */
-.pg:has(.pg-about2){padding-top:0}
-/* the footer's rounded shoulders sit on the navy services band, not on almond */
-body:has(.pg-about2){background:var(--ink)}
+.pg:has(.pg-v2){padding-top:0}
+/* a page that ends on a navy band (.ab-end): the footer's rounded shoulders sit on navy, not on almond */
+body:has(.ab-end){background:var(--ink)}
 
-/* 1. Hero: navy down to the middle of the portrait, almond below */
-.ab-hero{--pw:clamp(250px,25vw,380px);--ov:calc(var(--pw) * .72);
-  position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;
-  padding-top:calc(var(--head) + clamp(36px,6vw,88px));
-  background:linear-gradient(180deg,var(--ink) 0,var(--ink) calc(100% - var(--ov) - 2.6em),var(--paper) calc(100% - var(--ov) - 2.6em))}
+/* 1. Hero: navy down to the middle of the image, almond below. The navy is its own element (.ab-hero-navy) so the header can
+   find it; --ov is how far the image reaches into the almond, --cap the caption under it. */
+.ab-hero{--cap:2.6em;position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding-top:calc(var(--head) + clamp(36px,6vw,88px))}
+.ab-hero--nocap{--cap:0px}
+.ab-hero > *{position:relative;z-index:1}
+.ab-hero > .ab-hero-navy{position:absolute;z-index:0;left:0;right:0;top:0;bottom:calc(var(--ov) + var(--cap));background:var(--hero-bg)}
+/* One of the theme's blues per page (PageHero tone): background and the subtitle colour that reads on it */
+.ab-tone--navy{--hero-bg:var(--ink);--hero-sub:var(--surface)}
+.ab-tone--smoke{--hero-bg:var(--smoke);--hero-sub:rgba(242,237,231,.92)}
+.ab-tone--deep{--hero-bg:var(--deep);--hero-sub:var(--surface)}
+.ab-tone--teal{--hero-bg:var(--mute);--hero-sub:rgba(242,237,231,.9)}
 .ab-display{margin:0;font:300 clamp(64px,11vw,184px)/.9 var(--f-sans);letter-spacing:-.02em;text-transform:uppercase;color:var(--paper)}
-.ab-h1{margin:clamp(16px,1.8vw,26px) 0 0;max-width:42ch;font:400 clamp(14px,1.1vw,17px)/1.5 var(--f-sans);letter-spacing:.04em;color:var(--surface);text-wrap:balance}
+.ab-h1{margin:clamp(16px,1.8vw,26px) 0 0;max-width:42ch;font:400 clamp(14px,1.1vw,17px)/1.5 var(--f-sans);letter-spacing:.04em;color:var(--hero-sub);text-wrap:balance}
+.ab-hero figcaption{display:flex;justify-content:center;gap:10px;margin-top:16px;font:600 11px/1.4 var(--f-sans);letter-spacing:.24em;text-transform:uppercase;color:var(--ink-2)}
+.ab-hero-media{overflow:hidden;border-radius:4px;background:var(--deep);box-shadow:0 40px 80px -40px rgba(28,40,54,.65)}
+.ab-hero-media img{display:block;width:100%;height:100%;object-fit:cover}
+/* portrait (About: the founder) */
+.ab-hero--portrait{--pw:clamp(250px,25vw,380px);--ov:calc(var(--pw) * .72)}
 .ab-portrait{margin:clamp(36px,4.4vw,64px) 0 0;width:var(--pw)}
-.ab-portrait-frame{aspect-ratio:2/3;overflow:hidden;border-radius:4px;background:var(--deep);box-shadow:0 40px 80px -40px rgba(28,40,54,.65)}
-.ab-portrait-frame img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 20%}
-.ab-portrait figcaption{display:flex;justify-content:center;gap:10px;margin-top:16px;font:600 11px/1.4 var(--f-sans);letter-spacing:.24em;text-transform:uppercase;color:var(--ink-2)}
+.ab-portrait-frame{aspect-ratio:2/3}
+.ab-portrait-frame img{object-position:50% 20%}
+/* wide photo (Projects, Contact) */
+.ab-hero--wide{--ww:min(1100px,88vw);--ov:calc(var(--ww) * .28)}
+.ab-wide{margin:clamp(36px,4.4vw,64px) 0 0;width:var(--ww)}
+.ab-wide-frame{aspect-ratio:16/9}
+/* three photos (Services: one per service group, each opening its tab); the middle one sits a little higher (restored on request,
+   2026-11-26, after a short spell in one even row) */
+.ab-hero--trio{--tw:clamp(200px,21vw,330px);--ov:calc(var(--tw) * .62)}
+.ab-trio{display:grid;grid-template-columns:repeat(3,var(--tw));gap:clamp(14px,1.8vw,26px);margin:clamp(36px,4.4vw,64px) 0 0;padding:0;list-style:none;align-items:end}
+.ab-trio a{display:block;color:inherit;text-decoration:none}
+.ab-trio-frame{display:block;aspect-ratio:3/4}
+.ab-trio-2 .ab-trio-frame{aspect-ratio:3/4.4}
+.ab-trio-label{display:block;min-height:2.8em;margin-top:14px;font:600 11px/1.4 var(--f-sans);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);text-wrap:balance;transition:color .3s}
+.ab-trio a:hover .ab-trio-label{color:var(--gold-deep)}
+.ab-hero--trio{--cap:4.2em}
+/* About: the founder's name set large behind the portrait (client, 2026-11-26, after an "ARCHIFORM" sample): wide-spaced light
+   capitals, tone on tone, brighter at the top and fading down, standing on the bottom edge of the blue band and smaller than the
+   portrait, which covers its middle. In the site's one typeface (the sample's serif is not used: one font only). */
+.ab-backname{position:absolute !important;z-index:1;left:0;right:0;bottom:calc(var(--ov) + var(--cap));display:flex;justify-content:center;pointer-events:none}
+/* the outer box is measured at the hero's own text size (its bottom is the blue band's edge); the word inside sits on it */
+.ab-backname span{display:block;white-space:nowrap;padding-top:.08em;margin:0 -.22em -.19em 0;
+  font:300 clamp(56px,8.6vw,150px)/1 var(--f-sans);letter-spacing:.22em;text-transform:uppercase;
+  color:transparent;background:linear-gradient(180deg,rgba(242,237,231,.38) 10%,rgba(242,237,231,.1) 80%);-webkit-background-clip:text;background-clip:text}
+.ab-hero--portrait .ab-portrait{z-index:2}
+/* Contact: the enquiry form card where the other pages have their image */
+.ab-hero--slot{--ov:clamp(150px,16vw,240px)}
+.ab-slot{margin:clamp(36px,4.4vw,64px) 0 0;width:min(780px,92vw);text-align:left}
 
 /* 2. Statement and the About text */
 .ab-story{padding-block:clamp(64px,8vw,120px) clamp(48px,6vw,96px);text-align:center}
 .ab-kicker{margin:0;font:500 clamp(13px,1vw,15px)/1.4 var(--f-sans);letter-spacing:.06em;color:var(--ink-2)}
 .ab-statement{max-width:21ch;margin:clamp(20px,2.4vw,32px) auto 0;font-size:clamp(32px,3.9vw,60px);line-height:1.12;letter-spacing:-.02em;color:var(--ink)}
+.ab-statement--sm{max-width:30ch;font-size:clamp(26px,2.8vw,42px);line-height:1.25}
 .ab-statement em{font-style:normal;font-weight:300;color:var(--gold-deep)}
 .ab-cols{max-width:880px;margin:clamp(40px,5vw,72px) auto 0;columns:2;column-gap:clamp(28px,4vw,56px);text-align:left}
 .ab-cols p{margin:0 0 18px;font-size:15px;line-height:1.75;color:var(--ink-2);break-inside:avoid-column}
+/* About: the statement and the two columns across the full width (client, 2026-11-26) */
+.ab-story--full .ab-statement{max-width:none}
+.ab-story--full .ab-cols{max-width:none}
+/* Services: the statement aligned left (client, 2026-11-26) */
+.ab-story--left{text-align:left}
+.ab-story--left .ab-statement{margin-left:0;max-width:34ch}
 
 /* 3. Photo beside "Why choose" */
 .ab-why{padding-block:clamp(24px,4vw,56px) clamp(72px,9vw,140px)}
-.ab-why-in{max-width:1040px;margin-inline:auto;display:grid;grid-template-columns:minmax(0,.62fr) minmax(0,1.38fr);gap:clamp(28px,5vw,72px);align-items:start}
+.ab-why-in{margin-inline:auto;display:grid;grid-template-columns:minmax(0,.62fr) minmax(0,1.38fr);gap:clamp(28px,5vw,72px);align-items:start}
 .ab-why-fig{margin:0;aspect-ratio:3/4;overflow:hidden;border-radius:4px;background:var(--surface)}
 .ab-why-fig img{display:block;width:100%;height:100%;object-fit:cover}
-.ab-why-copy h2{max-width:18ch;font-size:clamp(30px,3.3vw,50px);line-height:1.08;color:var(--ink)}
+.ab-why-copy h2{max-width:none;font-size:clamp(30px,3.3vw,50px);line-height:1.08;color:var(--ink)}
 .ab-why-copy h2 em{color:var(--gold-deep)}
 .ab-why-copy ul{margin:clamp(24px,3vw,36px) 0 0;padding:0;list-style:none}
 .ab-why-copy li{padding:16px 0;border-top:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
@@ -61,6 +107,21 @@ body:has(.pg-about2){background:var(--ink)}
 .ab-card-name{display:block;margin-top:14px;font-size:15px;line-height:1.35;color:var(--paper);transition:color .3s}
 .ab-card a:hover .ab-card-name{color:var(--gold)}
 
+/* Body block on almond (Projects gallery, Services tabs) */
+.ab-body{padding-block:clamp(56px,7vw,110px) clamp(72px,9vw,140px)}
+.ab-body--flush{padding-top:0}
+/* closer under the hero (Projects gallery, Services list; client 2026-11-26) */
+.ab-body--up{padding-top:clamp(8px,1.6vw,24px)}
+.ab-body--up .project-index{padding-top:0}
+
+/* Closing band (PageCta.tsx): navy, centred, Start a project */
+.ab-cta{background:var(--ink);color:var(--paper);padding-block:clamp(80px,10vw,150px);text-align:center}
+.ab-cta-in{display:flex;flex-direction:column;align-items:center}
+.ab-cta h2{font-size:clamp(40px,5.4vw,84px);line-height:1;color:var(--paper)}
+.ab-cta h2 em{color:var(--gold)}
+.ab-cta p{margin:20px 0 0;font-size:16px;line-height:1.7;color:var(--surface)}
+.ab-cta .ab-btn{margin-top:32px}
+
 @media (max-width:900px){
   .ab-cols{columns:1}
   .ab-why-in{grid-template-columns:1fr}
@@ -68,6 +129,8 @@ body:has(.pg-about2){background:var(--ink)}
   .ab-team-in{grid-template-columns:1fr}
 }
 @media (max-width:560px){
+  .ab-hero--trio{--tw:28vw}
+  .ab-trio-label{font-size:9px;letter-spacing:.12em}
   .ab-cards{grid-template-columns:1fr 1fr}
   .ab-card-3{grid-column:1 / -1;margin-top:0}
   .ab-card-3 .ab-card-art{aspect-ratio:16/10}
